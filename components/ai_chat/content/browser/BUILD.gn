@@ -16,6 +16,12 @@ static_library("browser") {
     "ai_chat_throttle.h",
     "page_content_fetcher.cc",
     "page_content_fetcher.h",
+    "ai_chat_database.cc",
+    "ai_chat_database.h",
+    "ai_chat_service.cc",
+    "ai_chat_service.h",
+    "ai_chat_service_factory.cc",
+    "ai_chat_service_factory.h",
   ]
 
   deps = [
@@ -32,6 +38,7 @@ static_library("browser") {
     "//brave/components/text_recognition/common/buildflags",
     "//components/favicon/content",
     "//components/favicon/core",
+    "//components/keyed_service/content",
     "//components/prefs",
     "//components/user_prefs",
     "//content/public/browser",
@@ -41,6 +48,7 @@ static_library("browser") {
     "//services/service_manager/public/cpp",
     "//ui/base",
     "//url",
+    "//sql:sql",
   ]
 
   if (enable_text_recognition) {
