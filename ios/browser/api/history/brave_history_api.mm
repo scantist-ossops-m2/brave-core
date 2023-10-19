@@ -7,8 +7,12 @@
 
 #include "base/functional/bind.h"
 #include "base/strings/sys_string_conversions.h"
+#include "base/time/clock.h"
+#include "base/time/default_clock.h"
+#include "base/time/time.h"
 #include "components/history/core/browser/history_service.h"
 #include "components/history/core/browser/history_types.h"
+#include "components/sync/protocol/history_delete_directive_specifics.pb.h"
 #include "ios/chrome/browser/history/history_service_factory.h"
 #include "ios/chrome/browser/history/web_history_service_factory.h"
 #include "ios/web/public/thread/web_task_traits.h"
@@ -163,6 +167,47 @@ DomainMetricTypeIOS const DomainMetricTypeIOSLast28DayMetric =
 - (void)removeHistory:(IOSHistoryNode*)history {
   DCHECK_CURRENTLY_ON(web::WebThread::UI);
 
+  std::unique_ptr<base::Clock> clock_;
+  clock_.reset(new base::DefaultClock());
+
+  base::Time now = clock_->Now();
+  
+  std::vector<history::ExpireHistoryArgs> expire_list;
+  expire_list.reserve(1);
+
+  // In order to ensure that visits will be deleted from the server and other
+  // clients (even if they are offline), create a sync delete directive for
+  // each visit to be deleted.
+  sync_pb::HistoryDeleteDirectiveSpecifics delete_directive;
+  sync_pb::GlobalIdDirective* global_id_directive =
+      delete_directive.mutable_global_id_directive();
+  history::ExpireHistoryArgs* expire_args = nullptr;
+
+  if (!expire_args) {
+    GURL gurl(net::GURLWithNSURL(history.url));
+
+    expire_list.resize(expire_list.size() + 1);
+    expire_args = &expire_list.back();
+
+    expire_args->SetTimeRangeForOneDay(base::Time::FromNSDate(history.dateAdded));
+    expire_args->urls.insert(gurl);
+  }
+  // The local visit time is treated as a global ID for the visit.
+  global_id_directive->add_global_id(base::Time::FromNSDate(history.dateAdded).ToInternalValue());
+
+  // Set the start and end time in microseconds since the Unix epoch.
+  global_id_directive->set_start_time_usec(
+      (expire_args->begin_time - base::Time::UnixEpoch()).InMicroseconds());
+
+  base::Time end_time = std::min(expire_args->end_time, now);
+
+  // -1 because end time in delete directives is inclusive.
+  global_id_directive->set_end_time_usec(
+      (end_time - base::Time::UnixEpoch()).InMicroseconds() - 1);
+
+  if (web_history_service_ && history_service_)
+    history_service_->ProcessLocalDeleteDirective(delete_directive);
+      
   // Deletes a specific URL using history service and web history service
   history_service_->DeleteLocalAndRemoteUrl(web_history_service_,
                                             net::GURLWithNSURL(history.url));
