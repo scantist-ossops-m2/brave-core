@@ -5,6 +5,7 @@
 
 package org.chromium.chrome.browser.crypto_wallet.util;
 
+import android.annotation.SuppressLint;
 import android.text.TextUtils;
 
 import androidx.annotation.NonNull;
@@ -119,6 +120,7 @@ public class TokenUtils {
                 });
     }
 
+    @SuppressLint("WrongCommentType")
     /*
      * Wrapper for {@link BlockchainRegistry#getAllTokens} with Goerli contract address
      * modifications.
