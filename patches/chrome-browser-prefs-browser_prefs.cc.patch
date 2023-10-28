@@ -2,7 +2,7 @@ diff --git a/chrome/browser/prefs/browser_prefs.cc b/chrome/browser/prefs/browse
 index cf011e0ea314322c1b2545e1954f8aa00b33f10c..b64c42b57b500b3eb8735535642c965bb8c98abe 100644
 --- a/chrome/browser/prefs/browser_prefs.cc
 +++ b/chrome/browser/prefs/browser_prefs.cc
-@@ -1605,6 +1605,8 @@ void RegisterLocalState(PrefRegistrySimple* registry) {
+@@ -1602,6 +1602,8 @@ void RegisterLocalState(PrefRegistrySimple* registry) {
    DeviceOAuth2TokenStoreDesktop::RegisterPrefs(registry);
  #endif
  
