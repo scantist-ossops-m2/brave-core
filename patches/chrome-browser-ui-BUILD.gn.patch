@@ -1,10 +1,10 @@
 diff --git a/chrome/browser/ui/BUILD.gn b/chrome/browser/ui/BUILD.gn
-index f9b414d08e4255f120670edbd1ca113c43f1c499..1ff6b832199ed74e98abd889165cc8bab4606deb 100644
+index 95a7723fe4fc069954c8c26c147a03bcc510a3a8..7ce56e6bb4677f465af2a63b820fc4132887e3ca 100644
 --- a/chrome/browser/ui/BUILD.gn
 +++ b/chrome/browser/ui/BUILD.gn
-@@ -699,6 +699,7 @@ static_library("ui") {
+@@ -697,6 +697,7 @@ static_library("ui") {
+     "//chrome/browser/safe_browsing",
      "//chrome/browser/profiling_host",
-     "//chrome/browser/ui/webui:configs",
    ]
 +  public_deps += [ "//brave/browser/ui" ] allow_circular_includes_from += [ "//brave/browser/ui" ]
  

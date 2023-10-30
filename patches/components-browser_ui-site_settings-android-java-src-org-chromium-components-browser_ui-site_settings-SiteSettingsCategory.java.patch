@@ -1,26 +1,25 @@
 diff --git a/components/browser_ui/site_settings/android/java/src/org/chromium/components/browser_ui/site_settings/SiteSettingsCategory.java b/components/browser_ui/site_settings/android/java/src/org/chromium/components/browser_ui/site_settings/SiteSettingsCategory.java
-index 3cb346ca0d6c3953a4cd0afd84a70949f23b4d71..20f3a552bfcb3c98f747869da8ae79d02b6f0d76 100644
+index 21754f8a112594b8078f6f815d0ceb406e3db9ac..e96b49438b178daa122329baf5603f664787f4a9 100644
 --- a/components/browser_ui/site_settings/android/java/src/org/chromium/components/browser_ui/site_settings/SiteSettingsCategory.java
 +++ b/components/browser_ui/site_settings/android/java/src/org/chromium/components/browser_ui/site_settings/SiteSettingsCategory.java
-@@ -72,7 +72,7 @@ public class SiteSettingsCategory {
-         Type.ANTI_ABUSE,
+@@ -73,7 +73,7 @@ public class SiteSettingsCategory {
          Type.ZOOM,
          Type.STORAGE_ACCESS,
+         Type.TRACKING_PROTECTION,
 -        Type.NUM_ENTRIES
 +        Type.NUM_ENTRIES, Type.AUTOPLAY, Type.BRAVE_GOOGLE_SIGN_IN, Type.BRAVE_LOCALHOST_ACCESS
      })
      @Retention(RetentionPolicy.SOURCE)
      public @interface Type {
-@@ -109,10 +109,11 @@ public class SiteSettingsCategory {
-         int ANTI_ABUSE = 28;
+@@ -111,9 +111,10 @@ public class SiteSettingsCategory {
          int ZOOM = 29;
          int STORAGE_ACCESS = 30;
-+        int AUTOPLAY = 31; int BRAVE_GOOGLE_SIGN_IN = 32; int BRAVE_LOCALHOST_ACCESS = 33;
-         /**
-          * Number of handled categories used for calculating array sizes.
-          */
--        int NUM_ENTRIES = 31;
-+        int NUM_ENTRIES = 34;
+         int TRACKING_PROTECTION = 31;
++        int AUTOPLAY = 32; int BRAVE_GOOGLE_SIGN_IN = 33; int BRAVE_LOCALHOST_ACCESS = 34;
+ 
+         /** Number of handled categories used for calculating array sizes. */
+-        int NUM_ENTRIES = 32;
++        int NUM_ENTRIES = 35;
      }
  
      private final BrowserContextHandle mBrowserContextHandle;
