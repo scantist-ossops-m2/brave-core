@@ -534,7 +534,7 @@
     <!-- Permission change infobar. -->
     <if expr="not is_android">
       <message name="IDS_PAGE_INFO_INFOBAR_TEXT" desc="The string shown in the infobar after the user has changed site permissions settings, reminding them to reload the page in order for the new settings to take effect.  Deliberately similar to IDS_EXTENSION_SITE_RELOAD_PAGE_BUBBLE_HEADING, but used for an different permission setting so they are not combined. If updating the one, please update the other or consult the extensions and privacy teams.">
-        To apply your updated settings to this site, reload this page
+        Reload this page to apply your updated settings on this site
       </message>
       <message name="IDS_PAGE_INFO_INFOBAR_BUTTON" desc="The string used in the infobar button allowing the user to reload the page directly from the infobar.">
         Reload
@@ -751,6 +751,9 @@
   <message name="IDS_PAGE_INFO_TRACKING_PROTECTION_BLOCKED_COOKIES_DESCRIPTION" desc="Description text for the Tracking Protection subpage in the page info bubble if all cookies are blocked. Contains a link to the Tracking Protection settings page.">
     You blocked sites from using third-party cookies to track you as you browse. Visit settings to <ph name="LINK">$1<ex>manage your tracking protections</ex></ph>.
   </message>
+  <message name="IDS_PAGE_INFO_TRACKING_PROTECTION_INCOGNITO_BLOCKED_COOKIES_DESCRIPTION" desc="Description text for the Tracking Protection subpage in the page info bubble in private mode when cookies are blocked. Contains a link to the Tracking Protection settings page.">
+    Brave blocks sites from using third-party cookies to track you as you browse. Visit settings to <ph name="LINK">$1<ex>manage your tracking protections</ex></ph>.
+  </message>
   <message name="IDS_PAGE_INFO_COOKIES_SETTINGS_LINK" desc="The text of the link to cookies settings.">
     Settings
   </message>
@@ -907,6 +910,9 @@
   </message>
   <message name="IDS_PAGE_INFO_COOKIES_PERMANENT_ALLOWED_TITLE" desc="A subtitle in the page info bubble if cookies were allowed by the user and they won't be automatically blocked again the future.">
     You allowed third-party cookies for this site
+  </message>
+  <message name="IDS_PAGE_INFO_TRACKING_PROTECTION_PERMANENT_ALLOWED_TITLE" desc="A subtitle in the Tracking Protection subpage bubble telling the user they allowed third-party cookies on the current site.">
+    You allowed third-party cookies on this site
   </message>
   <message name="IDS_PAGE_INFO_COOKIES_PERMANENT_ALLOWED_DESCRIPTION" desc="Descriptive text in the page info bubble after the user has allowed third-party cookies on a site explaining the trade-off of their decision.">
     This means that most site features should work, but you have less protection
