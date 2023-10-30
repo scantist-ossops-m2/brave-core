@@ -1,8 +1,8 @@
 diff --git a/components/content_settings/core/common/cookie_settings_base.cc b/components/content_settings/core/common/cookie_settings_base.cc
-index b03d4f97c6233223eea4de941a67cb8536a11562..074c510ca64bfd222a3c5a633c2b271a955a405a 100644
+index 31e3cb2be59ac76f0a630155d0e5edc4290555f7..9445f12de224a0fc44dce281d2310d8dd5e8ae8a 100644
 --- a/components/content_settings/core/common/cookie_settings_base.cc
 +++ b/components/content_settings/core/common/cookie_settings_base.cc
-@@ -283,6 +283,7 @@ CookieSettingsBase::GetCookieSettingInternal(
+@@ -292,6 +292,7 @@ CookieSettingsBase::GetCookieSettingInternal(
        ShouldBlockThirdPartyCookies() &&
        !IsThirdPartyCookiesAllowedScheme(first_party_url.scheme());
  
