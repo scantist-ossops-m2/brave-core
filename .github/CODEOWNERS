@@ -186,3 +186,6 @@ android/java/org/chromium/chrome/browser/preferences/BravePrefServiceBridge.java
 
 # Semgrep configuration
 /.semgrepignore @thypon
+
+# Deprecated stuff
+components/deprecated_channel_name @bridiver
