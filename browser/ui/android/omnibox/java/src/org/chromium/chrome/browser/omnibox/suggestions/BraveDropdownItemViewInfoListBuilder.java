@@ -147,12 +147,12 @@ class BraveDropdownItemViewInfoListBuilder extends DropdownItemViewInfoListBuild
                     tileNavSuggestPosition,
                     new DropdownItemViewInfo(mBraveLeoSuggestionProcessor, leoModel, config));
         }
-        if (isBraveSearchPromoBanner()) {
-            final PropertyModel model = mBraveSearchBannerProcessor.createModel();
+        // if (isBraveSearchPromoBanner()) {
+        final PropertyModel model = mBraveSearchBannerProcessor.createModel();
             mBraveSearchBannerProcessor.populateModel(model);
             viewInfoList.add(new DropdownItemViewInfo(
                     mBraveSearchBannerProcessor, model, GroupConfig.getDefaultInstance()));
-        }
+        // }
 
         return viewInfoList;
     }
