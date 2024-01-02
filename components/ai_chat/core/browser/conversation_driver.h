@@ -165,6 +165,7 @@ class ConversationDriver {
   // TODO(nullhook): Abstract the data model
   std::string model_key_;
   std::vector<mojom::ConversationTurn> chat_history_;
+  std::unique_ptr<mojom::Conversation> conversation_;
   std::string article_text_;
   bool is_conversation_active_ = false;
   bool is_page_text_fetch_in_progress_ = false;

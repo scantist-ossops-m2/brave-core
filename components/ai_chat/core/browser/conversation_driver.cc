@@ -255,6 +255,13 @@ void ConversationDriver::OnUserOptedIn() {
 void ConversationDriver::AddToConversationHistory(mojom::ConversationTurn turn) {
   chat_history_.push_back(std::move(turn));
 
+  if ((chat_history_.size() >= 1) && !conversation_) {
+    conversation_ = std::make_unique<mojom::Conversation>();
+    conversation_->date = base::Time::Now();
+    conversation_->page_url = GetPageURL();
+    conversation_->title = "A conversation";
+  }
+
   for (auto& obs : observers_) {
     obs.OnHistoryUpdate();
   }
@@ -619,6 +626,7 @@ void ConversationDriver::MakeAPIRequestWithConversationHistoryUpdate(
 
   // Add the human part to the conversation
   AddToConversationHistory(std::move(turn));
+  // TODO(Service): Persist human entry
 
   is_request_in_progress_ = true;
   for (auto& obs : observers_) {
@@ -688,6 +696,8 @@ void ConversationDriver::OnEngineCompletionComplete(
   for (auto& obs : observers_) {
     obs.OnAPIRequestInProgress(IsRequestInProgress());
   }
+
+  // TODO(Service): Persist the last AI Entry
 }
 
 void ConversationDriver::OnSuggestedQuestionsChanged() {
