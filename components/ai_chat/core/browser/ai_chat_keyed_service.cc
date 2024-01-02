@@ -3,7 +3,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
-#include "brave/components/ai_chat/core/browser/ai_chat_service.h"
+#include "brave/components/ai_chat/core/browser/ai_chat_keyed_service.h"
 
 #include <utility>
 
@@ -13,24 +13,24 @@
 namespace ai_chat {
 namespace {
 constexpr base::FilePath::StringPieceType kBaseDirName =
-    FILE_PATH_LITERAL("ai_chat");
+    FILE_PATH_LITERAL("AIChat");
 }  // namespace
 
-AIChatService::AIChatService(content::BrowserContext* context)
+AIChatKeyedService::AIChatKeyedService(content::BrowserContext* context)
     : base_dir_(context->GetPath().Append(kBaseDirName)) {
   ai_chat_db_ = base::SequenceBound<AIChatDatabase>(GetTaskRunner());
 
   auto on_response = base::BindOnce(
-      [](bool success) { DVLOG(1) << "Init: " << success << "\n"; });
+      [](bool success) { DVLOG(1) << "Init: " << success << "\n";  });
 
   ai_chat_db_.AsyncCall(&AIChatDatabase::Init)
       .WithArgs(base_dir_)
       .Then(std::move(on_response));
 }
 
-AIChatService::~AIChatService() = default;
+AIChatKeyedService::~AIChatKeyedService() = default;
 
-base::SequencedTaskRunner* AIChatService::GetTaskRunner() {
+base::SequencedTaskRunner* AIChatKeyedService::GetTaskRunner() {
   if (!task_runner_) {
     task_runner_ = base::ThreadPool::CreateSequencedTaskRunner(
         {base::MayBlock(), base::WithBaseSyncPrimitives(),
@@ -41,7 +41,7 @@ base::SequencedTaskRunner* AIChatService::GetTaskRunner() {
   return task_runner_.get();
 }
 
-void AIChatService::Shutdown() {
+void AIChatKeyedService::Shutdown() {
   task_runner_.reset();
 }
 

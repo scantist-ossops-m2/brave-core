@@ -30,8 +30,8 @@ static_library("browser") {
     "models.h",
     "ai_chat_database.cc",
     "ai_chat_database.h",
-    "ai_chat_service.cc",
-    "ai_chat_service.h",
+    "ai_chat_keyed_service.cc",
+    "ai_chat_keyed_service.h",
     "ai_chat_service_factory.cc",
     "ai_chat_service_factory.h",
   ]

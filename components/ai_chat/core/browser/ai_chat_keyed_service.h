@@ -23,12 +23,12 @@ class BrowserContext;
 
 namespace ai_chat {
 
-class AIChatService : public KeyedService {
+class AIChatKeyedService : public KeyedService {
  public:
-  explicit AIChatService(content::BrowserContext* context);
-  ~AIChatService() override;
-  AIChatService(const AIChatService&) = delete;
-  AIChatService& operator=(const AIChatService&) = delete;
+  explicit AIChatKeyedService(content::BrowserContext* context);
+  ~AIChatKeyedService() override;
+  AIChatKeyedService(const AIChatKeyedService&) = delete;
+  AIChatKeyedService& operator=(const AIChatKeyedService&) = delete;
 
  private:
   base::SequencedTaskRunner* GetTaskRunner();
@@ -42,7 +42,7 @@ class AIChatService : public KeyedService {
 
   base::SequenceBound<AIChatDatabase> ai_chat_db_;
 
-  base::WeakPtrFactory<AIChatService> weak_ptr_factory_{this};
+  base::WeakPtrFactory<AIChatKeyedService> weak_ptr_factory_{this};
 };
 
 }  // namespace ai_chat
