@@ -10,7 +10,7 @@
 #include "base/memory/scoped_refptr.h"
 #include "base/memory/weak_ptr.h"
 #include "base/threading/sequence_bound.h"
-#include "brave/components/ai_chat/content/browser/ai_chat_database.h"
+#include "brave/components/ai_chat/core/browser/ai_chat_database.h"
 #include "components/keyed_service/core/keyed_service.h"
 
 namespace base {

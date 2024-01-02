@@ -3,10 +3,10 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
-#include "brave/components/ai_chat/content/browser/ai_chat_service_factory.h"
+#include "brave/components/ai_chat/core/browser/ai_chat_service_factory.h"
 
 #include "base/no_destructor.h"
-#include "brave/components/ai_chat/content/browser/ai_chat_service.h"
+#include "brave/components/ai_chat/core/browser/ai_chat_service.h"
 #include "brave/components/ai_chat/core/common/features.h"
 #include "components/keyed_service/content/browser_context_dependency_manager.h"
 

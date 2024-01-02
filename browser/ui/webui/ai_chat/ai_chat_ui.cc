@@ -24,7 +24,7 @@
 #include "content/public/browser/web_contents.h"
 #include "content/public/browser/web_ui_data_source.h"
 #include "content/public/common/url_constants.h"
-#include "brave/components/ai_chat/content/browser/ai_chat_service_factory.h"
+#include "brave/components/ai_chat/core/browser/ai_chat_service_factory.h"
 
 #if !BUILDFLAG(IS_ANDROID)
 #include "chrome/browser/ui/browser.h"

@@ -113,7 +113,7 @@
 #endif
 
 #if BUILDFLAG(ENABLE_AI_CHAT)
-#include "brave/components/ai_chat/content/browser/ai_chat_service_factory.h"
+#include "brave/components/ai_chat/core/browser/ai_chat_service_factory.h"
 #include "brave/components/ai_chat/core/common/features.h"
 #endif
 

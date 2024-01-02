@@ -28,6 +28,12 @@ static_library("browser") {
     "engine/remote_completion_client.h",
     "models.cc",
     "models.h",
+    "ai_chat_database.cc",
+    "ai_chat_database.h",
+    "ai_chat_service.cc",
+    "ai_chat_service.h",
+    "ai_chat_service_factory.cc",
+    "ai_chat_service_factory.h",
   ]
 
   if (is_android) {
@@ -53,6 +59,7 @@ static_library("browser") {
     "//brave/components/time_period_storage",
     "//components/prefs",
     "//components/user_prefs",
+    "//components/keyed_service/content",
     "//net/traffic_annotation",
     "//services/data_decoder/public/cpp",
     "//services/network/public/cpp",
@@ -60,6 +67,7 @@ static_library("browser") {
     "//third_party/abseil-cpp:absl",
     "//ui/base",
     "//url",
+    "//sql:sql",
   ]
 }
 
