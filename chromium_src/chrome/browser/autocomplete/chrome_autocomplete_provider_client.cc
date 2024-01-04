@@ -78,12 +78,8 @@ void ChromeAutocompleteProviderClient::OpenLeo(const std::u16string& query) {
 }
 
 bool ChromeAutocompleteProviderClient::IsLeoProviderEnabled() {
-#if BUILDFLAG(IS_ANDROID)
-  return false;
-#else
   return brave::IsRegularProfile(profile_) &&
          GetPrefs()->GetBoolean(
              ai_chat::prefs::kBraveChatAutocompleteProviderEnabled);
-#endif
 }
 #endif  // BUILDFLAG(ENABLE_AI_CHAT)

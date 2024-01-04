@@ -21,6 +21,13 @@ const gfx::VectorIcon& AutocompleteMatch::GetVectorIcon(
 #define GetVectorIcon GetVectorIcon_Chromium
 #endif
 
+#if BUILDFLAG(IS_ANDROID)
+#define ACTION_IN_SUGGEST \
+  ACTION_IN_SUGGEST:      \
+  case OmniboxActionId::OPEN_BRAVE_LEO
+#endif
+
 #include "src/components/omnibox/browser/autocomplete_match.cc"  // IWYU pragma: export
 
 #undef GetVectorIcon
+#undef HISTORY_CLUSTERS

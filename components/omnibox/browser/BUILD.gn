@@ -5,6 +5,12 @@
 
 import("//brave/components/commander/common/buildflags/buildflags.gni")
 
+if (is_android) {
+  import("//build/config/android/config.gni")
+  import("//build/config/android/rules.gni")
+  import("//third_party/jni_zero/jni_zero.gni")
+}
+
 source_set("unit_tests") {
   testonly = true
 
@@ -52,6 +58,35 @@ source_set("unit_tests") {
     deps += [
       "//brave/components/commander/browser",
       "//brave/components/vector_icons",
+    ]
+  }
+}
+
+if (is_android) {
+  android_library("browser_java") {
+    sources = [
+      "android/java/src/org/chromium/components/omnibox/action/BraveOmniboxActionFactory.java",
+    ]
+
+    resources_package = "org.chromium.components.omnibox"
+    deps = [
+      "//base:base_java",
+      "//base:jni_java",
+      "//build/android:build_java",
+      "//components/omnibox/browser:browser_java",
+      "//third_party/androidx:androidx_annotation_annotation_jvm_java",
+      "//third_party/androidx:androidx_annotation_annotation_java",
+      "//third_party/jni_zero:jni_zero_java",
+    ]
+
+    srcjar_deps = [
+      ":jni_headers",
+    ]
+  }
+
+  generate_jni("jni_headers") {
+    sources = [
+      "android/java/src/org/chromium/components/omnibox/action/BraveOmniboxActionFactory.java",
     ]
   }
 }

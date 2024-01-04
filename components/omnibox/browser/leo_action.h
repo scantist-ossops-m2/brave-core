@@ -16,6 +16,10 @@ class LeoAction : public OmniboxAction {
 
   // OmniboxAction:
   void Execute(ExecutionContext& context) const override;
+#if BUILDFLAG(IS_ANDROID)
+  base::android::ScopedJavaLocalRef<jobject> GetOrCreateJavaObject(
+      JNIEnv* env) const override;
+#endif
 
  protected:
   ~LeoAction() override;
