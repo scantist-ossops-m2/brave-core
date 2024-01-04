@@ -1,7 +1,5 @@
 def SKIP_SIGNING_DEFAULT = ! JOB_NAME.contains("windows")
 
-
-
 pipeline {
     agent none
     options {
@@ -84,7 +82,8 @@ pipeline {
                                                 credentials('brave-builds-github-token-for-pr-builder')
                                                 github('brave/devops', 'https')
                                             }
-                                            branch('${params.DEVOPS_BRANCH}')
+                                            // branch('${params.DEVOPS_BRANCH}')
+                                            branch('wknapik-detect-android-test-failures')
                                         }
                                     }
                                     scriptPath("jenkins/jobs/browser/pr-brave-browser-${PLATFORM}.Jenkinsfile")
