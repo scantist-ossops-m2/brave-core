@@ -41,6 +41,20 @@ base::SequencedTaskRunner* AIChatKeyedService::GetTaskRunner() {
   return task_runner_.get();
 }
 
+void AIChatKeyedService::SyncConversation(mojom::ConversationPtr conversation,
+                                          ConversationCallback callback) {
+  auto on_added = [](mojom::ConversationPtr conversation,
+                     ConversationCallback callback, int64_t id) {
+    conversation->id = id;
+    std::move(callback).Run(std::move(conversation));
+  };
+
+  ai_chat_db_.AsyncCall(&AIChatDatabase::AddConversation)
+      .WithArgs(conversation.Clone())
+      .Then(base::BindOnce(on_added, std::move(conversation),
+                           std::move(callback)));
+}
+
 void AIChatKeyedService::Shutdown() {
   task_runner_.reset();
 }

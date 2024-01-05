@@ -16,6 +16,7 @@
 #include "base/observer_list.h"
 #include "brave/components/ai_chat/core/browser/ai_chat_credential_manager.h"
 #include "brave/components/ai_chat/core/browser/ai_chat_feedback_api.h"
+#include "brave/components/ai_chat/core/browser/ai_chat_keyed_service.h"
 #include "brave/components/ai_chat/core/browser/engine/engine_consumer.h"
 #include "brave/components/ai_chat/core/common/mojom/ai_chat.mojom.h"
 #include "components/prefs/pref_change_registrar.h"
@@ -106,6 +107,7 @@ class ConversationDriver {
                     const std::string& feedback,
                     const std::string& rating_id,
                     mojom::PageHandler::SendFeedbackCallback callback);
+  void SetService(AIChatKeyedService* service);
 
  protected:
   virtual GURL GetPageURL() const = 0;
@@ -152,6 +154,9 @@ class ConversationDriver {
   void SetAPIError(const mojom::APIError& error);
   bool IsContentAssociationPossible();
 
+  void CreateAndSyncConversation();
+  void OnConversationSynced(mojom::ConversationPtr conversation);
+
   raw_ptr<PrefService> pref_service_;
   raw_ptr<AIChatMetrics> ai_chat_metrics_;
   std::unique_ptr<AIChatCredentialManager> credential_manager_;
@@ -165,7 +170,8 @@ class ConversationDriver {
   // TODO(nullhook): Abstract the data model
   std::string model_key_;
   std::vector<mojom::ConversationTurn> chat_history_;
-  std::unique_ptr<mojom::Conversation> conversation_;
+  mojom::ConversationPtr conversation_;
+
   std::string article_text_;
   bool is_conversation_active_ = false;
   bool is_page_text_fetch_in_progress_ = false;
@@ -188,6 +194,8 @@ class ConversationDriver {
 
   std::unique_ptr<mojom::ConversationTurn> pending_conversation_entry_;
   bool pending_message_needs_page_content_ = false;
+
+  raw_ptr<AIChatKeyedService> service_;
 
   base::WeakPtrFactory<ConversationDriver> weak_ptr_factory_{this};
 };

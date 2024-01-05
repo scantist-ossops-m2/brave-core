@@ -255,12 +255,7 @@ void ConversationDriver::OnUserOptedIn() {
 void ConversationDriver::AddToConversationHistory(mojom::ConversationTurn turn) {
   chat_history_.push_back(std::move(turn));
 
-  if ((chat_history_.size() >= 1) && !conversation_) {
-    conversation_ = std::make_unique<mojom::Conversation>();
-    conversation_->date = base::Time::Now();
-    conversation_->page_url = GetPageURL();
-    conversation_->title = "A conversation";
-  }
+  CreateAndSyncConversation();
 
   for (auto& obs : observers_) {
     obs.OnHistoryUpdate();
@@ -764,6 +759,30 @@ bool ConversationDriver::IsContentAssociationPossible() {
   return true;
 }
 
+void ConversationDriver::CreateAndSyncConversation() {
+  if (conversation_) {
+    LOG(ERROR) << "READ with id: " << conversation_->id << "\n";
+    return;
+  }
+
+  if ((chat_history_.size() >= 1) && !conversation_) {
+    conversation_ = mojom::Conversation::New(-1, base::Time::Now(),
+                                             "A conversation", GetPageURL());
+
+    DCHECK(service_);
+
+    service_->SyncConversation(
+        std::move(conversation_),
+        base::BindOnce(&ConversationDriver::OnConversationSynced,
+                       weak_ptr_factory_.GetWeakPtr()));
+  }
+}
+
+void ConversationDriver::OnConversationSynced(
+    mojom::ConversationPtr conversation) {
+  conversation_ = std::move(conversation);
+}
+
 void ConversationDriver::GetPremiumStatus(
     mojom::PageHandler::GetPremiumStatusCallback callback) {
   credential_manager_->GetPremiumStatus(
@@ -882,6 +901,10 @@ void ConversationDriver::SendFeedback(
 
   feedback_api_->SendFeedback(category, feedback, rating_id,
                               std::move(on_complete));
+}
+
+void ConversationDriver::SetService(AIChatKeyedService* service) {
+  service_ = service;
 }
 
 }  // namespace ai_chat
