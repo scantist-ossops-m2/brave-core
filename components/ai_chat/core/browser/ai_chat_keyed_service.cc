@@ -21,7 +21,7 @@ AIChatKeyedService::AIChatKeyedService(content::BrowserContext* context)
   ai_chat_db_ = base::SequenceBound<AIChatDatabase>(GetTaskRunner());
 
   auto on_response = base::BindOnce(
-      [](bool success) { DVLOG(1) << "Init: " << success << "\n";  });
+      [](bool success) { DVLOG(1) << "Init: " << success << "\n"; });
 
   ai_chat_db_.AsyncCall(&AIChatDatabase::Init)
       .WithArgs(base_dir_)
