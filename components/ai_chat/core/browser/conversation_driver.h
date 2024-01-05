@@ -155,7 +155,7 @@ class ConversationDriver {
   bool IsContentAssociationPossible();
 
   void CreateAndSyncConversation();
-  void OnConversationSynced(mojom::ConversationPtr conversation);
+  void OnConversationSynced(std::optional<mojom::ConversationPtr> conversation);
 
   raw_ptr<PrefService> pref_service_;
   raw_ptr<AIChatMetrics> ai_chat_metrics_;
@@ -195,7 +195,7 @@ class ConversationDriver {
   std::unique_ptr<mojom::ConversationTurn> pending_conversation_entry_;
   bool pending_message_needs_page_content_ = false;
 
-  raw_ptr<AIChatKeyedService> service_;
+  raw_ptr<AIChatKeyedService> service_ = nullptr;
 
   base::WeakPtrFactory<ConversationDriver> weak_ptr_factory_{this};
 };

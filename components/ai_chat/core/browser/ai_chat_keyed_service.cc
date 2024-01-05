@@ -55,6 +55,25 @@ void AIChatKeyedService::SyncConversation(mojom::ConversationPtr conversation,
                            std::move(callback)));
 }
 
+void AIChatKeyedService::GetConversationForGURL(const GURL& gurl,
+                                                ConversationCallback callback) {
+  auto on_get = [](const GURL& gurl, ConversationCallback callback,
+                   std::vector<mojom::ConversationPtr> conversations) {
+    auto it = std::find_if(conversations.begin(), conversations.end(),
+                           [&gurl](const auto& conversation) {
+                             return conversation->page_url == gurl.spec();
+                           });
+    if (it != conversations.end()) {
+      std::move(callback).Run(std::move(*it));
+    } else {
+      std::move(callback).Run(std::nullopt);
+    }
+  };
+
+  ai_chat_db_.AsyncCall(&AIChatDatabase::GetAllConversations)
+      .Then(base::BindOnce(on_get, gurl, std::move(callback)));
+}
+
 void AIChatKeyedService::Shutdown() {
   task_runner_.reset();
 }

@@ -766,21 +766,23 @@ void ConversationDriver::CreateAndSyncConversation() {
   }
 
   if ((chat_history_.size() >= 1) && !conversation_) {
-    conversation_ = mojom::Conversation::New(-1, base::Time::Now(),
-                                             "A conversation", GetPageURL());
+    auto conversation = mojom::Conversation::New(
+        -1, base::Time::Now(), "A conversation", GetPageURL());
 
-    DCHECK(service_);
+    CHECK(service_);
 
     service_->SyncConversation(
-        std::move(conversation_),
+        std::move(conversation),
         base::BindOnce(&ConversationDriver::OnConversationSynced,
                        weak_ptr_factory_.GetWeakPtr()));
   }
 }
 
 void ConversationDriver::OnConversationSynced(
-    mojom::ConversationPtr conversation) {
-  conversation_ = std::move(conversation);
+    std::optional<mojom::ConversationPtr> conversation) {
+  if (conversation.has_value()) {
+    conversation_ = std::move(conversation.value());
+  }
 }
 
 void ConversationDriver::GetPremiumStatus(
@@ -905,6 +907,10 @@ void ConversationDriver::SendFeedback(
 
 void ConversationDriver::SetService(AIChatKeyedService* service) {
   service_ = service;
+
+  service_->GetConversationForGURL(
+      GetPageURL(), base::BindOnce(&ConversationDriver::OnConversationSynced,
+                                   weak_ptr_factory_.GetWeakPtr()));
 }
 
 }  // namespace ai_chat

@@ -22,8 +22,8 @@ class BrowserContext;
 }  // namespace content
 
 namespace ai_chat {
-using ConversationCallback =
-    base::OnceCallback<void(mojom::ConversationPtr conversation)>;
+using ConversationCallback = base::OnceCallback<void(
+    std::optional<mojom::ConversationPtr> conversation)>;
 class AIChatKeyedService : public KeyedService {
  public:
   explicit AIChatKeyedService(content::BrowserContext* context);
@@ -33,6 +33,7 @@ class AIChatKeyedService : public KeyedService {
 
   void SyncConversation(mojom::ConversationPtr conversation,
                         ConversationCallback callback);
+  void GetConversationForGURL(const GURL& gurl, ConversationCallback callback);
 
  private:
   base::SequencedTaskRunner* GetTaskRunner();
