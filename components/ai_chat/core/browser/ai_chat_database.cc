@@ -136,7 +136,8 @@ int64_t AIChatDatabase::AddConversation(mojom::ConversationPtr conversation) {
   }
 
   if (!statement.Step()) {
-    DVLOG(0) << "Failed to execute 'conversation' insert statement\n";
+    DVLOG(0) << "Failed to execute 'conversation' insert statement"
+             << db_.GetErrorMessage();
     return INT64_C(-1);
   }
 
@@ -146,11 +147,10 @@ int64_t AIChatDatabase::AddConversation(mojom::ConversationPtr conversation) {
 int64_t AIChatDatabase::AddConversationEntry(
     int64_t conversation_id,
     mojom::ConversationEntryPtr entry) {
-  sql::Transaction transaction(&db_);
+  sql::Transaction transaction(&GetDB());
   if (!transaction.Begin()) {
     DVLOG(0) << "Transaction cannot begin\n";
     return INT64_C(-1);
-    ;
   }
 
   sql::Statement get_conversation_id_statement(
@@ -161,12 +161,12 @@ int64_t AIChatDatabase::AddConversationEntry(
   if (!get_conversation_id_statement.Step()) {
     DVLOG(0) << "ID not found in 'conversation' table";
     return INT64_C(-1);
-    ;
   }
 
   sql::Statement insert_conversation_entry_statement(GetDB().GetUniqueStatement(
       "INSERT INTO conversation_entry(id, date, character_type, "
-      "conversation_id) VALUES(NULL, ?, ?, ?) RETURNING id"));
+      "conversation_id) VALUES(1, ?, ?, ?)"));
+
   // ConversationEntry's date should always match first text's date
   insert_conversation_entry_statement.BindTimeDelta(
       0, SerializeTimeToDelta(entry->texts[0]->date));
@@ -176,9 +176,9 @@ int64_t AIChatDatabase::AddConversationEntry(
       2, get_conversation_id_statement.ColumnInt64(0));
 
   if (!insert_conversation_entry_statement.Step()) {
-    DVLOG(0) << "Failed to execute 'conversation_entry' insert statement\n";
+    DVLOG(0) << "Failed to execute 'conversation_entry' insert statement: "
+             << db_.GetErrorMessage();
     return INT64_C(-1);
-    ;
   }
 
   int64_t conversation_entry_row_id =
@@ -188,7 +188,12 @@ int64_t AIChatDatabase::AddConversationEntry(
     AddConversationEntryText(conversation_entry_row_id, std::move(text));
   }
 
-  transaction.Commit();
+  if (!transaction.Commit()) {
+    DVLOG(0) << "Transaction commit failed with reason: "
+             << db_.GetErrorMessage();
+    return INT64_C(-1);
+  }
+
   return conversation_entry_row_id;
 }
 
@@ -201,7 +206,8 @@ int64_t AIChatDatabase::AddConversationEntryText(
   get_conversation_entry_statement.BindInt64(0, conversation_entry_id);
 
   if (!get_conversation_entry_statement.Step()) {
-    DVLOG(0) << "ID not found in 'conversation entry' table";
+    DVLOG(0) << "ID not found in 'conversation entry' table"
+             << db_.GetErrorMessage();
     return INT64_C(-1);
   }
 
@@ -216,7 +222,8 @@ int64_t AIChatDatabase::AddConversationEntryText(
   insert_text_statement.BindInt64(2, conversation_entry_id);
 
   if (!insert_text_statement.Step()) {
-    DVLOG(0) << "Failed to execute 'conversation_entry' insert statement\n";
+    DVLOG(0) << "Failed to execute 'conversation_entry_text' insert statement: "
+             << db_.GetErrorMessage();
     return INT64_C(-1);
   }
 

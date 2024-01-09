@@ -155,7 +155,8 @@ class ConversationDriver {
   bool IsContentAssociationPossible();
 
   void CreateAndSyncConversation();
-  void OnConversationSynced(std::optional<mojom::ConversationPtr> conversation);
+  void OnGetConversation(std::optional<mojom::ConversationPtr> conversation);
+  void SyncConversationTurn(mojom::ConversationTurnPtr turn);
 
   raw_ptr<PrefService> pref_service_;
   raw_ptr<AIChatMetrics> ai_chat_metrics_;

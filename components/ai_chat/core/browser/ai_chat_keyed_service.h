@@ -33,6 +33,8 @@ class AIChatKeyedService : public KeyedService {
 
   void SyncConversation(mojom::ConversationPtr conversation,
                         ConversationCallback callback);
+  void SyncConversationTurn(int64_t conversation_id,
+                            mojom::ConversationTurnPtr turn);
   void GetConversationForGURL(const GURL& gurl, ConversationCallback callback);
 
  private:

@@ -6,6 +6,7 @@
 #include "brave/components/ai_chat/core/browser/ai_chat_keyed_service.h"
 
 #include <utility>
+#include <vector>
 
 #include "base/task/thread_pool.h"
 #include "content/public/browser/browser_context.h"
@@ -21,7 +22,7 @@ AIChatKeyedService::AIChatKeyedService(content::BrowserContext* context)
   ai_chat_db_ = base::SequenceBound<AIChatDatabase>(GetTaskRunner());
 
   auto on_response = base::BindOnce(
-      [](bool success) { DVLOG(1) << "Init: " << success << "\n"; });
+      [](bool success) { DVLOG(1) << "AIChatDB Init: " << success; });
 
   ai_chat_db_.AsyncCall(&AIChatDatabase::Init)
       .WithArgs(base_dir_)
@@ -53,6 +54,24 @@ void AIChatKeyedService::SyncConversation(mojom::ConversationPtr conversation,
       .WithArgs(conversation.Clone())
       .Then(base::BindOnce(on_added, std::move(conversation),
                            std::move(callback)));
+}
+
+void AIChatKeyedService::SyncConversationTurn(int64_t conversation_id,
+                                              mojom::ConversationTurnPtr turn) {
+  std::vector<mojom::ConversationEntryTextPtr> texts;
+  texts.emplace_back(
+      mojom::ConversationEntryText::New(-1, base::Time::Now(), turn->text));
+
+  auto conversation_entry = mojom::ConversationEntry::New(
+      -1, base::Time::Now(), turn->character_type, std::move(texts));
+
+  auto on_added = [](int64_t id) {
+    LOG(ERROR) << "converstaion entry saved at id: " << id << "\n";
+  };
+
+  ai_chat_db_.AsyncCall(&AIChatDatabase::AddConversationEntry)
+      .WithArgs(conversation_id, std::move(conversation_entry))
+      .Then(base::BindOnce(on_added));
 }
 
 void AIChatKeyedService::GetConversationForGURL(const GURL& gurl,
