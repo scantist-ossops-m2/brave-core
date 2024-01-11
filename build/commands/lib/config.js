@@ -630,6 +630,7 @@ Config.prototype.buildArgs = function () {
     args.ios_enable_share_extension = false
     args.ios_enable_credential_provider_extension = false
     args.ios_enable_widget_kit_extension = false
+    args.ios_enable_screen_time = false
 
     // This is currently being flipped on and off by the Chromium team to test
     // however it causes crashes for us at launch. Check `ios/features.gni`
