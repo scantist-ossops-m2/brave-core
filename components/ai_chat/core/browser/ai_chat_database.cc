@@ -127,6 +127,7 @@ int64_t AIChatDatabase::AddConversation(mojom::ConversationPtr conversation) {
   sql::Statement statement(
       GetDB().GetUniqueStatement("INSERT INTO conversation(id, title, "
                                  "page_url) VALUES(NULL, ?, ?) RETURNING id"));
+  CHECK(statement.is_valid());
 
   statement.BindString(0, conversation->title);
   if (conversation->page_url.has_value()) {
@@ -148,6 +149,9 @@ int64_t AIChatDatabase::AddConversationEntry(
     int64_t conversation_id,
     mojom::ConversationEntryPtr entry) {
   sql::Transaction transaction(&GetDB());
+
+  CHECK(GetDB().is_open());
+
   if (!transaction.Begin()) {
     DVLOG(0) << "Transaction cannot begin\n";
     return INT64_C(-1);
@@ -156,6 +160,8 @@ int64_t AIChatDatabase::AddConversationEntry(
   sql::Statement get_conversation_id_statement(
       GetDB().GetUniqueStatement("SELECT id FROM conversation"
                                  " WHERE id=?"));
+  CHECK(get_conversation_id_statement.is_valid());
+
   get_conversation_id_statement.BindInt64(0, conversation_id);
 
   if (!get_conversation_id_statement.Step()) {
@@ -166,6 +172,7 @@ int64_t AIChatDatabase::AddConversationEntry(
   sql::Statement insert_conversation_entry_statement(GetDB().GetUniqueStatement(
       "INSERT INTO conversation_entry(id, date, character_type, "
       "conversation_id) VALUES(1, ?, ?, ?)"));
+  CHECK(insert_conversation_entry_statement.is_valid());
 
   // ConversationEntry's date should always match first text's date
   insert_conversation_entry_statement.BindTimeDelta(
@@ -203,6 +210,7 @@ int64_t AIChatDatabase::AddConversationEntryText(
   sql::Statement get_conversation_entry_statement(
       GetDB().GetUniqueStatement("SELECT id FROM conversation_entry"
                                  " WHERE id=?"));
+  CHECK(get_conversation_entry_statement.is_valid());
   get_conversation_entry_statement.BindInt64(0, conversation_entry_id);
 
   if (!get_conversation_entry_statement.Step()) {
@@ -216,6 +224,8 @@ int64_t AIChatDatabase::AddConversationEntryText(
                                  "conversation_entry_text("
                                  "id, date, text, conversation_entry_id"
                                  ") VALUES(NULL, ?, ?, ?) RETURNING id"));
+  CHECK(insert_text_statement.is_valid());
+
   insert_text_statement.BindTimeDelta(0,
                                       SerializeTimeToDelta(entry_text->date));
   insert_text_statement.BindString(1, entry_text->text);
