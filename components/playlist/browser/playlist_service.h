@@ -232,7 +232,9 @@ class PlaylistService : public KeyedService,
   // contents, which means it could have impact on performance/memory.
   bool ShouldGetMediaFromBackgroundWebContents(const GURL& url) const;
 
-  bool ShouldRefetchMediaSourceToCache(
+  // Returns true when any of items contains blob: scheme, which we can't cache
+  // media directly from.
+  bool ShouldExtractMediaFromBackgroundWebContents(
       const std::vector<mojom::PlaylistItemPtr>& items);
 
   bool playlist_enabled() const { return *enabled_pref_; }
