@@ -1,3 +1,4 @@
 include_rules = [
   "+brave/third_party/blink/renderer",
+  "+brave/components/webcompat_exceptions",
 ]
