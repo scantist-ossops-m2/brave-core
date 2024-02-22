@@ -21,6 +21,7 @@ import org.chromium.chrome.browser.ActivityTabProvider;
 import org.chromium.chrome.browser.bookmarks.BookmarkModel;
 import org.chromium.chrome.browser.incognito.reauth.IncognitoReauthController;
 import org.chromium.chrome.browser.layouts.LayoutStateProvider;
+import org.chromium.chrome.browser.multiwindow.BraveMultiWindowUtils;
 import org.chromium.chrome.browser.multiwindow.MultiWindowModeStateDispatcher;
 import org.chromium.chrome.browser.readaloud.ReadAloudController;
 import org.chromium.chrome.browser.tabmodel.TabModelSelector;
@@ -111,5 +112,15 @@ public class BraveAppMenuPropertiesDelegateImpl extends AppMenuPropertiesDelegat
                 }
             }
         }
+    }
+
+    @Override
+    protected boolean shouldShowNewWindow() {
+        return BraveMultiWindowUtils.shouldEnableWindows() && super.shouldShowNewWindow();
+    }
+
+    @Override
+    protected boolean shouldShowMoveToOtherWindow() {
+        return BraveMultiWindowUtils.shouldEnableWindows() && super.shouldShowMoveToOtherWindow();
     }
 }

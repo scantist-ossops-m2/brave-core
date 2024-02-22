@@ -63,6 +63,7 @@ public class BraveClassAdapter {
         chain = new BraveMenuButtonCoordinatorClassAdapter(chain);
         chain = new BraveMimeUtilsClassAdapter(chain);
         chain = new BraveMostVisitedTilesMediatorClassAdapter(chain);
+        chain = new BraveMultiWindowUtilsClassAdapter(chain);
         chain = new BraveNewTabPageClassAdapter(chain);
         chain = new BraveNewTabPageLayoutClassAdapter(chain);
         chain = new BraveNotificationBuilderClassAdapter(chain);

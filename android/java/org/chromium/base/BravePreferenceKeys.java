@@ -62,6 +62,8 @@ public final class BravePreferenceKeys {
     public static final String BRAVE_CLEAR_ON_EXIT = "clear_on_exit";
     public static final String BRAVE_QUICK_ACTION_SEARCH_AND_BOOKMARK_WIDGET_TILES =
             "org.chromium.chrome.browser.widget.quickactionsearchandbookmark.QuickActionSearchAndBookmarkWidgetProvider.TILES";
+    public static final String ENABLE_WINDOWS = "enable_windows";
+    public static final String ENABLE_WINDOWS_UPGRADE = "enable_windows_upgrade";
 
     public static final String BRAVE_LEO_AUTOCOMPLETE =
             "org.chromium.chrome.browser.Brave_Leo_AutoComplete";
@@ -126,7 +128,8 @@ public final class BravePreferenceKeys {
                 PREF_REMEMBER_FILE_PLAYBACK_POSITION,
                 PREF_REMEMBER_LIST_PLAYBACK_POSITION,
                 PREF_CONTINUOUS_LISTENING,
-                PREF_RESET_PLAYLIST);
+                PREF_RESET_PLAYLIST,
+                ENABLE_WINDOWS);
     }
 
     /*
