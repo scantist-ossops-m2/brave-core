@@ -1,12 +1,12 @@
 diff --git a/ui/webui/resources/cr_elements/BUILD.gn b/ui/webui/resources/cr_elements/BUILD.gn
-index 8619605e2975f2f6aea6155912906cb6b8e5cfb1..f210534ffdec40df426490cd70a6dc70b68892d9 100644
+index 0c14538f962727fcba5e8ba13bd7a73a1f1702f2..cb9cc7d7b2f7b0f7a101ed98e5ce188290b4abc7 100644
 --- a/ui/webui/resources/cr_elements/BUILD.gn
 +++ b/ui/webui/resources/cr_elements/BUILD.gn
-@@ -66,6 +66,7 @@ build_webui("build") {
+@@ -65,6 +65,7 @@ build_webui("build") {
        web_component_files +=
            [ "cr_searchable_drop_down/cr_searchable_drop_down.ts" ]
      }
 +    else if (!is_android) { web_component_files += [ "cr_searchable_drop_down/cr_searchable_drop_down.ts" ] }
  
      icons_html_files = [
-       "cr_fingerprint/cr_fingerprint_icons.html",
+       "icons.html",
