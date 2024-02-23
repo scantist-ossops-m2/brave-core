@@ -542,6 +542,7 @@ export enum WalletRoutes {
 
   // onboarding (connect hardware wallet)
   OnboardingHardwareWalletStart = '/crypto/onboarding/hardware',
+  OnboardingImportHardwareWalletWelcome = '/crypto/onboarding/hardware/welcome',
   OnboardingHardwareWalletTerms = '/crypto/onboarding/hardware/terms',
   OnboardingHardwareWalletConnect = '/crypto/onboarding/hardware/connect' +
     '/:accountTypeName?',
@@ -649,6 +650,7 @@ export interface CreateAccountOptionsType {
   description: string
   coin: BraveWallet.CoinType
   icon: string
+  chainIcons?: string[]
 }
 
 export interface NFTAttribute {
@@ -1056,7 +1058,7 @@ export interface BraveRewardsInfo {
 export type AutoLockOption = {
   value: number
   label: string
-} 
+}
 
 export type BitcoinBalances = {
   availableBalance: string
