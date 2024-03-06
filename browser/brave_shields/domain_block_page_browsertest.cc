@@ -15,6 +15,7 @@
 #include "brave/components/constants/pref_names.h"
 #include "chrome/browser/extensions/extension_browsertest.h"
 #include "chrome/browser/interstitials/security_interstitial_page_test_utils.h"
+#include "chrome/browser/profiles/profile.h"
 #include "chrome/browser/ui/browser.h"
 #include "chrome/test/base/testing_browser_process.h"
 #include "chrome/test/base/ui_test_utils.h"
