@@ -43,6 +43,7 @@ var package = Package(
     .library(name: "Playlist", targets: ["Playlist"]),
     .library(name: "UserAgent", targets: ["UserAgent"]),
     .library(name: "CredentialProviderUI", targets: ["CredentialProviderUI"]),
+    .library(name: "PlaylistPrototype", targets: ["PlaylistPrototype"]),
     .executable(name: "LeoAssetCatalogGenerator", targets: ["LeoAssetCatalogGenerator"]),
     .plugin(name: "IntentBuilderPlugin", targets: ["IntentBuilderPlugin"]),
     .plugin(name: "LoggerPlugin", targets: ["LoggerPlugin"]),
@@ -385,6 +386,7 @@ var package = Package(
       name: "GrowthTests",
       dependencies: ["Growth", "Shared", "BraveShared", "BraveVPN"]
     ),
+    .target(name: "PlaylistPrototype", dependencies: ["DesignSystem"]),
     .plugin(name: "IntentBuilderPlugin", capability: .buildTool()),
     .plugin(name: "LoggerPlugin", capability: .buildTool()),
     .plugin(

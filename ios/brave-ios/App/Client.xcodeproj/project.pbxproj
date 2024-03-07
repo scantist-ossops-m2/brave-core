@@ -25,6 +25,11 @@
 		27466BB1288EDB9C00584C90 /* RuntimeWarnings in Frameworks */ = {isa = PBXBuildFile; productRef = 27466BB0288EDB9C00584C90 /* RuntimeWarnings */; };
 		2759468D29CCB62F0094BDDE /* GRDWireGuardKit in Frameworks */ = {isa = PBXBuildFile; productRef = 2759468C29CCB62F0094BDDE /* GRDWireGuardKit */; };
 		2759468F29CCB6350094BDDE /* GRDWireGuardKit in Frameworks */ = {isa = PBXBuildFile; productRef = 2759468E29CCB6350094BDDE /* GRDWireGuardKit */; };
+		275D23BE2B9A49EC00BE37A2 /* PlaylistPrototypeApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 275D23BD2B9A49EC00BE37A2 /* PlaylistPrototypeApp.swift */; };
+		275D23C02B9A49EC00BE37A2 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 275D23BF2B9A49EC00BE37A2 /* ContentView.swift */; };
+		275D23C22B9A49ED00BE37A2 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 275D23C12B9A49ED00BE37A2 /* Assets.xcassets */; };
+		275D23C52B9A49ED00BE37A2 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 275D23C42B9A49ED00BE37A2 /* Preview Assets.xcassets */; };
+		275D23CE2B9A49FB00BE37A2 /* PlaylistPrototype in Frameworks */ = {isa = PBXBuildFile; productRef = 275D23CD2B9A49FB00BE37A2 /* PlaylistPrototype */; };
 		2787B06A2B7ED260004796F8 /* BraveCore in Frameworks */ = {isa = PBXBuildFile; productRef = 2787B0692B7ED260004796F8 /* BraveCore */; };
 		278852E42ACDC26B005395CF /* Playlist in Frameworks */ = {isa = PBXBuildFile; productRef = 278852E32ACDC26B005395CF /* Playlist */; };
 		278852E62ACDE795005395CF /* UserAgent in Frameworks */ = {isa = PBXBuildFile; productRef = 278852E52ACDE795005395CF /* UserAgent */; };
@@ -201,6 +206,11 @@
 		27444B6A29831BBE002E1EBE /* topics_news.en_US.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = topics_news.en_US.json; sourceTree = "<group>"; };
 		27465DC3284FDB6F0056FDB2 /* sv */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sv; path = Shortcuts/sv.lproj/BrowserIntents.strings; sourceTree = "<group>"; };
 		275A4C39284FDB290016F5A8 /* ko-KR */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "ko-KR"; path = "Shortcuts/ko-KR.lproj/BrowserIntents.strings"; sourceTree = "<group>"; };
+		275D23BB2B9A49EC00BE37A2 /* PlaylistPrototypeApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PlaylistPrototypeApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		275D23BD2B9A49EC00BE37A2 /* PlaylistPrototypeApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlaylistPrototypeApp.swift; sourceTree = "<group>"; };
+		275D23BF2B9A49EC00BE37A2 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		275D23C12B9A49ED00BE37A2 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		275D23C42B9A49ED00BE37A2 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		276FEA8B284FDB7A001A0718 /* tr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = tr; path = Shortcuts/tr.lproj/BrowserIntents.strings; sourceTree = "<group>"; };
 		277CA004284FDB34002E8470 /* ms */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ms; path = Shortcuts/ms.lproj/BrowserIntents.strings; sourceTree = "<group>"; };
 		278BB9FE297B0A1E00690BE3 /* TopNewsListWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopNewsListWidget.swift; sourceTree = "<group>"; };
@@ -396,6 +406,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		275D23B82B9A49EC00BE37A2 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				275D23CE2B9A49FB00BE37A2 /* PlaylistPrototype in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		27F443922135E11200296C58 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -543,6 +561,25 @@
 				27444B6A29831BBE002E1EBE /* topics_news.en_US.json */,
 			);
 			path = "Development Assets";
+			sourceTree = "<group>";
+		};
+		275D23BC2B9A49EC00BE37A2 /* PlaylistPrototype */ = {
+			isa = PBXGroup;
+			children = (
+				275D23BD2B9A49EC00BE37A2 /* PlaylistPrototypeApp.swift */,
+				275D23BF2B9A49EC00BE37A2 /* ContentView.swift */,
+				275D23C12B9A49ED00BE37A2 /* Assets.xcassets */,
+				275D23C32B9A49ED00BE37A2 /* Preview Content */,
+			);
+			path = PlaylistPrototype;
+			sourceTree = "<group>";
+		};
+		275D23C32B9A49ED00BE37A2 /* Preview Content */ = {
+			isa = PBXGroup;
+			children = (
+				275D23C42B9A49ED00BE37A2 /* Preview Assets.xcassets */,
+			);
+			path = "Preview Content";
 			sourceTree = "<group>";
 		};
 		27F443962135E11200296C58 /* ShareExtension */ = {
@@ -708,6 +745,7 @@
 				CA0391B7271E1023000EB13C /* BraveWidgets */,
 				2FD860C329C3D686005AADD1 /* BraveWireGuard */,
 				2714EE6C2AF2D4CD002090A9 /* AutoFillProvider */,
+				275D23BC2B9A49EC00BE37A2 /* PlaylistPrototype */,
 				7B604FC11C496005006EEEC3 /* Frameworks */,
 				F84B21BF1A090F8100AAB793 /* Products */,
 			);
@@ -726,6 +764,7 @@
 				2FD860C129C3D677005AADD1 /* BraveWireGuard.appex */,
 				2FE7D51B2B509DA40039FBA4 /* ActionExtension.appex */,
 				2714EE692AF2D4CD002090A9 /* AutoFillProvider.appex */,
+				275D23BB2B9A49EC00BE37A2 /* PlaylistPrototypeApp.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -763,6 +802,26 @@
 			productName = AutoFillProvider;
 			productReference = 2714EE692AF2D4CD002090A9 /* AutoFillProvider.appex */;
 			productType = "com.apple.product-type.app-extension";
+		};
+		275D23BA2B9A49EC00BE37A2 /* PlaylistPrototypeApp */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 275D23CC2B9A49ED00BE37A2 /* Build configuration list for PBXNativeTarget "PlaylistPrototypeApp" */;
+			buildPhases = (
+				275D23B72B9A49EC00BE37A2 /* Sources */,
+				275D23B82B9A49EC00BE37A2 /* Frameworks */,
+				275D23B92B9A49EC00BE37A2 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = PlaylistPrototypeApp;
+			packageProductDependencies = (
+				275D23CD2B9A49FB00BE37A2 /* PlaylistPrototype */,
+			);
+			productName = PlaylistPrototype;
+			productReference = 275D23BB2B9A49EC00BE37A2 /* PlaylistPrototypeApp.app */;
+			productType = "com.apple.product-type.application";
 		};
 		27F443942135E11200296C58 /* ShareExtension */ = {
 			isa = PBXNativeTarget;
@@ -923,12 +982,15 @@
 			attributes = {
 				DefaultBuildSystemTypeForWorkspace = Latest;
 				LastSwiftMigration = 0700;
-				LastSwiftUpdateCheck = 1500;
+				LastSwiftUpdateCheck = 1530;
 				LastUpgradeCheck = 1250;
 				ORGANIZATIONNAME = Mozilla;
 				TargetAttributes = {
 					2714EE682AF2D4CD002090A9 = {
 						CreatedOnToolsVersion = 15.0.1;
+					};
+					275D23BA2B9A49EC00BE37A2 = {
+						CreatedOnToolsVersion = 15.3;
 					};
 					27F443942135E11200296C58 = {
 						CreatedOnToolsVersion = 10.0;
@@ -1015,6 +1077,7 @@
 				CA0391B1271E1023000EB13C /* BraveWidgetsExtension */,
 				2FD860C029C3D676005AADD1 /* BraveWireGuard */,
 				2714EE682AF2D4CD002090A9 /* AutoFillProvider */,
+				275D23BA2B9A49EC00BE37A2 /* PlaylistPrototypeApp */,
 			);
 		};
 /* End PBXProject section */
@@ -1026,6 +1089,15 @@
 			files = (
 				44A8A3792BADE6DC004D1BF1 /* PrivacyInfo.xcprivacy in Resources */,
 				2714EE8D2AF3F476002090A9 /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		275D23B92B9A49EC00BE37A2 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				275D23C52B9A49ED00BE37A2 /* Preview Assets.xcassets in Resources */,
+				275D23C22B9A49ED00BE37A2 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1113,6 +1185,15 @@
 			buildActionMask = 2147483647;
 			files = (
 				2714EE6E2AF2D4CD002090A9 /* CredentialProviderViewController.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		275D23B72B9A49EC00BE37A2 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				275D23C02B9A49EC00BE37A2 /* ContentView.swift in Sources */,
+				275D23BE2B9A49EC00BE37A2 /* PlaylistPrototypeApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1590,6 +1671,282 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "Brave iOS Beta AutoFill Provider";
 				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Beta;
+		};
+		275D23C62B9A49ED00BE37A2 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_ASSET_PATHS = "\"PlaylistPrototype/Preview Content\"";
+				DEVELOPMENT_TEAM = KL8N8XSYF4;
+				ENABLE_PREVIEWS = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MARKETING_VERSION = 1.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.brave.ios.PlaylistPrototype;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		275D23C72B9A49ED00BE37A2 /* Debug (AppStore) */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_ASSET_PATHS = "\"PlaylistPrototype/Preview Content\"";
+				DEVELOPMENT_TEAM = KL8N8XSYF4;
+				ENABLE_PREVIEWS = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MARKETING_VERSION = 1.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.brave.ios.PlaylistPrototype;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = "Debug (AppStore)";
+		};
+		275D23C82B9A49ED00BE37A2 /* Nightly */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_ASSET_PATHS = "\"PlaylistPrototype/Preview Content\"";
+				DEVELOPMENT_TEAM = KL8N8XSYF4;
+				ENABLE_PREVIEWS = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MARKETING_VERSION = 1.0;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.brave.ios.PlaylistPrototype;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Nightly;
+		};
+		275D23C92B9A49ED00BE37A2 /* Release (AppStore) */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_ASSET_PATHS = "\"PlaylistPrototype/Preview Content\"";
+				DEVELOPMENT_TEAM = KL8N8XSYF4;
+				ENABLE_PREVIEWS = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MARKETING_VERSION = 1.0;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.brave.ios.PlaylistPrototype;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = "Release (AppStore)";
+		};
+		275D23CA2B9A49ED00BE37A2 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_ASSET_PATHS = "\"PlaylistPrototype/Preview Content\"";
+				DEVELOPMENT_TEAM = KL8N8XSYF4;
+				ENABLE_PREVIEWS = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MARKETING_VERSION = 1.0;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.brave.ios.PlaylistPrototype;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		275D23CB2B9A49ED00BE37A2 /* Beta */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_ASSET_PATHS = "\"PlaylistPrototype/Preview Content\"";
+				DEVELOPMENT_TEAM = KL8N8XSYF4;
+				ENABLE_PREVIEWS = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MARKETING_VERSION = 1.0;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = com.brave.ios.PlaylistPrototype;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
@@ -3297,6 +3654,19 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Debug;
 		};
+		275D23CC2B9A49ED00BE37A2 /* Build configuration list for PBXNativeTarget "PlaylistPrototypeApp" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				275D23C62B9A49ED00BE37A2 /* Debug */,
+				275D23C72B9A49ED00BE37A2 /* Debug (AppStore) */,
+				275D23C82B9A49ED00BE37A2 /* Nightly */,
+				275D23C92B9A49ED00BE37A2 /* Release (AppStore) */,
+				275D23CA2B9A49ED00BE37A2 /* Release */,
+				275D23CB2B9A49ED00BE37A2 /* Beta */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
 		27F443AB2135E11200296C58 /* Build configuration list for PBXNativeTarget "ShareExtension" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -3446,6 +3816,10 @@
 		2759468E29CCB6350094BDDE /* GRDWireGuardKit */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = GRDWireGuardKit;
+		};
+		275D23CD2B9A49FB00BE37A2 /* PlaylistPrototype */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = PlaylistPrototype;
 		};
 		2787B0692B7ED260004796F8 /* BraveCore */ = {
 			isa = XCSwiftPackageProductDependency;
