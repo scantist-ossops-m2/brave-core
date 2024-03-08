@@ -6,9 +6,20 @@
 import Foundation
 import SwiftUI
 
+@available(iOS 16.0, *)
 public struct PlaylistPrototypeRootView: View {
+  @Environment(\.dismiss) private var dismiss
+
   public init() {}
   public var body: some View {
-    Text("Hello, World")
+    NavigationStack {
+      Color.clear
+        .toolbar {
+          Button("Done") {
+            dismiss()
+          }
+        }
+        .observingInterfaceOrientation()
+    }
   }
 }
