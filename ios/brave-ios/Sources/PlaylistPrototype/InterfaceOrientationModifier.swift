@@ -17,16 +17,18 @@ extension EnvironmentValues {
   /// The value will be the current orientation of the View that reads it, regardless of horizontal
   /// and vertical size classes. Use this in conjunction with size classes to update UI accordingly.
   ///
+  /// Use size classes if possible before reaching for this API.
+  ///
   /// - Note: This environment value will be `UIInterfaceOrientation.unknown` and receive no changes
   ///         unless a parent View uses the `observingInterfaceOrientation` modifier.
   var interfaceOrientation: UIInterfaceOrientation {
-    get { self[InterfaceOrientationKey.self] }
+    self[InterfaceOrientationKey.self]
   }
 
-  /// Writable reference to `interfaceOrientation`, useful for SwiftUI Previews or snapshot tests.
+  /// Writable reference to `interfaceOrientation`
   ///
   /// - SeeAlso: `interfaceOrientation`
-  var _interfaceOrientation: UIInterfaceOrientation {
+  fileprivate var _interfaceOrientation: UIInterfaceOrientation {
     get { self[InterfaceOrientationKey.self] }
     set { self[InterfaceOrientationKey.self] = newValue }
   }
@@ -50,6 +52,8 @@ private struct InterfaceOrientationViewModifier: ViewModifier {
       .environment(\._interfaceOrientation, orientation)
       .background {
         _Representable(orientation: $orientation)
+          // Can't use the `hidden` modifier or the VC isn't added at all and can't receive updates
+          .opacity(0)
           .accessibilityHidden(true)
       }
   }
@@ -79,13 +83,11 @@ private struct InterfaceOrientationViewModifier: ViewModifier {
     }
 
     private func updateOrientation() {
-      if let interfaceOrientation = view.window?.windowScene?.interfaceOrientation {
-        orientation = interfaceOrientation
-      }
+      orientation = view.window?.windowScene?.interfaceOrientation ?? .unknown
     }
 
-    override func viewWillAppear(_ animated: Bool) {
-      super.viewWillAppear(animated)
+    override func viewIsAppearing(_ animated: Bool) {
+      super.viewIsAppearing(animated)
       updateOrientation()
     }
 

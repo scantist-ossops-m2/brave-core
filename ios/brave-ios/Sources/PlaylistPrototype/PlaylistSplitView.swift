@@ -9,7 +9,9 @@ import SwiftUI
 /// A view which displays playlist content in up to two columns depending on the orientation &
 /// size classes.
 struct PlaylistSplitView: View {
+  @Environment(\.interfaceOrientation) private var interfaceOrientation
+
   var body: some View {
-    EmptyView()
+    Text("Interface Orientation: \(interfaceOrientation.isPortrait ? "Portrait" : interfaceOrientation.isLandscape ? "Landscape" : "Unknown")")
   }
 }
