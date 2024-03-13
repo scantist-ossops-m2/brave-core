@@ -16,11 +16,15 @@ public struct PlaylistPrototypeRootView: View {
     NavigationStack {
       PlaylistSplitView()
         .toolbar {
-          Button("Done") {
-            dismiss()
+          ToolbarItemGroup(placement: .cancellationAction) {
+            Button("Done") {
+              dismiss()
+            }
           }
         }
+        .toolbarBackground(.hidden, for: .navigationBar)
         .observingInterfaceOrientation()
+        .creatingRequestGeometryUpdateAction()
     }
   }
 }

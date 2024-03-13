@@ -15,22 +15,14 @@ struct PlaybackControls: View {
   }
 
   var body: some View {
-    Group {
+    HStack {
       Toggle(isOn: $model.isShuffleEnabled) {
-        ZStack {
+        if model.isShuffleEnabled {
           Image(braveSystemName: "leo.shuffle.toggle-on")
+            .transition(.opacity.animation(.linear(duration: 0.1)))
+        } else {
           Image(braveSystemName: "leo.shuffle.off")
-        }
-        .accessibilityHidden(true)
-        .hidden()
-        .overlay {
-          if model.isShuffleEnabled {
-            Image(braveSystemName: "leo.shuffle.toggle-on")
-              .transition(.opacity.animation(.linear(duration: 0.1)))
-          } else {
-            Image(braveSystemName: "leo.shuffle.off")
-              .transition(.opacity.animation(.linear(duration: 0.1)))
-          }
+            .transition(.opacity.animation(.linear(duration: 0.1)))
         }
       }
       .toggleStyle(.button)
@@ -40,36 +32,31 @@ struct PlaybackControls: View {
       } label: {
         Label("Step Back", braveSystemImage: "leo.rewind.15")
       }
+      .buttonStyle(.playbackControl(size: .large))
+      .foregroundStyle(Color(braveSystemName: .textPrimary))
       Spacer()
-      Toggle(isOn: $model.isPlaying, label: {
-        // Maintain the sizes when swapping images
-        ZStack {
-          Image(braveSystemName: "leo.pause.filled")
-          Image(braveSystemName: "leo.play.filled")
+      Toggle(isOn: $model.isPlaying) {
+        if model.isPlaying {
+          Label("Pause", braveSystemImage: "leo.pause.filled")
+            .labelStyle(.iconOnly)
+            .transition(playButtonTransition)
+        } else {
+          Label("Play", braveSystemImage: "leo.play.filled")
+            .labelStyle(.iconOnly)
+            .transition(playButtonTransition)
         }
-        .accessibilityHidden(true)
-        .hidden()
-        .overlay {
-          if model.isPlaying {
-            Label("Pause", braveSystemImage: "leo.pause.filled")
-              .labelStyle(.iconOnly)
-              .transition(playButtonTransition)
-          } else {
-            Label("Play", braveSystemImage: "leo.play.filled")
-              .labelStyle(.iconOnly)
-              .transition(playButtonTransition)
-          }
-        }
-      })
+      }
       .toggleStyle(.button)
-      .foregroundStyle(.primary)
-      .font(.title)
+      .foregroundStyle(Color(braveSystemName: .textPrimary))
+      .buttonStyle(.playbackControl(size: .extraLarge))
       Spacer()
       Button {
         Task { await model.seekForwards() }
       } label: {
         Label("Step Forward", braveSystemImage: "leo.forward.15")
       }
+      .buttonStyle(.playbackControl(size: .large))
+      .foregroundStyle(Color(braveSystemName: .textPrimary))
       Spacer()
       Button {
         model.repeatMode.cycle()
@@ -88,16 +75,18 @@ struct PlaybackControls: View {
         .transition(.opacity.animation(.linear(duration: 0.1)))
       }
     }
-    .buttonStyle(.spring(scale: 0.85))
-    .labelStyle(.iconOnly)
+    .buttonStyle(.playbackControl)
+    .foregroundStyle(Color(braveSystemName: .textSecondary))
   }
 }
 
-struct LeadingExtraControls: View {
+struct ExtraControls: View {
+  @Binding var stopPlaybackDate: Date?
+  @Binding var isPlaybackStopInfoPresented: Bool
   @Binding var contentSpeed: PlayerModel.PlaybackSpeed
 
   var body: some View {
-    Group {
+    HStack {
       Button {
         contentSpeed.cycle()
       } label: {
@@ -111,92 +100,93 @@ struct LeadingExtraControls: View {
             Image(braveSystemName: "leo.2x")
           }
         }
-        .aspectRatio(1, contentMode: .fill)
-        .background(Color.red)
         .transition(.opacity.animation(.linear(duration: 0.1)))
       }
-    }
-    .buttonStyle(.spring(scale: 0.85))
-    .labelStyle(.iconOnly)
-  }
-}
-
-struct TrailingExtraControls: View {
-  @Binding var stopPlaybackDate: Date?
-  @Binding var isPlaybackStopInfoPresented: Bool
-
-  var body: some View {
-    Group {
-      if let _ = stopPlaybackDate {
-        Button {
-          isPlaybackStopInfoPresented = true
-        } label: {
-          Label("Sleep Timer", braveSystemImage: "leo.sleep.timer")
-        }
-//        .anchorPreference(key: SleepTimerBoundsPrefKey.self, value: .bounds, transform: { [$0] })
-      } else {
-        Menu {
-          Section {
-            Button {
-              stopPlaybackDate = .now.addingTimeInterval(10 * 60)
-            } label: {
-              Text("10 minutes")
-            }
-            Button {
-              stopPlaybackDate = .now.addingTimeInterval(20 * 60)
-            } label: {
-              Text("20 minutes")
-            }
-            Button {
-              stopPlaybackDate = .now.addingTimeInterval(30 * 60)
-            } label: {
-              Text("30 minutes")
-            }
-            Button {
-              stopPlaybackDate = .now.addingTimeInterval(60 * 60)
-            } label: {
-              Text("1 hour")
-            }
-          } header: {
-            Text("Stop Playback In…")
+      .labelStyle(.iconOnly)
+      Spacer()
+      Menu {
+        Section {
+          Button {
+            stopPlaybackDate = .now.addingTimeInterval(10 * 60)
+          } label: {
+            Text("10 minutes")
           }
-        } label: {
-          Label("Sleep Timer", braveSystemImage: "leo.sleep.timer")
+          Button {
+            stopPlaybackDate = .now.addingTimeInterval(20 * 60)
+          } label: {
+            Text("20 minutes")
+          }
+          Button {
+            stopPlaybackDate = .now.addingTimeInterval(30 * 60)
+          } label: {
+            Text("30 minutes")
+          }
+          Button {
+            stopPlaybackDate = .now.addingTimeInterval(60 * 60)
+          } label: {
+            Text("1 hour")
+          }
+        } header: {
+          Text("Stop Playback In…")
         }
+      } label: {
+        Label("Sleep Timer", braveSystemImage: "leo.sleep.timer")
       }
       Spacer()
       Button { } label: {
         Label("Fullscreen", braveSystemImage: "leo.fullscreen.on")
       }
     }
-    .buttonStyle(.spring(scale: 0.85))
-    .labelStyle(.iconOnly)
+    .buttonStyle(.playbackControl)
+    .foregroundStyle(Color(braveSystemName: .textSecondary))
   }
 }
 
 #if DEBUG
+@available(iOS 16.0, *)
 struct ControlPreview: View {
   @ObservedObject var model: PlayerModel
+  @State private var currentTime: Duration = .seconds(0)
 
   var body: some View {
-    VStack(spacing: 24) {
+    VStack(spacing: 28) {
       HStack {
+        Text("Title")
+          .font(.headline)
+          .frame(maxWidth: .infinity, alignment: .leading)
+          .lineLimit(1)
+        // FIXME: if airplay available (probably from model) {
+        Button {
+
+        } label: {
+          Label("AirPlay", braveSystemImage: "leo.airplay.video")
+        }
+        .buttonStyle(.playbackControl)
+        // }
+      }
+      .foregroundStyle(.secondary)
+      MediaScrubber(currentTime: $currentTime, duration: .seconds(1000), isScrubbing: .constant(false))
+        .tint(Color(braveSystemName: .iconInteractive))
+      VStack(spacing: 28) {
         PlaybackControls(model: model)
-          .imageScale(.large)
+        ExtraControls(stopPlaybackDate: .constant(nil), isPlaybackStopInfoPresented: .constant(false), contentSpeed: $model.playbackSpeed)
       }
-      HStack {
-        LeadingExtraControls(contentSpeed: $model.playbackSpeed)
-        Spacer()
-        TrailingExtraControls(stopPlaybackDate: .constant(nil), isPlaybackStopInfoPresented: .constant(false))
-      }
+      .font(.title3)
     }
+    .foregroundStyle(
+      Color(braveSystemName: .textPrimary),
+      Color(braveSystemName: .textSecondary),
+      Color(braveSystemName: .textTertiary)
+    )
     .frame(maxWidth: .infinity, maxHeight: .infinity)
+    .dynamicTypeSize(.xSmall...DynamicTypeSize.xxxLarge) // FIXME: Figure out what to do in AX sizes, maybe second row in PlaybackControls? XXXL may even have issues with DisplayZoom on
   }
 }
+@available(iOS 16.0, *)
 #Preview {
   ControlPreview(model: .init())
-    .padding()
+    .padding(24)
     .environment(\.colorScheme, .dark)
-    .background(Color.black)
+    .background(Color(white: 0.1))
 }
 #endif

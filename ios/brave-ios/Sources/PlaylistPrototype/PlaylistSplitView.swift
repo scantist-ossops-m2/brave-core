@@ -8,10 +8,24 @@ import SwiftUI
 
 /// A view which displays playlist content in up to two columns depending on the orientation &
 /// size classes.
+@available(iOS 16.0, *)
 struct PlaylistSplitView: View {
   @Environment(\.interfaceOrientation) private var interfaceOrientation
+  @Environment(\.horizontalSizeClass) private var horizontalSizeClass
 
   var body: some View {
-    Text("Interface Orientation: \(interfaceOrientation.isPortrait ? "Portrait" : interfaceOrientation.isLandscape ? "Landscape" : "Unknown")")
+    HStack {
+      if horizontalSizeClass == .regular {
+        // Show sidebar
+        Text("Sidebar - List Content")
+        Divider()
+      }
+      Text("Player View")
+        .overlay {
+          if horizontalSizeClass == .compact {
+            Text("Drawer - List Content")
+          }
+        }
+    }
   }
 }

@@ -7,6 +7,7 @@ import CoreMedia
 import Foundation
 import SwiftUI
 
+/// FIXME: Add doc
 @available(iOS 16.0, *)
 struct MediaScrubber: View {
   @Binding var currentTime: Duration
@@ -14,9 +15,7 @@ struct MediaScrubber: View {
   @Binding var isScrubbing: Bool
 
   @State private var isShowingTotalTime: Bool = false
-
   @GestureState private var isScrubbingState: Bool = false
-
   @ScaledMetric private var barHeight = 4
   @ScaledMetric private var thumbSize = 12
 
@@ -34,6 +33,7 @@ struct MediaScrubber: View {
   }
 
   private var barShape: some InsettableShape {
+    // FIXME: Design uses a regular Rectangle
     RoundedRectangle(cornerRadius: barHeight / 2, style: .continuous)
   }
 
@@ -98,7 +98,6 @@ struct MediaScrubber: View {
       .foregroundStyle(.primary)
       .font(.footnote)
     }
-    .padding(.vertical)
     .onChange(of: isScrubbingState) { newValue in
       isScrubbing = newValue
     }
@@ -154,6 +153,15 @@ private struct MediaScrubberPreview: View {
       .environment(\.colorScheme, .dark)
       .padding()
       .background(Color.black)
+
+      Button {
+        // FIXME: Currently animation is linear(0.1) based on animations in the actual MediaScrubber, see if its possible to only use those animations while scrubbing
+//        withAnimation(.spring()) {
+          currentTime = .seconds(500)
+//        }
+      } label: {
+        Text("Go to 50%")
+      }
     }
   }
 }
