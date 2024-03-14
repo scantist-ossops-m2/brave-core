@@ -1,8 +1,8 @@
 diff --git a/chrome/browser/resources/side_panel/bookmarks/BUILD.gn b/chrome/browser/resources/side_panel/bookmarks/BUILD.gn
-index c986617506442095301d0275f926a2ab95bd4811..52e837546e6c197f991a5b41d63ecf4a236cf0c9 100644
+index 66b8153bccb120fcd2440743aa2e9b570143d772..1201e89149801f18e28e937e06485cfed4e3f4bf 100644
 --- a/chrome/browser/resources/side_panel/bookmarks/BUILD.gn
 +++ b/chrome/browser/resources/side_panel/bookmarks/BUILD.gn
-@@ -61,4 +61,5 @@ build_webui("build") {
+@@ -62,4 +62,5 @@ build_webui("build") {
          rebase_path(
              "$root_gen_dir/chrome/browser/resources/side_panel/shared/tsc/*",
              target_gen_dir) ]

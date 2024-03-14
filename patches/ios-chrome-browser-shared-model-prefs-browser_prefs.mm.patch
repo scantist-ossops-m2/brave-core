@@ -1,8 +1,8 @@
 diff --git a/ios/chrome/browser/shared/model/prefs/browser_prefs.mm b/ios/chrome/browser/shared/model/prefs/browser_prefs.mm
-index 8059e74916e9b84fef3b28664d7cc329ca01f73b..2620e733b6d7f1ed842a9880c4da70b8e2e6cff3 100644
+index c61d0361f823d529765ce2477f5656a34ebff2e7..e06f2f1f69e606024ed186702a04849935063c10 100644
 --- a/ios/chrome/browser/shared/model/prefs/browser_prefs.mm
 +++ b/ios/chrome/browser/shared/model/prefs/browser_prefs.mm
-@@ -527,6 +527,7 @@ void RegisterLocalStatePrefs(PrefRegistrySimple* registry) {
+@@ -505,6 +505,7 @@ void RegisterLocalStatePrefs(PrefRegistrySimple* registry) {
    registry->RegisterStringPref(kIOSChromeNextVersionKey, std::string());
    registry->RegisterStringPref(kIOSChromeUpgradeURLKey, std::string());
    registry->RegisterTimePref(kLastInfobarDisplayTimeKey, base::Time());
@@ -10,7 +10,7 @@ index 8059e74916e9b84fef3b28664d7cc329ca01f73b..2620e733b6d7f1ed842a9880c4da70b8
  }
  
  void RegisterBrowserStatePrefs(user_prefs::PrefRegistrySyncable* registry) {
-@@ -791,6 +792,7 @@ void RegisterBrowserStatePrefs(user_prefs::PrefRegistrySyncable* registry) {
+@@ -763,6 +764,7 @@ void RegisterBrowserStatePrefs(user_prefs::PrefRegistrySyncable* registry) {
    // to the top Most Visited Sites.
    registry->RegisterListPref(prefs::kIosLatestMostVisitedSites,
                               PrefRegistry::LOSSY_PREF);

@@ -1,8 +1,8 @@
 diff --git a/chrome/browser/ui/BUILD.gn b/chrome/browser/ui/BUILD.gn
-index 768e11b9e56483cbe6235c894bca669b928e4d0c..ba693710323ce67fa923ae9b66346a0438a2ed89 100644
+index 1ab2bcb58daadeb34d63cd0406f557fe9e567c2b..7deccf84a8ef6b2f209f0144bff77fe136261fb8 100644
 --- a/chrome/browser/ui/BUILD.gn
 +++ b/chrome/browser/ui/BUILD.gn
-@@ -717,6 +717,7 @@ static_library("ui") {
+@@ -726,6 +726,7 @@ static_library("ui") {
  
      "//chrome/browser/permissions",
    ]
@@ -10,7 +10,7 @@ index 768e11b9e56483cbe6235c894bca669b928e4d0c..ba693710323ce67fa923ae9b66346a04
  
    if (enable_vr && is_win) {
      deps += [ "//chrome/browser/vr:vr_base" ]
-@@ -4606,7 +4607,10 @@ static_library("ui") {
+@@ -4652,7 +4653,10 @@ static_library("ui") {
        ]
        deps += [ "//chrome/updater/app/server/win:updater_legacy_idl" ]
      } else {

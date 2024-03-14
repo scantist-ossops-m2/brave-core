@@ -1,5 +1,5 @@
 diff --git a/third_party/blink/renderer/core/html/html_permission_element.cc b/third_party/blink/renderer/core/html/html_permission_element.cc
-index 4e2b05770e8b29a96bb1db6b8d6fe0c7805bf62e..3eef4b61c04624cfd153be69a448bfd6d6d2375e 100644
+index 854eb27bf63fd6b4f8dc5a4280a45c59e9fb087d..a3c7eefa158e716b9f1a82cc45a4e6a9c5c42a65 100644
 --- a/third_party/blink/renderer/core/html/html_permission_element.cc
 +++ b/third_party/blink/renderer/core/html/html_permission_element.cc
 @@ -34,7 +34,6 @@ using mojom::blink::PermissionDescriptorPtr;
