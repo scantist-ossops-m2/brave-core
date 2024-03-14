@@ -46,7 +46,7 @@ extension View {
 
 private struct InterfaceOrientationViewModifier: ViewModifier {
   @State private var orientation: UIInterfaceOrientation = .unknown
-  
+
   func body(content: Content) -> some View {
     content
       .environment(\._interfaceOrientation, orientation)
@@ -91,7 +91,10 @@ private struct InterfaceOrientationViewModifier: ViewModifier {
       updateOrientation()
     }
 
-    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+    override func viewWillTransition(
+      to size: CGSize,
+      with coordinator: UIViewControllerTransitionCoordinator
+    ) {
       super.viewWillTransition(to: size, with: coordinator)
       updateOrientation()
     }

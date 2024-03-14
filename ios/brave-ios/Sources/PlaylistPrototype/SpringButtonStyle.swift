@@ -16,37 +16,44 @@ public struct SpringButtonStyle: ButtonStyle {
   public func makeBody(configuration: Configuration) -> some View {
     configuration.label
       .background {
-          if isPressed {
-            RoundedRectangle(cornerRadius: 8, style: .continuous)
-              .fill(.quaternary)
-              // May want to reconsider this later and just add 8pt padding to button itself
-              .padding(-8)
-              .transition(.asymmetric(
+        if isPressed {
+          RoundedRectangle(cornerRadius: 8, style: .continuous)
+            .fill(.quaternary)
+            // May want to reconsider this later and just add 8pt padding to button itself
+            .padding(-8)
+            .transition(
+              .asymmetric(
                 insertion: .opacity.animation(.linear(duration: 0.05)),
                 removal: .opacity.animation(.interactiveSpring())
-              ))
+              )
+            )
         }
       }
       .scaleEffect(isPressed ? scale : 1.0)
       .opacity(isPressed ? 0.95 : 1.0)
-      .onChange(of: configuration.isPressed, perform: { value in
-        // Makes it so the "pressed" state shows more of its animation if you tap and immediately
-        // lift your finger
-        if value {
-          isPressed = value
-          pressDownTime = .now
-          delayedTouchUpTask?.cancel()
-        } else {
-          if let pressDownTime, case let delta = Date.now.timeIntervalSince(pressDownTime), delta < 0.1 {
-            delayedTouchUpTask = Task { @MainActor in
-              try await Task.sleep(nanoseconds: NSEC_PER_MSEC * UInt64((0.1 - delta) * 1000))
+      .onChange(
+        of: configuration.isPressed,
+        perform: { value in
+          // Makes it so the "pressed" state shows more of its animation if you tap and immediately
+          // lift your finger
+          if value {
+            isPressed = value
+            pressDownTime = .now
+            delayedTouchUpTask?.cancel()
+          } else {
+            if let pressDownTime, case let delta = Date.now.timeIntervalSince(pressDownTime),
+              delta < 0.1
+            {
+              delayedTouchUpTask = Task { @MainActor in
+                try await Task.sleep(nanoseconds: NSEC_PER_MSEC * UInt64((0.1 - delta) * 1000))
+                isPressed = value
+              }
+            } else {
               isPressed = value
             }
-          } else {
-            isPressed = value
           }
         }
-      })
+      )
       .animation(.spring(response: 0.3, dampingFraction: 0.8), value: isPressed)
   }
 }
@@ -66,10 +73,10 @@ extension ButtonStyle where Self == SpringButtonStyle {
 struct SpringButtonStyle_PreviewProvider: PreviewProvider {
   static var previews: some View {
     HStack {
-      Button("Hello, World") { }
+      Button("Hello, World") {}
         .padding()
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-      Button("Hello, World") { }
+      Button("Hello, World") {}
         .padding()
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .colorScheme(.dark)

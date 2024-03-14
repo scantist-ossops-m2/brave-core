@@ -8,39 +8,42 @@ import Combine
 import Foundation
 import MediaPlayer
 import SwiftUI
+import os
 
-public final class PlayerModel: ObservableObject {
-  
-  public init() {
+@available(iOS 16.0, *)
+final class PlayerModel: ObservableObject {
+
+  init() {
+    // FIXME: Consider moving this to a setUp method and call explicitly from UI
     player.seek(to: .zero)
     player.actionAtItemEnd = .none
-    
+
     playerLayer.videoGravity = .resizeAspect
     playerLayer.needsDisplayOnBoundsChange = true
     playerLayer.player = player
-    
+
     setupPlayerKeyPathObservation()
     setupRemoteCommandCenterHandlers()
     updateSystemPlayer()
   }
-  
+
   deinit {
     // FIXME: Make sure we call stop in UI layer onDisppear to avoid 17.0-17.2 bug
-    stop()
+    if isPlaying {
+      log.warning("PlayerModel deallocated without first stopping the underlying media.")
+      stop()
+    }
   }
 
+  private let log = Logger(subsystem: Bundle.main.bundleIdentifier!, category: "PlayerModel")
+
   // MARK: - Player Controls
-  
-  public var isPlaying: Bool {
+
+  var isPlaying: Bool {
     get {
-      // It is better NOT to keep tracking of isPlaying OR rate > 0.0
-      // Instead we should use the timeControlStatus because PIP and Background play
-      // via control-center will modify the timeControlStatus property
-      // This will keep our UI consistent with what is on the lock-screen.
-      // This will also allow us to properly determine play state in
-      // PlaylistMediaInfo -> init -> MPRemoteCommandCenter.shared().playCommand
       player.timeControlStatus == .playing
-    } set {
+    }
+    set {
       if newValue {
         play()
       } else {
@@ -48,14 +51,14 @@ public final class PlayerModel: ObservableObject {
       }
     }
   }
-  
-  public var currentTime: TimeInterval {
+
+  var currentTime: TimeInterval {
     guard let item = player.currentItem else { return 0 }
     let seconds = item.currentTime().seconds
     return seconds.isNaN ? 0.0 : seconds
   }
-  
-  public var duration: TimeInterval {
+
+  var duration: TimeInterval {
     guard let item = player.currentItem else { return 0 }
     let seconds = CMTimeConvertScale(
       item.asset.duration,
@@ -64,69 +67,68 @@ public final class PlayerModel: ObservableObject {
     ).seconds
     return seconds.isNaN ? 0.0 : seconds
   }
-  
-  public func play() {
+
+  func play() {
     if isPlaying {
       return
     }
-    player.rate = playbackSpeed.rawValue
     player.play()
   }
-  
-  public var currentTimeStream: AsyncStream<TimeInterval> {
+
+  var currentTimeStream: AsyncStream<TimeInterval> {
     return .init { [weak self] continuation in
       guard let self else { return }
       let observer = player.addCancellablePeriodicTimeObserver(forInterval: 500) { [weak self] _ in
         guard let self else { return }
         continuation.yield(currentTime)
       }
-      self.cancellables.insert(observer) // Should be tied to the View, but adding ane extra killswitch
+      self.cancellables.insert(observer)  // Should be tied to the View, but adding ane extra killswitch
       continuation.onTermination = { _ in
         observer.cancel()
       }
     }
   }
-  
-  public func pause() {
+
+  func pause() {
     if !isPlaying {
       return
     }
     player.pause()
   }
-  
-  public func stop() {
+
+  func stop() {
     if !isPlaying {
       return
     }
     player.pause()
     player.replaceCurrentItem(with: nil)
   }
-  
-  public func playPreviousTrack() {
+
+  func playPreviousTrack() {
     // Implement
   }
-  
-  public func playNextTrack() {
+
+  func playNextTrack() {
     // Implement
   }
-  
+
   private let seekInterval: TimeInterval = 15.0
-  
-  public func seekBackwards() async {
+
+  func seekBackwards() async {
     guard let currentItem = player.currentItem else {
       return
     }
     await seek(to: currentItem.currentTime().seconds - seekInterval)
   }
-  
-  public func seekForwards() async {
+
+  func seekForwards() async {
     guard let currentItem = player.currentItem else {
       return
     }
     await seek(to: currentItem.currentTime().seconds + seekInterval)
   }
-  
-  public func seek(to time: TimeInterval) async {
+
+  func seek(to time: TimeInterval) async {
     guard let currentItem = player.currentItem else {
       return
     }
@@ -136,15 +138,15 @@ public final class PlayerModel: ObservableObject {
     )
     await player.seek(to: seekTime)
   }
-  
+
   // MARK: - Playback Extras
-  
-  public enum RepeatMode {
+
+  enum RepeatMode {
     case none
     case one
     case all
 
-    public mutating func cycle() {
+    mutating func cycle() {
       switch self {
       case .none: self = .one
       case .one: self = .all
@@ -152,45 +154,51 @@ public final class PlayerModel: ObservableObject {
       }
     }
   }
-  
-  @Published public var repeatMode: RepeatMode = .none
-  
-  @Published public var isShuffleEnabled: Bool = false
-  
-  public enum PlaybackSpeed: Float {
-    case normal = 1.0
-    case fast = 1.5
-    case faster = 2
-    
-    public mutating func cycle() {
+
+  @Published var repeatMode: RepeatMode = .none
+
+  @Published var isShuffleEnabled: Bool = false
+
+  struct PlaybackSpeed: Equatable {
+    var rate: Float
+    var braveSystemName: String
+
+    static let normal = Self(rate: 1.0, braveSystemName: "leo.1x")
+    static let fast = Self(rate: 1.5, braveSystemName: "leo.1.5x")
+    static let faster = Self(rate: 2.0, braveSystemName: "leo.2x")
+
+    mutating func cycle() {
       switch self {
       case .normal: self = .fast
       case .fast: self = .faster
       case .faster: self = .normal
+      default: self = .fast
       }
     }
   }
-  
-  @Published public var playbackSpeed: PlaybackSpeed = .normal {
+
+  @Published var playbackSpeed: PlaybackSpeed = .normal {
     didSet {
-      player.rate = playbackSpeed.rawValue
+      player.rate = playbackSpeed.rate
+      player.defaultRate = playbackSpeed.rate
     }
   }
-  
+
   // MARK: - Picture in Picture
-  
-  @Published public private(set) var isPictureInPictureSupported: Bool = AVPictureInPictureController.isPictureInPictureSupported()
-  
+
+  // FIXME: Don't know if this needs to be Published at all
+  @Published private(set) var isPictureInPictureSupported: Bool =
+    AVPictureInPictureController.isPictureInPictureSupported()
+
   // MARK: - AirPlay
-  
-  
+
   // MARK: -
-  
+
   /*private*/ let player: AVPlayer = .init()
   private let playerLayer: AVPlayerLayer = .init()
-  
+
   private var cancellables: Set<AnyCancellable> = []
-  
+
   /// Sets up KVO observations for AVPlayer properties which trigger the `objectWillChange` publisher
   private func setupPlayerKeyPathObservation() {
     func subscriber<Value>(for keyPath: KeyPath<AVPlayer, Value>) -> AnyCancellable {
@@ -204,7 +212,8 @@ public final class PlayerModel: ObservableObject {
       }
     }
     cancellables.formUnion([
-      subscriber(for: \.timeControlStatus)
+      subscriber(for: \.timeControlStatus),
+      // FIXME: Add the rest
     ])
   }
 }
@@ -226,16 +235,19 @@ extension AVPlayer {
 }
 
 // MARK: - System Media Player
+
+@available(iOS 16.0, *)
 extension PlayerModel {
   private func updateSystemPlayer() {
     let remoteCommandsCenter: MPRemoteCommandCenter = .shared()
     remoteCommandsCenter.skipBackwardCommand.preferredIntervals = [.init(value: seekInterval)]
     remoteCommandsCenter.skipForwardCommand.preferredIntervals = [.init(value: seekInterval)]
-    
+
     let nowPlayingCenter: MPNowPlayingInfoCenter = .default()
-    nowPlayingCenter.nowPlayingInfo?[MPNowPlayingInfoPropertyElapsedPlaybackTime] = player.currentTime().seconds
+    nowPlayingCenter.nowPlayingInfo?[MPNowPlayingInfoPropertyElapsedPlaybackTime] =
+      player.currentTime().seconds
   }
-  
+
   private func setupRemoteCommandCenterHandlers() {
     let center: MPRemoteCommandCenter = .shared()
     let commands: [MPRemoteCommand] = [
@@ -244,14 +256,18 @@ extension PlayerModel {
       center.stopCommand,
       // FIXME: Add the rest
     ]
-    cancellables.formUnion(commands.map {
-      $0.addCancellableTarget { [weak self] event in
-        self?.handleControlCenterCommand(event) ?? .noSuchContent
+    cancellables.formUnion(
+      commands.map {
+        $0.addCancellableTarget { [weak self] event in
+          self?.handleControlCenterCommand(event) ?? .noSuchContent
+        }
       }
-    })
+    )
   }
-  
-  private func handleControlCenterCommand(_ event: MPRemoteCommandEvent) -> MPRemoteCommandHandlerStatus {
+
+  private func handleControlCenterCommand(
+    _ event: MPRemoteCommandEvent
+  ) -> MPRemoteCommandHandlerStatus {
     let center: MPRemoteCommandCenter = .shared()
     switch event.command {
     case center.pauseCommand:

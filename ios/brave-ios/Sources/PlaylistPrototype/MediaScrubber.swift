@@ -49,7 +49,13 @@ struct MediaScrubber: View {
             GeometryReader { proxy in
               barShape
                 .foregroundStyle(.tint)
-                .frame(width: min(proxy.size.width, CGFloat(currentTime.seconds / duration.seconds) * proxy.size.width), alignment: .leading)
+                .frame(
+                  width: min(
+                    proxy.size.width,
+                    CGFloat(currentTime.seconds / duration.seconds) * proxy.size.width
+                  ),
+                  alignment: .leading
+                )
                 .animation(.linear(duration: 0.1), value: currentTime)
             }
           }
@@ -64,15 +70,29 @@ struct MediaScrubber: View {
                 .frame(width: thumbSize, height: thumbSize)
                 .scaleEffect(isScrubbing ? 1.5 : 1)
                 .animation(.spring(response: 0.2, dampingFraction: 0.7), value: isScrubbing)
-                .offset(x: min(proxy.size.width, (CGFloat(currentTime.seconds / duration.seconds) * proxy.size.width)) - (thumbSize / 2))
+                .offset(
+                  x: min(
+                    proxy.size.width,
+                    (CGFloat(currentTime.seconds / duration.seconds) * proxy.size.width)
+                  ) - (thumbSize / 2)
+                )
                 .animation(.linear(duration: 0.1), value: currentTime)
                 .gesture(
                   DragGesture(minimumDistance: 0)
-                    .updating($isScrubbingState, body: { _, state, _ in
-                      state = true
-                    })
+                    .updating(
+                      $isScrubbingState,
+                      body: { _, state, _ in
+                        state = true
+                      }
+                    )
                     .onChanged { state in
-                      let seconds = max(0, min(duration.seconds, (state.location.x / proxy.size.width) * CGFloat(duration.seconds)))
+                      let seconds = max(
+                        0,
+                        min(
+                          duration.seconds,
+                          (state.location.x / proxy.size.width) * CGFloat(duration.seconds)
+                        )
+                      )
                       currentTime = .seconds(seconds)
                     }
                 )
@@ -108,7 +128,7 @@ struct MediaScrubber: View {
           in: 0.0...duration.seconds,
           step: 1
         ) {
-          Text("Current Media Time") // TODO: Localize
+          Text("Current Media Time")  // TODO: Localize
         } minimumValueLabel: {
           currentValueLabel
         } maximumValueLabel: {
@@ -156,15 +176,16 @@ private struct MediaScrubberPreview: View {
 
       Button {
         // FIXME: Currently animation is linear(0.1) based on animations in the actual MediaScrubber, see if its possible to only use those animations while scrubbing
-//        withAnimation(.spring()) {
-          currentTime = .seconds(500)
-//        }
+        //        withAnimation(.spring()) {
+        currentTime = .seconds(500)
+        //        }
       } label: {
         Text("Go to 50%")
       }
     }
   }
 }
+// swift-format-ignore
 @available(iOS 16.0, *)
 #Preview {
   MediaScrubberPreview()

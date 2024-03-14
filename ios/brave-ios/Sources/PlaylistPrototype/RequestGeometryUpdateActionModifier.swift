@@ -6,6 +6,7 @@
 import Foundation
 import SwiftUI
 import UIKit
+import os
 
 /// An action that requests a geometry update on the parent window scene to force an interface
 /// orientation change.
@@ -24,6 +25,9 @@ import UIKit
 ///         Text("Request Portrait Mode")
 ///       }
 ///     }
+///
+/// - Note: This action will fail if used on iPad when multitasking is enabled so consider feature
+///         blocking to only run when the interface idiom is `phone`.
 @available(iOS 16.0, *)
 struct RequestGeometryUpdateAction {
   fileprivate var windowScene: UIWindowScene?
@@ -42,7 +46,16 @@ struct RequestGeometryUpdateAction {
     @unknown default: []
     }
     windowScene?.requestGeometryUpdate(.iOS(interfaceOrientations: mask)) { error in
-      // FIXME: Log the error
+      // This method will fail with an error when you attempt to request an orientation change
+      // while in split view/slide over windowing states. `UIWindowScene.isFullScreen` is
+      // unfortunately not usable to check, as its always false for some reason.
+      let log = Logger(
+        subsystem: Bundle.main.bundleIdentifier!,
+        category: "RequestGeometryUpdateAction"
+      )
+      log.warning(
+        "Geometry update request failed: \(error.localizedDescription) (\((error as NSError).code, privacy: .public))"
+      )
     }
   }
 }

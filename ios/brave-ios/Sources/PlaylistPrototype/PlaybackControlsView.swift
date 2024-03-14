@@ -7,6 +7,7 @@ import DesignSystem
 import Foundation
 import SwiftUI
 
+@available(iOS 16.0, *)
 struct PlaybackControls: View {
   @ObservedObject var model: PlayerModel
 
@@ -80,6 +81,7 @@ struct PlaybackControls: View {
   }
 }
 
+@available(iOS 16.0, *)
 struct ExtraControls: View {
   @Binding var stopPlaybackDate: Date?
   @Binding var isPlaybackStopInfoPresented: Bool
@@ -90,17 +92,8 @@ struct ExtraControls: View {
       Button {
         contentSpeed.cycle()
       } label: {
-        Group {
-          switch contentSpeed {
-          case .normal:
-            Image(braveSystemName: "leo.1x")
-          case .fast:
-            Image(braveSystemName: "leo.1.5x")
-          case .faster:
-            Image(braveSystemName: "leo.2x")
-          }
-        }
-        .transition(.opacity.animation(.linear(duration: 0.1)))
+        Image(braveSystemName: contentSpeed.braveSystemName)
+          .transition(.opacity.animation(.linear(duration: 0.1)))
       }
       .labelStyle(.iconOnly)
       Spacer()
@@ -133,7 +126,8 @@ struct ExtraControls: View {
         Label("Sleep Timer", braveSystemImage: "leo.sleep.timer")
       }
       Spacer()
-      Button { } label: {
+      Button {
+      } label: {
         Label("Fullscreen", braveSystemImage: "leo.fullscreen.on")
       }
     }
@@ -165,11 +159,19 @@ struct ControlPreview: View {
         // }
       }
       .foregroundStyle(.secondary)
-      MediaScrubber(currentTime: $currentTime, duration: .seconds(1000), isScrubbing: .constant(false))
-        .tint(Color(braveSystemName: .iconInteractive))
+      MediaScrubber(
+        currentTime: $currentTime,
+        duration: .seconds(1000),
+        isScrubbing: .constant(false)
+      )
+      .tint(Color(braveSystemName: .iconInteractive))
       VStack(spacing: 28) {
         PlaybackControls(model: model)
-        ExtraControls(stopPlaybackDate: .constant(nil), isPlaybackStopInfoPresented: .constant(false), contentSpeed: $model.playbackSpeed)
+        ExtraControls(
+          stopPlaybackDate: .constant(nil),
+          isPlaybackStopInfoPresented: .constant(false),
+          contentSpeed: $model.playbackSpeed
+        )
       }
       .font(.title3)
     }
@@ -179,9 +181,10 @@ struct ControlPreview: View {
       Color(braveSystemName: .textTertiary)
     )
     .frame(maxWidth: .infinity, maxHeight: .infinity)
-    .dynamicTypeSize(.xSmall...DynamicTypeSize.xxxLarge) // FIXME: Figure out what to do in AX sizes, maybe second row in PlaybackControls? XXXL may even have issues with DisplayZoom on
+    .dynamicTypeSize(.xSmall...DynamicTypeSize.xxxLarge)  // FIXME: Figure out what to do in AX sizes, maybe second row in PlaybackControls? XXXL may even have issues with DisplayZoom on
   }
 }
+// swift-format-ignore
 @available(iOS 16.0, *)
 #Preview {
   ControlPreview(model: .init())
