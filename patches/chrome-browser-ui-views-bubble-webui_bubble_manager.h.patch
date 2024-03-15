@@ -1,7 +1,16 @@
 diff --git a/chrome/browser/ui/views/bubble/webui_bubble_manager.h b/chrome/browser/ui/views/bubble/webui_bubble_manager.h
-index c62977d27e45c72fd0f8d661ed90d08914baaae4..b23aee971b4b7893a8a98e54cd23d2fb06c087a3 100644
+index c62977d27e45c72fd0f8d661ed90d08914baaae4..35d9ba957c03ec2633233ec2d51c8715f07bd5f2 100644
 --- a/chrome/browser/ui/views/bubble/webui_bubble_manager.h
 +++ b/chrome/browser/ui/views/bubble/webui_bubble_manager.h
+@@ -137,7 +137,7 @@ class WebUIBubbleManagerImpl : public WebUIBubbleManager {
+         task_manager_string_id_(task_manager_string_id) {}
+   ~WebUIBubbleManagerImpl() override = default;
+ 
+- private:
++ protected:
+   void MaybeInitPersistentRenderer() override;
+ 
+   base::WeakPtr<WebUIBubbleDialogView> CreateWebUIBubbleDialog(
 @@ -222,6 +222,7 @@ WebUIBubbleManagerImpl<T>::CreateWebUIBubbleDialog(
  
    auto bubble_view = std::make_unique<WebUIBubbleDialogView>(
