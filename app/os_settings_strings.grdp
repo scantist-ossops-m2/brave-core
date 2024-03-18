@@ -296,6 +296,16 @@
   <message name="IDS_SETTINGS_ABOUT_PAGE_CONSUMER_AUTO_UPDATE_TOGGLE_KEEP_UPDATES_BUTTON" desc="Text of the auto update toggle feature dialog keep update button.">
     Keep updates
   </message>
+  <!-- TODO(b/324297162): Finalize and enable translation -->
+  <message name="IDS_SETTINGS_ABOUT_PAGE_EXTENDED_UPDATES_BUTTON" desc="Text of the extended updates button." translateable="false">
+    Set up
+  </message>
+  <message name="IDS_SETTINGS_ABOUT_PAGE_EXTENDED_UPDATES_MAIN_MESSAGE" desc="Text of the main extended updates message." translateable="false">
+    Opt into extended updates to keep your device up to date
+  </message>
+  <message name="IDS_SETTINGS_ABOUT_PAGE_EXTENDED_UPDATES_SECONDARY_MESSAGE" desc="Text of the supplemental explanation about extended updates." translateable="false">
+    Automatic security and software updates have been paused. You can extend updates for 2 more years, but some functionality will be limited. <ph name="LINK_BEGIN">&lt;a target="_blank" href="$1<ex>https://google.com/</ex>"&gt;</ph>Learn more<ph name="LINK_END">&lt;/a&gt;</ph>
+  </message>
 
  <!-- ChromeOS End Of Life Incentive -->
   <message name="IDS_SETTINGS_END_OF_LIFE_INCENTIVE_OFFER_TITLE" desc="The title of the end of life incentive which informs the user of an offer with a dollar amount they can get save when upgrading to a new Chromebook.">
@@ -1393,6 +1403,25 @@
   <message name="IDS_SETTINGS_ACCESSIBILITY_REDUCED_ANIMATIONS_DESCRIPTION" desc="Description for a checkbox which enables reduced animations.">
     Limit movement on the screen
   </message>
+  <!-- TODO(b:259374492): Mark these strings translatable before launch. -->
+  <message name="IDS_SETTINGS_CARET_BLINK_INTERVAL_LABEL" desc="The label for a drop-down menu that allows users to pick the blink rate of their text insertion caret." translateable="false">
+    Text caret blink rate
+  </message>
+  <message name="IDS_SETTINGS_CARET_BLINK_INTERVAL_DESCRIPTION" desc="The description for a drop-down menu that allows users to pick the blink rate of their text insertion caret." translateable="false">
+    Change the blink rate of the text caret in most text fields.
+  </message>
+  <message name="IDS_SETTINGS_CARET_BLINK_INTERVAL_OFF" desc="The name of a drop-down menu item that turns off the caret blink rate (so the caret is always steady on)." translateable="false">
+    Do not blink
+  </message>
+  <message name="IDS_SETTINGS_CARET_BLINK_INTERVAL_NORMAL" desc="The name of a drop-down menu item that makes the caret blink at the normal rate." translateable="false">
+    Normal
+  </message>
+  <message name="IDS_SETTINGS_CARET_BLINK_INTERVAL_SLOW" desc="The name of a drop-down menu item that makes the caret blink rate slower than normal." translateable="false">
+    Slow
+  </message>
+  <message name="IDS_SETTINGS_CARET_BLINK_INTERVAL_FAST" desc="The name of a drop-down menu item that makes the caret blink rate faster than normal." translateable="false">
+    Fast
+  </message>
   <message name="IDS_SETTINGS_STICKY_KEYS_LABEL" desc="Label for checkbox which enables sticky keys, with an explanation of the term 'sticky keys'.">
     Sticky keys
   </message>
@@ -1712,6 +1741,46 @@ Use Ctrl + Alt + Brightness down to zoom out.
   </message>
   <message name="IDS_SETTINGS_AUTOCLICK_MOVEMENT_THRESHOLD_EXTRA_LARGE" desc="Description of an extra large mouse movement threshold for autoclick mouse movements">
     Extra large
+  </message>
+  <!-- TODO(b/259372916): Finalize and translate these strings before Mouse Keys launches-->
+  <message name="IDS_OS_SETTINGS_ACCESSIBILITY_MOUSE_KEYS_LABEL" desc="Label for the mouse keys setting toggle." translateable="false">
+    Mouse Keys
+  </message>
+  <message name="IDS_OS_SETTINGS_ACCESSIBILITY_MOUSE_KEYS_DESCRIPTION" desc="Description of the mouse keys setting toggle." translateable="false">
+    Use your Chromebook keyboard or a numeric keypad to control the cursor
+  </message>
+  <message name="IDS_OS_SETTINGS_ACCESSIBILITY_MOUSE_KEYS_SHORTCUT_TO_PAUSE" desc="Description of the setting to disable mouse keys with a keyboard shortcut." translateable="false">
+    Press ctrl key 5 times to pause mouse keys
+  </message>
+  <message name="IDS_OS_SETTINGS_ACCESSIBILITY_MOUSE_KEYS_DISABLE_IN_TEXT_FIELDS" desc="Description of the setting to disable mouse keys in text fields." translateable="false">
+    Temporarily disable mouse keys when you are in a text field.  Press esc to resume.
+  </message>
+  <message name="IDS_OS_SETTINGS_ACCESSIBILITY_MOUSE_KEYS_ACCELERATION" desc="Label for the mouse keys acceleration slider." translateable="false">
+    Acceleration
+  </message>
+  <message name="IDS_OS_SETTINGS_ACCESSIBILITY_MOUSE_KEYS_ACCELERATION_MIN_LABEL" desc="Label for the mouse keys acceleration slider's minimum value." translateable="false">
+    Slow
+  </message>
+  <message name="IDS_OS_SETTINGS_ACCESSIBILITY_MOUSE_KEYS_ACCELERATION_MAX_LABEL" desc="Label for the mouse keys acceleration slider's maximum value." translateable="false">
+    Fast
+  </message>
+  <message name="IDS_OS_SETTINGS_ACCESSIBILITY_MOUSE_KEYS_MAX_SPEED" desc="Label for the mouse keys maximum speed slider." translateable="false">
+    Maximum speed
+  </message>
+  <message name="IDS_OS_SETTINGS_ACCESSIBILITY_MOUSE_KEYS_MAX_SPEED_MIN_LABEL" desc="Label for the mouse keys maximum speed slider's minimum value." translateable="false">
+    Low
+  </message>
+  <message name="IDS_OS_SETTINGS_ACCESSIBILITY_MOUSE_KEYS_MAX_SPEED_MAX_LABEL" desc="Label for the mouse keys maximum speed slider's maximum value." translateable="false">
+    High
+  </message>
+  <message name="IDS_OS_SETTINGS_ACCESSIBILITY_MOUSE_KEYS_DOMINANT_HAND" desc="Label for the drop down to select your dominant hand for mouse keys." translateable="false">
+    Dominant hand
+  </message>
+  <message name="IDS_OS_SETTINGS_ACCESSIBILITY_MOUSE_KEYS_RIGHT_HAND" desc="Drop down entries for mouse keys specifying your right hand as your dominant hand." translateable="false">
+    Right hand
+  </message>
+  <message name="IDS_OS_SETTINGS_ACCESSIBILITY_MOUSE_KEYS_LEFT_HAND" desc="Drop down entries for mouse keys specifying your left hand as your dominant hand." translateable="false">
+    Left hand
   </message>
   <message name="IDS_SETTINGS_ACCESSIBILITY_DICTATION_DESCRIPTION" desc="Description explaining that Dictation sends audio data to Brave for transcription">
     Send your voice to Brave to allow dictation into any text field.
@@ -5042,7 +5111,7 @@ Press an assigned switch or key to remove assignment.
     Unlock automatically once PIN is entered
   </message>
   <message name="IDS_SETTINGS_PEOPLE_LOCK_SCREEN_PIN_MORE_BUTTON_ARIA_LABEL" desc="ARIA (accessibility) label describing the three-dots button that shows menu with extra actions for PIN authentication factor.">
-    More actions
+    More actions for PIN
   </message>
   <message name="IDS_SETTINGS_PEOPLE_LOCK_SCREEN_PIN_AUTOSUBMIT_PROMPT" desc="Text above a PIN input field that tells the user they need to submit their PIN to enable auto submit.">
     Confirm PIN to turn on automatic unlock
@@ -5543,6 +5612,9 @@ Press an assigned switch or key to remove assignment.
   </message>
   <message name="IDS_SETTINGS_DISPLAY_ARRANGEMENT_TITLE" desc="In Device Settings &gt; Displays, the label for the display arrangement section.">
     Arrangement
+  </message>
+  <message name="IDS_SETTINGS_DISPLAY_BRIGHTNESS_LABEL" desc="In Device Settings &gt; Displays, the label for setting the screen brightness of the selected display." translateable="false">
+    Display brightness
   </message>
   <message name="IDS_SETTINGS_DISPLAY_MIRROR" desc="In Device Settings &gt; Displays, the label for the control for mirroring.">
     Mirror <ph name="DISPLAY_NAME">$1<ex>HP Z27n</ex></ph>
@@ -6466,7 +6538,7 @@ Press &amp; hold keyboard keys to see accent marks and special characters. This 
     Location access
   </message>
   <message name="IDS_OS_SETTINGS_PRIVACY_HUB_GEOLOCATION_AREA_DESCRIPTION" desc="The description of the geolocation row under the Privacy controls (aka Privacy Hub) os-settings page. Displays the system overivew for geolocation usage.">
-    Allow apps, websites, and system services to use your location. Location may use sources like Wi-Fi, mobile networks, and sensors to help estimate your device’s location. <ph name="LINK_BEGIN">&lt;a&gt;</ph>Learn more<ph name="LINK_END">&lt;/a&gt;</ph>
+    Manage location access for apps, websites and system services. Location may use sources like Wi-Fi, mobile networks, and sensors to help estimate your device's location. <ph name="LINK_BEGIN">&lt;a&gt;</ph>Learn more<ph name="LINK_END">&lt;/a&gt;</ph>
   </message>
   <message name="IDS_OS_SETTINGS_PRIVACY_HUB_GEOLOCATION_ACCESS_LEVEL_ALLOWED" desc="In Geolocation setting subpage (under Privacy Controls), Dropdown list item to set system-wide geolocation access level. ">
     Allowed
@@ -6488,6 +6560,9 @@ Press &amp; hold keyboard keys to see accent marks and special characters. This 
   <message name="IDS_OS_SETTINGS_PRIVACY_HUB_GEOLOCATION_ADVANCED_AREA_TITLE" desc="The title of the advanced location settings page.">
     Advanced location settings
   </message>
+  <message name="IDS_OS_SETTINGS_PRIVACY_HUB_GEOLOCATION_PRIMARY_USER_CONTROLLED" desc="Text to show when the geolocation setting is controlled by the primary user.">
+    This setting is controlled by <ph name="USER_EMAIL">$1<ex>joe@gmail.com</ex></ph>.
+  </message>
   <message name="IDS_OS_SETTINGS_HW_DATA_USAGE_TOGGLE_TITLE" desc="The label of the checkbox to enable/disable device hardware data collection and usage in ChromeOS Flex.">
     <ph name="DEVICE_OS">$1<ex>ChromeOS Flex</ex></ph> hardware support and stability
   </message>
@@ -6504,7 +6579,7 @@ Press &amp; hold keyboard keys to see accent marks and special characters. This 
     Manage site microphone permissions in Brave
   </message>
   <message name="IDS_OS_SETTINGS_PRIVACY_HUB_MANAGE_LOCATION_PERMISSIONS_IN_CHROME_TEXT" desc="The label of the Brave row in the Websites section of the location subpage. This row is displayed when location is allowed.">
-    Manage website location permissions in Brave
+    Manage site location permissions in Brave
   </message>
   <message name="IDS_OS_SETTINGS_PRIVACY_HUB_NO_WEBSITE_CAN_USE_CAMERA_TEXT" desc="The text displayed in the Websites section of the camera subpage when camera is not allowed.">
     No websites are allowed to use your camera

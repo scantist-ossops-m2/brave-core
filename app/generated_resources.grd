@@ -3104,7 +3104,16 @@ are declared in tools/grit/grit_rule.gni.
         Google Safe Browsing now scans suspicious files you try downloading as part of the enhanced protection you chose.
       </message>
       <message name="IDS_DEEP_SCANNING_PROMPT_REMOVAL_IPH_ACTION" desc="Text shown on the action button in the in-product-help, leading users to chrome://settings">
-	Settings
+        Settings
+      </message>
+      <message name="IDS_DOWNLOAD_BUBBLE_SUBPAGE_SUMMARY_IMMEDIATE_DEEP_SCAN_IN_PROGRESS" desc="Text shown in the download bubble when a deep scan is in progress">
+        This file might be malware.<ph name="LINE_BREAK">$1</ph>Google Safe Browsing is checking if this file is unsafe — a scan usually takes a few seconds.
+      </message>
+      <message name="IDS_DOWNLOAD_BUBBLE_SUBPAGE_IMMEDIATE_DEEP_SCAN_CANCEL" desc="Text shown in the download bubble to allow users to cancel a download being deep scanned">
+        Cancel download
+      </message>
+      <message name="IDS_DOWNLOAD_BUBBLE_SUBPAGE_IMMEDIATE_DEEP_SCAN_BYPASS" desc="Text shown in the download bubble to allow users to bypass a deep scan">
+        Download suspicious file
       </message>
 
       <!-- Local archive decryption in download bubble -->
@@ -8397,10 +8406,10 @@ Keep your key file in a safe place. You will need it to create new versions of y
         <ph name="ACTION_NAME">$1<ex>Bookmarks</ex></ph> - pinned
       </message>
       <message name="IDS_SIDE_PANEL_GENERIC_MENU_IPH" desc="The body text of the IPH describing how to find side panel entry points in the Brave menu.">
-        You can open most side panel features through the Brave menu
+        You can open bookmarks, reading mode, and more from the Brave menu
       </message>
       <message name="IDS_SIDE_PANEL_GENERIC_MENU_IPH_SCREENREADER" desc="The screen reader text of the IPH describing how to find side panel entry points in the Brave menu. The phrase 'top right' should read as 'top left' in rtl languages.">
-        You can open most side panel features through the Brave menu at the top right
+        You can open bookmarks, reading mode, and more from the Brave menu at the top right
       </message>
       <message name="IDS_SIDE_PANEL_GENERIC_PINNABLE_IPH" desc="The body text of the IPH describing a side panel is pinnable.">
         You can pin this side panel for easy access
@@ -9977,18 +9986,6 @@ Check your passwords anytime in <ph name="GOOGLE_PASSWORD_MANAGER">$1<ex>Brave P
         <message name="IDS_FEEDBACK_SCREENSHOT_A11Y_TEXT" desc="Accessibility label text for screenshot of system, which shows contents of screen apart from feedback dialog">
           Screenshot of programs that are currently on the screen
         </message>
-        <message name="IDS_FEEDBACK_INCLUDE_PERFORMANCE_TRACE_CHECKBOX" desc="Checkbox for including system performance data on the bug report dialog box">
-          Send performance trace data
-        </message>
-        <message name="IDS_FEEDBACK_BLUETOOTH_LOGS_CHECKBOX" desc="Checkbox for including bluetooth logs">
-          Attach <ph name="BEGIN_LINK">&lt;a href="#" id="bluetooth-logs-info-link"&gt;</ph>Bluetooth Logs<ph name="END_LINK">&lt;/a&gt;</ph> (Brave internal)
-        </message>
-        <message name="IDS_FEEDBACK_ASSISTANT_LOGS_MESSAGE" desc="Message shown after user clicks on the assistant logs hyperlink">
-          This information helps us better understand your Assistant issue. It's stored for up to 90 days and access is restricted to appropriate engineering and feedback teams.
-        </message>
-        <message name="IDS_FEEDBACK_BLUETOOTH_LOGS_MESSAGE" desc="Message shown after user clicks on the bluetooth logs hyperlink">
-          To better diagnose Bluetooth issues, Bravers can include additional Bluetooth logs with their feedback reports. When this option is checked, your report will include btsnoop and HCI logs from your current session, sanitized to remove as much PII as possible. Access to these logs will be restricted to managers of the ChromeOS product group in Listnr. Logs will be purged after 90 days.
-        </message>
         <message name="IDS_FEEDBACK_OFFLINE_DIALOG_TITLE" desc="The title of the message box displayed when the user attempts to send a report while offline">
           Feedback Report
         </message>
@@ -10008,9 +10005,6 @@ Check your passwords anytime in <ph name="GOOGLE_PASSWORD_MANAGER">$1<ex>Brave P
             Send <ph name="BEGIN_LINK1">&lt;a href="#" id="sys-info-url"&gt;</ph>system and app information<ph name="END_LINK1">&lt;/a&gt;</ph>, and <ph name="BEGIN_LINK2">&lt;a href="#" id="histograms-url"&gt;</ph>metrics<ph name="END_LINK2">&lt;/a&gt;</ph>
           </message>
         </if>
-        <message name="IDS_FEEDBACK_INCLUDE_ASSISTANT_INFORMATION_CHKBOX" desc="Checkbox for including Assistant debug information in the feedback report">
-          Include recent Assistant history via Sherlog. This may include your identity, location, and debug info. <ph name="BEGIN_LINK">&lt;a href="#" id="assistant-logs-info-link"&gt;</ph>Learn more<ph name="END_LINK">&lt;/a&gt;</ph>
-        </message>
         <message name="IDS_FEEDBACK_ATTACH_FILE_NOTE" desc="Text for describing the maximum size for an attached file">
           File will be sent to Brave for debugging
         </message>
@@ -12226,9 +12220,6 @@ This can include information about installed software, files, your browser, and 
       <message name="IDS_SIGNIN_ERROR_EMAIL_TITLE" desc="Title of the signin error tab modal dialog when username can be retrieved to display.">
         Can't sign in to <ph name="USERNAME">$1<ex>Jane.Doe@gmail.com</ex></ph>
       </message>
-      <message name="IDS_SIGNIN_ERROR_DICE_EMAIL_TITLE" desc="Title of the signin error tab modal dialog when username can be retrieved to display and when Desktop Identity Consistency is enabled.">
-        Can't sync with <ph name="USERNAME">$1<ex>Jane.Doe@gmail.com</ex></ph>
-      </message>
       <message name="IDS_SIGNIN_ERROR_CLOSE_BUTTON_LABEL" desc="Label of the Close button in the signin error dialog.">
         Close
       </message>
@@ -12900,6 +12891,15 @@ Please help our engineers fix this problem. Tell us what happened right before y
           Notifications from this site may be disruptive
         </message>
       </if>
+      <if expr="is_macosx">
+        <message name="IDS_NOTIFICATIONS" desc="Description text next to the notifications icon inside the pop-up bubble which describes that the notification permission is blocked on an OS level.">
+          Notifications
+        </message>
+        <message name="IDS_NOTIFICATIONS_TURNED_OFF_IN_MACOS" desc="Title for the notifications status bubble that is used when a PWA requests notifications access, but notifications for that app are blocked on an OS level in macOS.">
+          Notifications are turned off in Mac System Settings
+        </message>
+      </if>
+
 
       <!-- Mac AppleScript -->
       <if expr="is_macosx">
@@ -13674,38 +13674,6 @@ Please help our engineers fix this problem. Tell us what happened right before y
       </message>
       <message name="IDS_CUSTOM_FILES" desc="The description of the custom file extensions in the select file dialog.">
         Custom Files
-      </message>
-
-      <!-- Fullscreen Strings -->
-      <message name="IDS_FULLSCREEN_USER_ENTERED_FULLSCREEN" desc="Message for the user telling them that they have entered fullscreen mode.">
-        You have gone full screen.
-      </message>
-      <message name="IDS_FULLSCREEN_EXTENSION_TRIGGERED_FULLSCREEN" desc="Message for the user telling them that an extension triggered fullscreen mode.">
-        "<ph name="EXTENSION_NAME">$1<ex>MyExtension</ex></ph>" triggered full screen.
-      </message>
-      <message name="IDS_FULLSCREEN_UNKNOWN_EXTENSION_TRIGGERED_FULLSCREEN" desc="Message for the user telling them that an extension whose name is unknown triggered fullscreen mode.">
-        An extension triggered full screen.
-      </message>
-      <message name="IDS_FULLSCREEN_SITE_ENTERED_FULLSCREEN" desc="Text displayed in the bubble when a page has gone fullscreen. (With a domain URL to display)">
-        <ph name="FULLSCREEN_ORIGIN">$1<ex>google.com</ex></ph> is now full screen.
-      </message>
-      <message name="IDS_FULLSCREEN_ENTERED_FULLSCREEN" desc="Text displayed in the bubble when a page has gone fullscreen. (No domain to be shown, e.g. from filesystem page)">
-        This page is now full screen.
-      </message>
-      <message name="IDS_FULLSCREEN_SITE_ENTERED_FULLSCREEN_MOUSELOCK" desc="Text displayed in the bubble to inform the user that the page has gone fullscreen and locked the mouse. (With a domain URL to display)">
-        <ph name="FULLSCREEN_ORIGIN">$1<ex>google.com</ex></ph> is now full screen and has disabled your mouse cursor.
-      </message>
-      <message name="IDS_FULLSCREEN_ENTERED_FULLSCREEN_MOUSELOCK" desc="Text displayed in the bubble to inform the user that the page has gone fullscreen and locked the mouse. (No domain to be shown, e.g. from filesystem page)">
-        This page is now full screen and has disabled your mouse cursor.
-      </message>
-      <message name="IDS_FULLSCREEN_SITE_ENTERED_MOUSELOCK" desc="Text displayed in the bubble to inform the user that the page has locked the mouse. (With a domain URL to display)">
-        <ph name="FULLSCREEN_ORIGIN">$1<ex>google.com</ex></ph> has disabled your mouse cursor.
-      </message>
-      <message name="IDS_FULLSCREEN_ENTERED_MOUSELOCK" desc="Text displayed in the bubble to inform the user that the page has locked the mouse. (No domain to be shown, e.g. from filesystem page)">
-        This page has disabled your mouse cursor.
-      </message>
-      <message name="IDS_FULLSCREEN_PRESS_ESC_TO_EXIT_MOUSELOCK" desc="Text displayed in the bubble to tell users how to return from mouselock mode (where the mouse cursor is hidden) to normal mode. Please surround the name of the key (e.g. 'Esc') in pipe characters so it can be rendered as a key.">
-        Press |<ph name="ACCELERATOR">$1<ex>Esc</ex></ph>| to show your cursor
       </message>
 
       <!-- Sensor messages -->
