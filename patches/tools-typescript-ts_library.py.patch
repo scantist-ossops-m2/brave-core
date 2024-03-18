@@ -1,8 +1,8 @@
 diff --git a/tools/typescript/ts_library.py b/tools/typescript/ts_library.py
-index fb50564d938d12c14f522aca89721d689ac7c9b4..88ee7e6defbdca8d7572d7a1840ccc872d4ef81b 100644
+index 4dbbb4455516ac35b0df5204bc182fe798468119..679f31de69f41fd31efa926b90d3be7b040ac907 100644
 --- a/tools/typescript/ts_library.py
 +++ b/tools/typescript/ts_library.py
-@@ -280,20 +280,21 @@ def main(argv):
+@@ -247,20 +247,21 @@ def main(argv):
  
    # Invoke the TS compiler again, with the --listFilesOnly flag, to detect any
    # files that are used by the build, but not properly declared as dependencies.
@@ -38,7 +38,7 @@ index fb50564d938d12c14f522aca89721d689ac7c9b4..88ee7e6defbdca8d7572d7a1840ccc87
  
    if args.in_files is not None:
      manifest_path = os.path.join(args.gen_dir,
-@@ -310,5 +311,6 @@ def main(argv):
+@@ -277,5 +278,6 @@ def main(argv):
        json.dump(manifest_data, manifest_file)
  
  
