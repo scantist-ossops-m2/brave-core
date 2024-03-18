@@ -36,7 +36,12 @@ import { DefaultPanelHeader } from '../../../components/desktop/card-headers/def
 import { LeoSquaredButton } from '../../../components/shared/style'
 import { ReviewButtonRow } from '../composer_ui/shared_composer.style'
 
-export const Swap = () => {
+interface Props {
+  isIOS?: boolean
+}
+
+export const Swap = React.memo((props: Props) => {
+  const { isIOS = false } = props
   // Hooks
   const swap = useSwap()
   const {
@@ -114,6 +119,8 @@ export const Swap = () => {
       <WalletPageWrapper
         wrapContentInBox={true}
         noCardPadding={true}
+        hideNav={isIOS}
+        hideHeader={isIOS}
         noMinCardHeight={true}
         hideDivider={true}
         cardHeader={
@@ -244,4 +251,4 @@ export const Swap = () => {
       )}
     </>
   )
-}
+})
