@@ -7,6 +7,7 @@ import DesignSystem
 import Foundation
 import SwiftUI
 
+// FIXME: Delete, move into MediaContentView.PlaybackControlsView
 @available(iOS 16.0, *)
 struct PlaybackControls: View {
   @ObservedObject var model: PlayerModel
@@ -81,6 +82,7 @@ struct PlaybackControls: View {
   }
 }
 
+// FIXME: Delete, move into MediaContentView.InlinePlaybackControls
 @available(iOS 16.0, *)
 struct ExtraControls: View {
   @Binding var stopPlaybackDate: Date?

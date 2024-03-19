@@ -10,18 +10,13 @@ import SwiftUI
 public struct PlaylistPrototypeRootView: View {
   @Environment(\.dismiss) private var dismiss
 
+  @StateObject private var playerModel: PlayerModel = .init()
+
   public init() {}
 
   public var body: some View {
     NavigationStack {
-      PlaylistSplitView()
-        .toolbar {
-          ToolbarItemGroup(placement: .cancellationAction) {
-            Button("Done") {
-              dismiss()
-            }
-          }
-        }
+      PlaylistSplitView(playerModel: playerModel)
         .toolbarBackground(.hidden, for: .navigationBar)
         .observingInterfaceOrientation()
         .creatingRequestGeometryUpdateAction()

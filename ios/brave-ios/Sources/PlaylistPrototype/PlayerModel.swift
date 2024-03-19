@@ -186,9 +186,16 @@ final class PlayerModel: ObservableObject {
 
   // MARK: - Picture in Picture
 
-  // FIXME: Don't know if this needs to be Published at all
+  private var pipController: AVPictureInPictureController?
+
+  // FIXME: Maybe update this based on AVPictureInPictureController.isPictureInPicturePossible KVO
   @Published private(set) var isPictureInPictureSupported: Bool =
     AVPictureInPictureController.isPictureInPictureSupported()
+
+  func togglePictureInPicture() {
+    pipController = AVPictureInPictureController(playerLayer: playerLayer)
+    pipController?.startPictureInPicture()
+  }
 
   // MARK: - AirPlay
 

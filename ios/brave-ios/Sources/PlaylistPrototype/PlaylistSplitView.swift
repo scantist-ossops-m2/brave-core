@@ -13,6 +13,8 @@ struct PlaylistSplitView: View {
   @Environment(\.interfaceOrientation) private var interfaceOrientation
   @Environment(\.horizontalSizeClass) private var horizontalSizeClass
 
+  var playerModel: PlayerModel
+
   /// Whether or not the bottom drawer is visible
   ///
   /// On iPhone:
@@ -49,7 +51,7 @@ struct PlaylistSplitView: View {
           .frame(width: 320)
         Divider()
       }
-      Text("Player View")
+      MediaContentView(model: playerModel)
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .overlay(alignment: .bottom) {
           if isBottomDrawerVisible {
@@ -66,6 +68,6 @@ struct PlaylistSplitView: View {
 // swift-format-ignore
 @available(iOS 16.0, *)
 #Preview {
-  PlaylistSplitView()
+  PlaylistSplitView(playerModel: .init())
     .observingInterfaceOrientation()
 }
