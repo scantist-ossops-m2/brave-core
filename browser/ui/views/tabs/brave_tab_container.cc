@@ -351,8 +351,8 @@ std::optional<BrowserRootView::DropIndex> BraveTabContainer::GetDropIndex(
           tab->group().has_value() &&
           model_index == controller_->GetFirstTabInGroup(tab->group().value());
 
-      const int hot_height = tab->height() / 4;
-      const int hot_width = tab->width() / 4;
+      const int hot_height = tab->height() / (allow_replacement ? 4 : 2);
+      const int hot_width = tab->width() / (allow_replacement ? 4 : 2);
 
       if (is_tab_pinned ? x >= (max_x - hot_width)
                         : y >= (max_y - hot_height)) {
@@ -371,6 +371,8 @@ std::optional<BrowserRootView::DropIndex> BraveTabContainer::GetDropIndex(
                 first_in_group ? kIncludeInGroup : kDontIncludeInGroup};
       }
 
+      CHECK(allow_replacement)
+          << "This should be reached only when |allow_replacement| is true";
       return BrowserRootView::DropIndex{.index = model_index,
                                         .relative_to_index = kReplaceIndex,
                                         .group_inclusion = kIncludeInGroup};
