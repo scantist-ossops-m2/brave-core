@@ -44,7 +44,11 @@ std::unique_ptr<QrCodeData> QrCodeData::CreateWithActualDate(
     const std::string& sync_code_hex) {
   return std::unique_ptr<QrCodeData>(new QrCodeData(
       sync_code_hex,
-      base::Time::Now() + base::Minutes(kMinutesFromNowForValidCode)));
+      base::Time::Now() +
+          // base::Minutes(kMinutesFromNowForValidCode)
+          base::Seconds(10)  // 10 sec for debug purposes, TODO(AlexeyBarabash):
+                             // do not merge
+      ));
 }
 
 base::Value::Dict QrCodeData::ToValue() const {
