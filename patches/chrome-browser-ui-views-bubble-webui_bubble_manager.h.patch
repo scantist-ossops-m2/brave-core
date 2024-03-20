@@ -1,20 +1,20 @@
 diff --git a/chrome/browser/ui/views/bubble/webui_bubble_manager.h b/chrome/browser/ui/views/bubble/webui_bubble_manager.h
-index ea2b2c5f0e7127677cbeb1a500ca778b544c7709..4b7659c8869acf513e5481fcf8b0546f2c46a4df 100644
+index a554528ce9c2795bd70c4d2fadf887657a3418bf..7282dc3e11c370ccdc71fddd4f4e0269a1c62a0b 100644
 --- a/chrome/browser/ui/views/bubble/webui_bubble_manager.h
 +++ b/chrome/browser/ui/views/bubble/webui_bubble_manager.h
-@@ -149,9 +149,11 @@ class WebUIBubbleManagerImpl : public WebUIBubbleManager {
+@@ -165,9 +165,11 @@ class WebUIBubbleManagerImpl : public WebUIBubbleManager {
   private:
+   // WebUIBubbleManager:
    void MaybeInitPersistentRenderer() override;
- 
 + protected:
    base::WeakPtr<WebUIBubbleDialogView> CreateWebUIBubbleDialog(
        const std::optional<gfx::Rect>& anchor,
        views::BubbleBorder::Arrow arrow) override;
 + private:
+   WebUIContentsWrapper* GetContentsWrapper() override;
  
    const raw_ptr<views::View> anchor_view_;
-   const raw_ptr<Profile, DanglingUntriaged> profile_;
-@@ -231,6 +233,7 @@ WebUIBubbleManagerImpl<T>::CreateWebUIBubbleDialog(
+@@ -247,6 +249,7 @@ WebUIBubbleManagerImpl<T>::CreateWebUIBubbleDialog(
  
    auto bubble_view = std::make_unique<WebUIBubbleDialogView>(
        anchor_view_, contents_wrapper->GetWeakPtr(), anchor, arrow);
