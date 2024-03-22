@@ -356,18 +356,19 @@ mojom::FeedItemMetadataPtr PickAndRemove(ArticleInfos& articles,
 // 1. The user hasn't subscribed to.
 // 2. **AND** The user hasn't visited.
 // 3. Don't belong to polarising categories like Politics
-mojom::FeedItemMetadataPtr PickDiscoveryArticleAndRemove(
-    ArticleInfos& articles, PickArticles picker) {
+mojom::FeedItemMetadataPtr PickDiscoveryArticleAndRemove(ArticleInfos& articles,
+                                                         PickArticles picker) {
   return PickAndRemove(articles, std::move(picker));
 }
 
 // Generates a standard block:
 // 1. Hero Article
 // 2. 1 - 5 Inline Articles (a percentage of which might be discover cards).
-std::vector<mojom::FeedItemV2Ptr> GenerateBlock(ArticleInfos& articles,
-                                                PickArticles hero_picker,
-                                                PickArticles article_picker,
-                                                std::optional<PickArticles> discovery_picker) {
+std::vector<mojom::FeedItemV2Ptr> GenerateBlock(
+    ArticleInfos& articles,
+    PickArticles hero_picker,
+    PickArticles article_picker,
+    std::optional<PickArticles> discovery_picker) {
   DVLOG(1) << __FUNCTION__;
   std::vector<mojom::FeedItemV2Ptr> result;
   if (articles.empty()) {
@@ -386,13 +387,16 @@ std::vector<mojom::FeedItemV2Ptr> GenerateBlock(ArticleInfos& articles,
   const int block_min_inline = features::kBraveNewsMinBlockCards.Get();
   const int block_max_inline = features::kBraveNewsMaxBlockCards.Get();
   auto follow_count = GetNormal(block_min_inline, block_max_inline + 1);
-  const float inline_discovery_ratio = features::kBraveNewsInlineDiscoveryRatio.Get();
+  const float inline_discovery_ratio =
+      features::kBraveNewsInlineDiscoveryRatio.Get();
   for (auto i = 0; i < follow_count; ++i) {
-    bool is_discover = discovery_picker.has_value() && base::RandDouble() < inline_discovery_ratio;
+    bool is_discover = discovery_picker.has_value() &&
+                       base::RandDouble() < inline_discovery_ratio;
     mojom::FeedItemMetadataPtr generated;
 
     if (is_discover) {
-      generated = PickDiscoveryArticleAndRemove(articles, discovery_picker.value());
+      generated =
+          PickDiscoveryArticleAndRemove(articles, discovery_picker.value());
     } else {
       generated = PickAndRemove(articles, article_picker);
     }
@@ -430,8 +434,8 @@ std::vector<mojom::FeedItemV2Ptr> GenerateBlock(
         }));
   });
 
-  PickArticles pick_discovery = base::BindRepeating(
-      [](const ArticleInfos& articles) {
+  PickArticles pick_discovery =
+      base::BindRepeating([](const ArticleInfos& articles) {
         return PickRouletteWithWeighting(
             articles,
             base::BindRepeating([](const mojom::FeedItemMetadataPtr& metadata,
@@ -441,12 +445,13 @@ std::vector<mojom::FeedItemV2Ptr> GenerateBlock(
               }
 
               return weight.pop_recency;
-        }));
-    });
+            }));
+      });
 
-  return GenerateBlock(articles, std::move(pick_hero),
-                       base::BindRepeating(&PickRoulette),
-                       inline_discovery_ratio > 0.0 ? std::optional<PickArticles>(pick_discovery) : std::nullopt);
+  return GenerateBlock(
+      articles, std::move(pick_hero), base::BindRepeating(&PickRoulette),
+      inline_discovery_ratio > 0.0 ? std::optional<PickArticles>(pick_discovery)
+                                   : std::nullopt);
 }
 
 // Generates a block from sampled content groups:
@@ -547,30 +552,35 @@ std::vector<mojom::FeedItemV2Ptr> GenerateBlockFromContentGroups(
 
   auto get_discovery_weighting = base::BindRepeating(
       [](base::flat_set<std::string> politics_publisher_ids) {
-            return base::BindRepeating([](base::flat_set<std::string> politics_publisher_ids,
-                                  const mojom::FeedItemMetadataPtr& metadata,
-                                  const ArticleWeight& weight) {
+        return base::BindRepeating(
+            [](base::flat_set<std::string> politics_publisher_ids,
+               const mojom::FeedItemMetadataPtr& metadata,
+               const ArticleWeight& weight) {
               if (weight.subscribed) {
                 return 0.0;
               }
 
-              auto is_politics = politics_publisher_ids.find(metadata->publisher_id);
+              auto is_politics =
+                  politics_publisher_ids.find(metadata->publisher_id);
               if (is_politics != politics_publisher_ids.end()) {
                 return 0.0;
               }
               return weight.pop_recency;
-            }, politics_publisher_ids);
-      }, std::move(politics_publisher_ids));
+            },
+            politics_publisher_ids);
+      },
+      std::move(politics_publisher_ids));
 
   PickArticles pick_discovery = base::BindRepeating(
-      [](GetWeighting weighting,
-         const ArticleInfos& articles) {
+      [](GetWeighting weighting, const ArticleInfos& articles) {
         return PickRouletteWithWeighting(articles, std::move(weighting));
       },
       get_discovery_weighting.Run());
 
   return GenerateBlock(articles, pick_hero, pick_article,
-                       inline_discovery_ratio > 0.0 ? std::optional<PickArticles>(pick_discovery) : std::nullopt);
+                       inline_discovery_ratio > 0.0
+                           ? std::optional<PickArticles>(pick_discovery)
+                           : std::nullopt);
 }
 
 // Generates a Channel Block
