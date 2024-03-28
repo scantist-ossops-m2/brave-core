@@ -268,20 +268,18 @@ public class AppStoreSDK: ObservableObject {
     // Start updater immediately
     updateTask = Task.detached {
       for await result in Transaction.updates {
+        Logger.module.info("[AppStoreSDK] - Transaction Update Received")
+
         do {
+          Logger.module.info("[AppStoreSDK] - Verifying Transaction")
+
           // Verify the transaction
           let transaction = try self.verify(result)
 
-          // Retrieve all products the user purchased
-          let purchasedProducts = await self.fetchPurchasedProducts()
+          Logger.module.info("[AppStoreSDK] - Processing Transaction")
 
-          // Transactions must be marked as completed once processed
-          await transaction.finish()
-
-          // Distribute the purchased products to the customer
-          await MainActor.run {
-            self.purchasedProducts = purchasedProducts
-          }
+          // Process the transaction with our backend
+          try await self.processTransaction(transaction, for: transaction.productID)
         } catch {
           Logger.module.error(
             "[AppStoreSDK] - Transaction Verification Failed: \(error, privacy: .public)"
@@ -386,65 +384,9 @@ public class AppStoreSDK: ObservableObject {
       // Verify the transaction
       let transaction = try self.verify(result)
 
-      Logger.module.info("[AppStoreSDK] - Fetching Purchases")
+      Logger.module.info("[AppStoreSDK] - Processing Transaction")
 
-      // Retrieve all products the user purchased
-      let purchasedProducts = await self.fetchPurchasedProducts()
-
-      Logger.module.info("[AppStoreSDK] - Refreshing Receipt")
-
-      // If we cannot force a receipt to be added to the app,
-      // leave the transaction pending.
-      try await AppStoreReceipt.sync()
-
-      if try AppStoreReceipt.receipt.isEmpty {
-        Logger.module.info("[AppStoreSDK] - Receipt is NOT valid!")
-        return nil
-      }
-
-      var processingError: Error?
-
-      // Try a maximum of 10 times before considering the purchase a failure
-      for _ in 0..<10 {
-        do {
-          // Do additional purchase processing such as server-side validation
-          // This function also asks for a receipt refresh
-          try await processPurchase(of: product, transaction: transaction)
-
-          Logger.module.info("[AppStoreSDK] - Transaction Verified with Backend")
-          processingError = nil
-          break
-        } catch {
-          processingError = error
-
-          Logger.module.error(
-            "[AppStoreSDK] - Backend Processing Failed: \(error, privacy: .public)"
-          )
-
-          Logger.module.info("[AppStoreSDK] - Waiting 2s and trying again...")
-
-          try? await Task.sleep(seconds: 1.0)
-        }
-      }
-
-      if let processingError {
-        Logger.module.info(
-          "[AppStoreSDK] - Marking Transaction In-Completed: \(processingError, privacy: .public)"
-        )
-        throw processingError
-      }
-
-      Logger.module.info("[AppStoreSDK] - Marking Transaction Completed")
-
-      // Transactions must be marked as completed once processed
-      await transaction.finish()
-
-      Logger.module.info("[AppStoreSDK] - Distributing Purchase To User")
-
-      // Distribute the purchased products to the customer
-      await MainActor.run {
-        self.purchasedProducts = purchasedProducts
-      }
+      try await processTransaction(transaction, for: product.id)
 
       // Return the processed transaction
       return transaction
@@ -489,9 +431,8 @@ public class AppStoreSDK: ObservableObject {
 
   /// An abstract function that is called to process a purchase further
   /// If the transaction for the product cannot be processed, validated, etc, an error must be thrown
-  /// - Parameter product: The product that is currently being purchased
-  /// - Parameter transaction: The verified purchase transaction for the product
-  func processPurchase(of product: Product, transaction: Transaction) async throws {
+  /// - Parameter productId: The ID of the product that is currently being purchased
+  func processPurchase(of productId: Product.ID) async throws {
     fatalError("[AppStoreSDK] - ProcessTransaction Not Implemented")
   }
 
@@ -508,6 +449,66 @@ public class AppStoreSDK: ObservableObject {
 
     case .verified(let signedType):
       return signedType
+    }
+  }
+
+  /// Processes a transaction and adds a receipt to our Bundle
+  /// - Parameter transaction: The verified transaction to process
+  /// - Parameter productId: The ID of the product or line item
+  /// - Throws: Throws an exception if processing fails for any reason
+  private func processTransaction(
+    _ transaction: Transaction,
+    for productId: Product.ID
+  ) async throws {
+    // Retrieve all products the user purchased
+    let purchasedProducts = await self.fetchPurchasedProducts()
+
+    var processingError: Error?
+
+    // Try a maximum of 5 times before considering the purchase a failure
+    for _ in 0..<5 {
+      do {
+        // Do additional purchase processing such as server-side validation
+        // This function also asks for a receipt refresh
+        try await processPurchase(of: productId)
+
+        Logger.module.info("[AppStoreSDK] - Transaction Verified with Backend")
+        processingError = nil
+        break
+      } catch {
+        processingError = error
+
+        Logger.module.error(
+          "[AppStoreSDK] - Backend Processing Failed: \(error, privacy: .public)"
+        )
+
+        Logger.module.info("[AppStoreSDK] - Waiting 1s and trying again...")
+
+        try? await Task.sleep(seconds: 1.0)
+      }
+    }
+
+    // If there is an error, do NOT call `transaction.finish`
+    // For non-consumable products, it can be called.
+    // For consumable products, they are removed from the receipt FOREVER and it should never be called,
+    // until we can guarantee it is delivered to the user.
+    if let processingError {
+      Logger.module.info(
+        "[AppStoreSDK] - Marking Transaction In-Completed: \(processingError, privacy: .public)"
+      )
+      throw processingError
+    }
+
+    Logger.module.info("[AppStoreSDK] - Marking Transaction Completed")
+
+    // Transactions must be marked as completed once processed
+    await transaction.finish()
+
+    Logger.module.info("[AppStoreSDK] - Distributing Purchase To User")
+
+    // Distribute the purchased products to the customer
+    await MainActor.run {
+      self.purchasedProducts = purchasedProducts
     }
   }
 
