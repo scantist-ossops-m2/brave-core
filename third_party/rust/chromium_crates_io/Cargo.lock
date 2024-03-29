@@ -378,6 +378,7 @@ dependencies = [
  "constellation-cxx",
  "cxx",
  "filecoin-cxx",
+ "incrementalmerkletree",
  "json-cxx",
  "orchard",
  "skus-cxx",
