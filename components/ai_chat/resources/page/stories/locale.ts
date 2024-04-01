@@ -91,4 +91,8 @@ provideStrings({
   changeLengthLabel: 'Change length',
   shortenLabel: 'Shorten',
   maybeLaterLabel: 'Maybe later',
+  actionsSummarize: 'Summarize',
+  actionsExplain: 'Explain',
+  actionsParaphrase: 'Paraphrase',
+  actionsImprove: 'Improve'
 })
