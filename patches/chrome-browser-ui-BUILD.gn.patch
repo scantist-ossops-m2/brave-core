@@ -1,5 +1,5 @@
 diff --git a/chrome/browser/ui/BUILD.gn b/chrome/browser/ui/BUILD.gn
-index 768e11b9e56483cbe6235c894bca669b928e4d0c..7af12101dda74f339cf1a807ea78d741370d9130 100644
+index 768e11b9e56483cbe6235c894bca669b928e4d0c..02a6ca98233b95c1434a3790f46e1ba5dd383787 100644
 --- a/chrome/browser/ui/BUILD.gn
 +++ b/chrome/browser/ui/BUILD.gn
 @@ -717,6 +717,7 @@ static_library("ui") {
@@ -14,7 +14,7 @@ index 768e11b9e56483cbe6235c894bca669b928e4d0c..7af12101dda74f339cf1a807ea78d741
        "webui/settings/settings_utils_mac.mm",
        "window_sizer/window_sizer_mac.mm",
      ]
-+    import("//brave/updater/config.gni") if (brave_enable_updater) { sources -= [ "webui/help/version_updater_mac.mm" ] sources += [ "//brave/chromium_src/chrome/browser/ui/webui/help/version_updater_mac_sparkle.mm" ] }
++    import("//brave/updater/config.gni") if (!brave_enable_updater) { sources -= [ "webui/help/version_updater_mac.mm" ] sources += [ "//brave/chromium_src/chrome/browser/ui/webui/help/version_updater_mac_sparkle.mm" ] }
  
      if (enable_updater) {
        sources += [
