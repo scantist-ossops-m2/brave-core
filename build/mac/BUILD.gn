@@ -594,7 +594,7 @@ if (brave_enable_updater) {
 
     # The private key file is not in Git for obvious reasons. It needs to be
     # copied into this directory manually. Changing the private key requires
-    # also changing kBravePublisherKeyHash in crx_verifier.cc.
+    # also changing kBraveBrowserUpdatesKeyHash in crx_verifier.cc.
     key = "//brave/updater/crx-private-key.der"
     deps = [ ":copy_dmg_pkg" ]
   }
