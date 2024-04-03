@@ -10,7 +10,15 @@ index 768e11b9e56483cbe6235c894bca669b928e4d0c..c4800832c36164383978ac8e417751cb
  
    if (enable_vr && is_win) {
      deps += [ "//chrome/browser/vr:vr_base" ]
-@@ -4606,7 +4607,10 @@ static_library("ui") {
+@@ -4477,6 +4478,7 @@ static_library("ui") {
+       "webui/settings/settings_utils_mac.mm",
+       "window_sizer/window_sizer_mac.mm",
+     ]
++    import("//brave/updater/config.gni") if (brave_enable_updater) { sources -= [ "webui/help/version_updater_mac.mm" ] sources += ["//brave/chromium_src/chrome/browser/ui/webui/help/version_updater_mac_sparkle.mm"] }
+ 
+     if (enable_updater) {
+       sources += [
+@@ -4606,7 +4608,10 @@ static_library("ui") {
        ]
        deps += [ "//chrome/updater/app/server/win:updater_legacy_idl" ]
      } else {
