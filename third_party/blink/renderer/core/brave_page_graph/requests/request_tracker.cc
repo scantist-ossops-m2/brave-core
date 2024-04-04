@@ -10,12 +10,14 @@
 #include <utility>
 
 #include "base/containers/contains.h"
+#include "base/memory/scoped_refptr.h"
 #include "brave/third_party/blink/renderer/core/brave_page_graph/graph_item/edge/request/edge_request_start.h"
 #include "brave/third_party/blink/renderer/core/brave_page_graph/graph_item/node/graph_node.h"
 #include "brave/third_party/blink/renderer/core/brave_page_graph/graph_item/node/node_resource.h"
 #include "brave/third_party/blink/renderer/core/brave_page_graph/requests/tracked_request.h"
 #include "brave/third_party/blink/renderer/core/brave_page_graph/types.h"
 #include "third_party/blink/renderer/platform/loader/fetch/resource.h"
+#include "third_party/blink/renderer/platform/wtf/text/wtf_string.h"
 
 namespace brave_page_graph {
 
@@ -29,12 +31,14 @@ RequestTracker::~RequestTracker() = default;
 scoped_refptr<const TrackedRequestRecord> RequestTracker::RegisterRequestStart(
     const InspectorId request_id,
     GraphNode* requester,
+    const FrameId& frame_id,
     NodeResource* resource,
     const String& resource_type) {
   auto item = tracked_requests_.find(request_id);
   if (item == tracked_requests_.end()) {
     auto request_record = std::make_unique<TrackedRequest>(
-        page_graph_context_, request_id, requester, resource, resource_type);
+        page_graph_context_, request_id, requester, frame_id, resource,
+        resource_type);
     CheckTracedRequestAgainstHistory(request_record.get());
     auto tracking_record = base::MakeRefCounted<TrackedRequestRecord>();
     tracking_record->request = std::move(request_record);
@@ -42,43 +46,48 @@ scoped_refptr<const TrackedRequestRecord> RequestTracker::RegisterRequestStart(
     return tracking_record;
   }
 
-  item->value->request->AddRequest(requester, resource, resource_type);
+  item->value->request->AddRequest(requester, frame_id, resource,
+                                   resource_type);
   return ReturnTrackingRecord(request_id);
 }
 
 void RequestTracker::RegisterRequestRedirect(
     const InspectorId request_id,
+    const FrameId& frame_id,
     const blink::KURL& url,
     const blink::ResourceResponse& redirect_response,
     NodeResource* resource) {
   auto& request = tracked_requests_.at(request_id)->request;
-  request->AddRequestRedirect(url, redirect_response, resource);
+  request->AddRequestRedirect(url, redirect_response, resource, frame_id);
 }
 
 scoped_refptr<const TrackedRequestRecord>
 RequestTracker::RegisterRequestComplete(const InspectorId request_id,
-                                        int64_t encoded_data_length) {
+                                        int64_t encoded_data_length,
+                                        const FrameId& frame_id) {
   auto& request = tracked_requests_.at(request_id)->request;
   request->GetResponseMetadata().SetEncodedDataLength(encoded_data_length);
-  request->SetCompleted();
+  request->SetCompleted(frame_id);
   return ReturnTrackingRecord(request_id);
 }
 
 scoped_refptr<const TrackedRequestRecord> RequestTracker::RegisterRequestError(
-    const InspectorId request_id) {
-  tracked_requests_.at(request_id)->request->SetIsError();
+    const InspectorId request_id,
+    const FrameId& frame_id) {
+  tracked_requests_.at(request_id)->request->SetIsError(frame_id);
   return ReturnTrackingRecord(request_id);
 }
 
 void RequestTracker::RegisterDocumentRequestStart(
     const InspectorId request_id,
-    const blink::DOMNodeId frame_id,
+    const blink::DOMNodeId& node_id,
     const blink::KURL& url,
     const bool is_main_frame,
     const base::TimeDelta timestamp) {
+  auto node_id_str = WTF::String(base::NumberToString(node_id));
   // Any previous document requests from this root should have been canceled.
-  if (document_request_initiators_.Contains(frame_id)) {
-    CHECK_EQ(document_request_initiators_.at(frame_id), request_id);
+  if (document_request_initiators_.Contains(node_id_str)) {
+    CHECK_EQ(document_request_initiators_.at(node_id_str), request_id);
     return;
   }
 
@@ -91,12 +100,13 @@ void RequestTracker::RegisterDocumentRequestStart(
       .is_main_frame = is_main_frame,
       .start_timestamp = timestamp,
   };
-  document_request_initiators_.insert(frame_id, request_id);
+  document_request_initiators_.insert(node_id_str, request_id);
   document_requests_.insert(request_id, std::move(request_record));
 }
 
 void RequestTracker::RegisterDocumentRequestComplete(
     const InspectorId request_id,
+    const FrameId& frame_id,
     const int64_t encoded_data_length,
     const base::TimeDelta timestamp) {
   // The request should have been started previously.
@@ -110,6 +120,7 @@ void RequestTracker::RegisterDocumentRequestComplete(
 
   request_record.response_metadata.SetEncodedDataLength(encoded_data_length);
   request_record.complete_timestamp = timestamp;
+  request_record.frame_id = frame_id;
 }
 
 DocumentRequest* RequestTracker::GetDocumentRequestInfo(
