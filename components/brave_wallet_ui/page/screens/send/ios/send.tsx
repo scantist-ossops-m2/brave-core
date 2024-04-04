@@ -49,10 +49,10 @@ export function IOSSendApp() {
           <LibContext.Provider value={Lib}>
             <Switch>
               <Route path={WalletRoutes.Send}>
-                <SendScreen />
+                <SendScreen isIOS={true} />
               </Route>
               <Route path={WalletRoutes.Swap}>
-                <Swap />
+                <Swap isIOS={true} />
               </Route>
             </Switch>
           </LibContext.Provider>
