@@ -32,7 +32,8 @@ class TipPanelBubbleManager : public BraveWebUIBubbleManager<TipPanelUI> {
       : BraveWebUIBubbleManager(anchor_view,
                                 profile,
                                 GURL(kBraveTipPanelURL),
-                                IDS_BRAVE_UI_BRAVE_REWARDS) {}
+                                IDS_BRAVE_UI_BRAVE_REWARDS,
+                                /*force_load_on_create=*/false) {}
 
   ~TipPanelBubbleManager() override = default;
 
