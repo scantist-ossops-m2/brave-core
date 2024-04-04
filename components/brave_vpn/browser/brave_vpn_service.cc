@@ -505,10 +505,10 @@ void BraveVpnService::RequestCredentialSummary(const std::string& domain) {
 }
 
 void BraveVpnService::OnCredentialSummary(const std::string& domain,
-                                          const std::string& summary_string) {
+                                          skus::mojom::SkusResultPtr summary) {
   auto env = skus::GetEnvironmentForDomain(domain);
   std::string summary_string_trimmed;
-  base::TrimWhitespaceASCII(summary_string, base::TrimPositions::TRIM_ALL,
+  base::TrimWhitespaceASCII(summary->message, base::TrimPositions::TRIM_ALL,
                             &summary_string_trimmed);
   if (summary_string_trimmed.length() == 0) {
     // no credential found; person needs to login
@@ -518,7 +518,7 @@ void BraveVpnService::OnCredentialSummary(const std::string& domain,
   }
 
   std::optional<base::Value> records_v = base::JSONReader::Read(
-      summary_string, base::JSONParserOptions::JSON_PARSE_RFC);
+      summary->message, base::JSONParserOptions::JSON_PARSE_RFC);
 
   // Early return when summary is invalid or it's empty dict.
   if (!records_v || !records_v->is_dict()) {
@@ -565,12 +565,12 @@ void BraveVpnService::OnCredentialSummary(const std::string& domain,
 
 void BraveVpnService::OnPrepareCredentialsPresentation(
     const std::string& domain,
-    const std::string& credential_as_cookie) {
+    skus::mojom::SkusResultPtr credential_as_cookie) {
   DCHECK_CALLED_ON_VALID_SEQUENCE(sequence_checker_);
   auto env = skus::GetEnvironmentForDomain(domain);
   // Credential is returned in cookie format.
   net::CookieInclusionStatus status;
-  net::ParsedCookie credential_cookie(credential_as_cookie,
+  net::ParsedCookie credential_cookie(credential_as_cookie->message,
                                       /*block_truncated=*/true, &status);
   // TODO(bsclifton): have a better check / logging.
   // should these failed states be considered NOT_PURCHASED?

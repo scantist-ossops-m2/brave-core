@@ -18,12 +18,13 @@ class PrefService;
 
 namespace skus {
 
-enum class SkusResult : uint8_t;
+enum class SkusResultCode : uint8_t;
 enum class TracingLevel : uint8_t;
 struct HttpRequest;
 struct HttpResponse;
 struct HttpRoundtripContext;
 struct WakeupContext;
+struct SkusResult;
 struct StoragePurgeContext;
 struct StorageSetContext;
 struct StorageGetContext;
@@ -32,42 +33,54 @@ class FetchOrderCredentialsCallbackState {
  public:
   FetchOrderCredentialsCallbackState();
   ~FetchOrderCredentialsCallbackState();
-  base::OnceCallback<void(const std::string&)> cb;
+  base::OnceCallback<void(const SkusResultCode code,
+                          const std::string& message)>
+      cb;
 };
 
 class PrepareCredentialsPresentationCallbackState {
  public:
   PrepareCredentialsPresentationCallbackState();
   ~PrepareCredentialsPresentationCallbackState();
-  base::OnceCallback<void(const std::string&)> cb;
+  base::OnceCallback<void(const SkusResultCode code,
+                          const std::string& message)>
+      cb;
 };
 
 class CredentialSummaryCallbackState {
  public:
   CredentialSummaryCallbackState();
   ~CredentialSummaryCallbackState();
-  base::OnceCallback<void(const std::string&)> cb;
+  base::OnceCallback<void(const SkusResultCode code,
+                          const std::string& message)>
+      cb;
 };
 
 class RefreshOrderCallbackState {
  public:
   RefreshOrderCallbackState();
   ~RefreshOrderCallbackState();
-  base::OnceCallback<void(const std::string&)> cb;
+  base::OnceCallback<void(const SkusResultCode code,
+                          const std::string& message)>
+      cb;
 };
 
 class SubmitReceiptCallbackState {
  public:
   SubmitReceiptCallbackState();
   ~SubmitReceiptCallbackState();
-  base::OnceCallback<void(const std::string&)> cb;
+  base::OnceCallback<void(const SkusResultCode code,
+                          const std::string& message)>
+      cb;
 };
 
 class CreateOrderFromReceiptCallbackState {
  public:
   CreateOrderFromReceiptCallbackState();
   ~CreateOrderFromReceiptCallbackState();
-  base::OnceCallback<void(const std::string&)> cb;
+  base::OnceCallback<void(const SkusResultCode code,
+                          const std::string& message)>
+      cb;
 };
 
 class SkusUrlLoader {
@@ -105,25 +118,26 @@ class SkusContext {
 };
 
 using RefreshOrderCallback = void (*)(RefreshOrderCallbackState* callback_state,
-                                      SkusResult result,
+                                      std::unique_ptr<skus::SkusResult> result,
                                       rust::cxxbridge1::Str order);
 using FetchOrderCredentialsCallback =
     void (*)(FetchOrderCredentialsCallbackState* callback_state,
-             SkusResult result);
+             std::unique_ptr<skus::SkusResult> result);
 using PrepareCredentialsPresentationCallback =
     void (*)(PrepareCredentialsPresentationCallbackState* callback_state,
-             SkusResult result,
+             std::unique_ptr<skus::SkusResult> result,
              rust::cxxbridge1::Str presentation);
 using CredentialSummaryCallback =
     void (*)(CredentialSummaryCallbackState* callback_state,
-             SkusResult result,
+             std::unique_ptr<skus::SkusResult> result,
              rust::cxxbridge1::Str summary);
 using SubmitReceiptCallback =
-    void (*)(SubmitReceiptCallbackState* callback_state, SkusResult result);
+    void (*)(SubmitReceiptCallbackState* callback_state,
+             std::unique_ptr<skus::SkusResult> result);
 
 using CreateOrderFromReceiptCallback =
     void (*)(CreateOrderFromReceiptCallbackState* callback_state,
-             SkusResult result,
+             std::unique_ptr<skus::SkusResult> result,
              rust::cxxbridge1::Str order_id);
 
 void shim_logMessage(rust::cxxbridge1::Str file,

@@ -124,6 +124,8 @@ mod ffi {
         Error = 4,
     }
 
+    impl UniquePtr<SkusResult> {}
+
     #[derive(Debug)]
     pub struct SkusResult {
         code: SkusResultCode,
@@ -466,7 +468,7 @@ impl CppSDK {
 pub struct RefreshOrderCallback(
     pub  extern "C" fn(
         callback_state: *mut ffi::RefreshOrderCallbackState,
-        result: ffi::SkusResult,
+        result: UniquePtr<ffi::SkusResult>,
         order: &str,
     ),
 );
@@ -488,8 +490,8 @@ async fn refresh_order_task(
         .and_then(|order| serde_json::to_string(&order).map_err(|e| e.into()))
         .map_err(|e| e.into())
     {
-        Ok(order) => callback.0(callback_state.into_raw(), ffi::SkusResult::new(ffi::SkusResultCode::Ok, ""), &order),
-        Err(e) => callback.0(callback_state.into_raw(), e, ""),
+        Ok(order) => callback.0(callback_state.into_raw(), UniquePtr::new(ffi::SkusResult::new(ffi::SkusResultCode::Ok, "")), &order),
+        Err(e) => callback.0(callback_state.into_raw(), UniquePtr::new(e), ""),
     }
 }
 
@@ -498,7 +500,7 @@ async fn refresh_order_task(
 pub struct FetchOrderCredentialsCallback(
     pub  extern "C" fn(
         callback_state: *mut ffi::FetchOrderCredentialsCallbackState,
-        result: ffi::SkusResult,
+        result: UniquePtr<ffi::SkusResult>,
     ),
 );
 
@@ -514,8 +516,8 @@ async fn fetch_order_credentials_task(
     order_id: String,
 ) {
     match sdk.fetch_order_credentials(&order_id).await.map_err(|e| e.into()) {
-        Ok(_) => callback.0(callback_state.into_raw(), ffi::SkusResult::new(ffi::SkusResultCode::Ok, "")),
-        Err(e) => callback.0(callback_state.into_raw(), e),
+        Ok(_) => callback.0(callback_state.into_raw(), UniquePtr::new(ffi::SkusResult::new(ffi::SkusResultCode::Ok, ""))),
+        Err(e) => callback.0(callback_state.into_raw(), UniquePtr::new(e)),
     }
 }
 
@@ -524,7 +526,7 @@ async fn fetch_order_credentials_task(
 pub struct PrepareCredentialsPresentationCallback(
     pub  extern "C" fn(
         callback_state: *mut ffi::PrepareCredentialsPresentationCallbackState,
-        result: ffi::SkusResult,
+        result: UniquePtr<ffi::SkusResult>,
         presentation: &str,
     ),
 );
@@ -543,10 +545,10 @@ async fn prepare_credentials_presentation_task(
 ) {
     match sdk.prepare_credentials_presentation(&domain, &path).await.map_err(|e| e.into()) {
         Ok(Some(presentation)) => {
-            callback.0(callback_state.into_raw(), ffi::SkusResult::new(ffi::SkusResultCode::Ok, ""), &presentation)
+            callback.0(callback_state.into_raw(), UniquePtr::new(ffi::SkusResult::new(ffi::SkusResultCode::Ok, "")), &presentation)
         }
-        Ok(None) => callback.0(callback_state.into_raw(), ffi::SkusResult::new(ffi::SkusResultCode::Ok, ""), ""),
-        Err(e) => callback.0(callback_state.into_raw(), e, ""),
+        Ok(None) => callback.0(callback_state.into_raw(), UniquePtr::new(ffi::SkusResult::new(ffi::SkusResultCode::Ok, "")), ""),
+        Err(e) => callback.0(callback_state.into_raw(), UniquePtr::new(e), ""),
     }
 }
 
@@ -555,7 +557,7 @@ async fn prepare_credentials_presentation_task(
 pub struct CredentialSummaryCallback(
     pub  extern "C" fn(
         callback_state: *mut ffi::CredentialSummaryCallbackState,
-        result: ffi::SkusResult,
+        result: UniquePtr<ffi::SkusResult>,
         summary: &str,
     ),
 );
@@ -579,16 +581,16 @@ async fn credential_summary_task(
         })
         .map_err(|e| e.into())
     {
-        Ok(Some(summary)) => callback.0(callback_state.into_raw(), ffi::SkusResult::new(ffi::SkusResultCode::Ok, ""), &summary),
-        Ok(None) => callback.0(callback_state.into_raw(), ffi::SkusResult::new(ffi::SkusResultCode::Ok, ""), "{}"), /* none, empty */
-        Err(e) => callback.0(callback_state.into_raw(), e, "{}"),                     // none, empty
+        Ok(Some(summary)) => callback.0(callback_state.into_raw(), UniquePtr::new(ffi::SkusResult::new(ffi::SkusResultCode::Ok, "")), &summary),
+        Ok(None) => callback.0(callback_state.into_raw(), UniquePtr::new(ffi::SkusResult::new(ffi::SkusResultCode::Ok, "")), "{}"), /* none, empty */
+        Err(e) => callback.0(callback_state.into_raw(), UniquePtr::new(e), "{}"),                     // none, empty
     }
 }
 
 #[allow(improper_ctypes_definitions)]
 #[repr(transparent)]
 pub struct SubmitReceiptCallback(
-    pub extern "C" fn(callback_state: *mut ffi::SubmitReceiptCallbackState, result: ffi::SkusResult),
+    pub extern "C" fn(callback_state: *mut ffi::SubmitReceiptCallbackState, result: UniquePtr<ffi::SkusResult>),
 );
 
 unsafe impl ExternType for SubmitReceiptCallback {
@@ -604,8 +606,8 @@ async fn submit_receipt_task(
     receipt: String,
 ) {
     match sdk.submit_receipt(&order_id, &receipt).await.map_err(|e| e.into()) {
-        Ok(_) => callback.0(callback_state.into_raw(), ffi::SkusResult::new(ffi::SkusResultCode::Ok, "")),
-        Err(e) => callback.0(callback_state.into_raw(), e),
+        Ok(_) => callback.0(callback_state.into_raw(), UniquePtr::new(ffi::SkusResult::new(ffi::SkusResultCode::Ok, ""))),
+        Err(e) => callback.0(callback_state.into_raw(), UniquePtr::new(e)),
     }
 }
 
@@ -614,7 +616,7 @@ async fn submit_receipt_task(
 pub struct CreateOrderFromReceiptCallback(
     pub  extern "C" fn(
         callback_state: *mut ffi::CreateOrderFromReceiptCallbackState,
-        result: ffi::SkusResult,
+        result: UniquePtr<ffi::SkusResult>,
         order_id: &str,
     ),
 );
@@ -631,7 +633,7 @@ async fn create_order_from_receipt_task(
     receipt: String,
 ) {
     match sdk.create_order_from_receipt(&receipt).await.map_err(|e| e.into()) {
-        Ok(order_id) => callback.0(callback_state.into_raw(), ffi::SkusResult::new(ffi::SkusResultCode::Ok, ""), &order_id),
-        Err(e) => callback.0(callback_state.into_raw(), e, ""),
+        Ok(order_id) => callback.0(callback_state.into_raw(), UniquePtr::new(ffi::SkusResult::new(ffi::SkusResultCode::Ok, "")), &order_id),
+        Err(e) => callback.0(callback_state.into_raw(), UniquePtr::new(e), ""),
     }
 }

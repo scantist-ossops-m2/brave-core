@@ -18,25 +18,47 @@
 
 namespace {
 
+skus::mojom::SkusResultPtr to_skus_result(const skus::SkusResultCode code,
+                                          const std::string& message) {
+  return skus::mojom::SkusResult::New(
+      static_cast<skus::mojom::SkusResultCode>(code), message);
+}
+
 void OnRefreshOrder(skus::RefreshOrderCallbackState* callback_state,
-                    skus::SkusResult result,
+                    std::unique_ptr<skus::SkusResult> result,
                     rust::cxxbridge1::Str order) {
   if (callback_state->cb) {
-    std::move(callback_state->cb).Run(static_cast<std::string>(order));
+    if (!result) {
+      std::move(callback_state->cb)
+          .Run(skus::SkusResultCode::UnknownError,
+               static_cast<std::string>(order));
+      delete callback_state;
+      return;
+    }
+
+    if (result->code == skus::SkusResultCode::Ok) {
+      std::move(callback_state->cb)
+          .Run(result->code, static_cast<std::string>(order));
+    } else {
+      std::move(callback_state->cb)
+          .Run(result->code, static_cast<std::string>(result->msg));
+    }
   }
   delete callback_state;
 }
 
 void OnFetchOrderCredentials(
     skus::FetchOrderCredentialsCallbackState* callback_state,
-    skus::SkusResult result) {
+    std::unique_ptr<skus::SkusResult> result) {
   if (callback_state->cb) {
-    std::string error_message;
-    if (result != skus::SkusResult::Ok) {
-      error_message = std::string{skus::result_to_string(result)};
+    if (!result) {
+      std::move(callback_state->cb).Run(skus::SkusResultCode::UnknownError, "");
+      delete callback_state;
+      return;
     }
 
-    std::move(callback_state->cb).Run(error_message);
+    std::move(callback_state->cb)
+        .Run(result->code, static_cast<std::string>(result->msg));
   }
 
   delete callback_state;
@@ -44,37 +66,88 @@ void OnFetchOrderCredentials(
 
 void OnPrepareCredentialsPresentation(
     skus::PrepareCredentialsPresentationCallbackState* callback_state,
-    skus::SkusResult result,
+    std::unique_ptr<skus::SkusResult> result,
     rust::cxxbridge1::Str presentation) {
   if (callback_state->cb) {
-    std::move(callback_state->cb).Run(static_cast<std::string>(presentation));
+    if (!result) {
+      std::move(callback_state->cb)
+          .Run(skus::SkusResultCode::UnknownError,
+               static_cast<std::string>(presentation));
+      delete callback_state;
+      return;
+    }
+
+    if (result->code == skus::SkusResultCode::Ok) {
+      std::move(callback_state->cb)
+          .Run(result->code, static_cast<std::string>(presentation));
+    } else {
+      std::move(callback_state->cb)
+          .Run(result->code, static_cast<std::string>(result->msg));
+    }
   }
   delete callback_state;
 }
 
 void OnCredentialSummary(skus::CredentialSummaryCallbackState* callback_state,
-                         skus::SkusResult result,
+                         std::unique_ptr<skus::SkusResult> result,
                          rust::cxxbridge1::Str summary) {
   if (callback_state->cb) {
-    std::move(callback_state->cb).Run(static_cast<std::string>(summary));
+    if (!result) {
+      std::move(callback_state->cb)
+          .Run(skus::SkusResultCode::UnknownError,
+               static_cast<std::string>(summary));
+      delete callback_state;
+      return;
+    }
+
+    if (result->code == skus::SkusResultCode::Ok) {
+      std::move(callback_state->cb)
+          .Run(result->code, static_cast<std::string>(summary));
+    } else {
+      std::move(callback_state->cb)
+          .Run(result->code, static_cast<std::string>(result->msg));
+    }
   }
   delete callback_state;
 }
 
 void OnSubmitReceipt(skus::SubmitReceiptCallbackState* callback_state,
-                     skus::SkusResult result) {
+                     std::unique_ptr<skus::SkusResult> result) {
   if (callback_state->cb) {
-    std::move(callback_state->cb).Run("");
+    if (!result) {
+      std::move(callback_state->cb)
+          .Run(skus::SkusResultCode::UnknownError,
+               static_cast<std::string>(""));
+      delete callback_state;
+      return;
+    }
+
+    std::move(callback_state->cb)
+        .Run(result->code, static_cast<std::string>(result->msg));
   }
   delete callback_state;
 }
 
 void OnCreateOrderFromReceipt(
     skus::CreateOrderFromReceiptCallbackState* callback_state,
-    skus::SkusResult result,
+    std::unique_ptr<skus::SkusResult> result,
     rust::cxxbridge1::Str order_id) {
   if (callback_state->cb) {
-    std::move(callback_state->cb).Run(static_cast<std::string>(order_id));
+    if (!result) {
+      std::move(callback_state->cb)
+          .Run(skus::SkusResultCode::UnknownError,
+               static_cast<std::string>(order_id));
+      delete callback_state;
+      return;
+    }
+
+    if (result->code == skus::SkusResultCode::Ok) {
+      std::move(callback_state->cb)
+          .Run(result->code, static_cast<std::string>(order_id));
+    } else {
+      std::move(callback_state->cb)
+          .Run(result->code, static_cast<std::string>(result->msg));
+    }
   }
   delete callback_state;
 }
@@ -129,9 +202,10 @@ void SkusServiceImpl::RefreshOrder(
   cbs->cb = base::BindOnce(
       [](mojom::SkusService::RefreshOrderCallback cb,
          scoped_refptr<base::SequencedTaskRunner> ui_task_runner,
-         const std::string& result) {
-        ui_task_runner->PostTask(FROM_HERE,
-                                 base::BindOnce(std::move(cb), result));
+         const SkusResultCode code, const std::string& message) {
+        ui_task_runner->PostTask(
+            FROM_HERE,
+            base::BindOnce(std::move(cb), to_skus_result(code, message)));
       },
       std::move(callback), ui_task_runner_);
 
@@ -155,9 +229,10 @@ void SkusServiceImpl::FetchOrderCredentials(
   cbs->cb = base::BindOnce(
       [](mojom::SkusService::FetchOrderCredentialsCallback cb,
          scoped_refptr<base::SequencedTaskRunner> ui_task_runner,
-         const std::string& result) {
-        ui_task_runner->PostTask(FROM_HERE,
-                                 base::BindOnce(std::move(cb), result));
+         const SkusResultCode code, const std::string& message) {
+        ui_task_runner->PostTask(
+            FROM_HERE,
+            base::BindOnce(std::move(cb), to_skus_result(code, message)));
       },
       std::move(callback), ui_task_runner_);
 
@@ -183,9 +258,10 @@ void SkusServiceImpl::PrepareCredentialsPresentation(
   cbs->cb = base::BindOnce(
       [](mojom::SkusService::PrepareCredentialsPresentationCallback cb,
          scoped_refptr<base::SequencedTaskRunner> ui_task_runner,
-         const std::string& result) {
-        ui_task_runner->PostTask(FROM_HERE,
-                                 base::BindOnce(std::move(cb), result));
+         const SkusResultCode code, const std::string& message) {
+        ui_task_runner->PostTask(
+            FROM_HERE,
+            base::BindOnce(std::move(cb), to_skus_result(code, message)));
       },
       std::move(callback), ui_task_runner_);
 
@@ -212,9 +288,10 @@ void SkusServiceImpl::CredentialSummary(
   cbs->cb = base::BindOnce(
       [](mojom::SkusService::CredentialSummaryCallback cb,
          scoped_refptr<base::SequencedTaskRunner> ui_task_runner,
-         const std::string& result) {
-        ui_task_runner->PostTask(FROM_HERE,
-                                 base::BindOnce(std::move(cb), result));
+         const SkusResultCode code, const std::string& message) {
+        ui_task_runner->PostTask(
+            FROM_HERE,
+            base::BindOnce(std::move(cb), to_skus_result(code, message)));
       },
       std::move(callback), ui_task_runner_);
 
@@ -240,9 +317,10 @@ void SkusServiceImpl::SubmitReceipt(
   cbs->cb = base::BindOnce(
       [](skus::mojom::SkusService::SubmitReceiptCallback cb,
          scoped_refptr<base::SequencedTaskRunner> ui_task_runner,
-         const std::string& result) {
-        ui_task_runner->PostTask(FROM_HERE,
-                                 base::BindOnce(std::move(cb), result));
+         const SkusResultCode code, const std::string& message) {
+        ui_task_runner->PostTask(
+            FROM_HERE,
+            base::BindOnce(std::move(cb), to_skus_result(code, message)));
       },
       std::move(callback), ui_task_runner_);
 
@@ -268,9 +346,10 @@ void SkusServiceImpl::CreateOrderFromReceipt(
   cbs->cb = base::BindOnce(
       [](skus::mojom::SkusService::CreateOrderFromReceiptCallback cb,
          scoped_refptr<base::SequencedTaskRunner> ui_task_runner,
-         const std::string& result) {
-        ui_task_runner->PostTask(FROM_HERE,
-                                 base::BindOnce(std::move(cb), result));
+         const SkusResultCode code, const std::string& message) {
+        ui_task_runner->PostTask(
+            FROM_HERE,
+            base::BindOnce(std::move(cb), to_skus_result(code, message)));
       },
       std::move(callback), ui_task_runner_);
 
