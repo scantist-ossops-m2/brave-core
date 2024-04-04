@@ -3,8 +3,8 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
-#ifndef BRAVE_CHROMIUM_SRC_CHROME_BROWSER_UI_WEBUI_HELP_VERSION_UPDATER_MAC_SPARKLE_H_
-#define BRAVE_CHROMIUM_SRC_CHROME_BROWSER_UI_WEBUI_HELP_VERSION_UPDATER_MAC_SPARKLE_H_
+#ifndef BRAVE_CHROMIUM_SRC_CHROME_BROWSER_UI_WEBUI_HELP_VERSION_UPDATER_MAC_H_
+#define BRAVE_CHROMIUM_SRC_CHROME_BROWSER_UI_WEBUI_HELP_VERSION_UPDATER_MAC_H_
 
 #import <AppKit/AppKit.h>
 
@@ -62,4 +62,4 @@ class VersionUpdaterMac : public VersionUpdater {
   base::WeakPtrFactory<VersionUpdaterMac> weak_factory_{this};
 };
 
-#endif  // BRAVE_CHROMIUM_SRC_CHROME_BROWSER_UI_WEBUI_HELP_VERSION_UPDATER_MAC_SPARKLE_H_
+#endif  // BRAVE_CHROMIUM_SRC_CHROME_BROWSER_UI_WEBUI_HELP_VERSION_UPDATER_MAC_H_

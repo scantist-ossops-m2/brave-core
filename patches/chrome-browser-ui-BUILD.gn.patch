@@ -1,5 +1,5 @@
 diff --git a/chrome/browser/ui/BUILD.gn b/chrome/browser/ui/BUILD.gn
-index 768e11b9e56483cbe6235c894bca669b928e4d0c..48c757f571b07a006117b2a9c82f47c1e13fb1af 100644
+index 768e11b9e56483cbe6235c894bca669b928e4d0c..c4800832c36164383978ac8e417751cb29581f52 100644
 --- a/chrome/browser/ui/BUILD.gn
 +++ b/chrome/browser/ui/BUILD.gn
 @@ -717,6 +717,7 @@ static_library("ui") {
@@ -10,15 +10,7 @@ index 768e11b9e56483cbe6235c894bca669b928e4d0c..48c757f571b07a006117b2a9c82f47c1
  
    if (enable_vr && is_win) {
      deps += [ "//chrome/browser/vr:vr_base" ]
-@@ -4477,6 +4478,7 @@ static_library("ui") {
-       "webui/settings/settings_utils_mac.mm",
-       "window_sizer/window_sizer_mac.mm",
-     ]
-+    import("//brave/updater/config.gni") if (!brave_enable_updater) { sources -= [ "webui/help/version_updater_mac.mm" ] sources += [ "//brave/chromium_src/chrome/browser/ui/webui/help/version_updater_mac_sparkle.mm" ] }
- 
-     if (enable_updater) {
-       sources += [
-@@ -4606,7 +4608,10 @@ static_library("ui") {
+@@ -4606,7 +4607,10 @@ static_library("ui") {
        ]
        deps += [ "//chrome/updater/app/server/win:updater_legacy_idl" ]
      } else {
