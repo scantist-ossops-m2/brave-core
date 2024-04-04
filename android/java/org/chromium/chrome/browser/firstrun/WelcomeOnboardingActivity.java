@@ -331,28 +331,14 @@ public class WelcomeOnboardingActivity extends FirstRunActivityBase {
                 mBtnNegative.setVisibility(View.VISIBLE);
             }
 
-            if (PackageUtils.isFirstInstall(this)
-                    && !OnboardingPrefManager.getInstance().isP3aCrashReportingMessageShown()) {
-                if (mCheckboxCrash != null) {
-                    mCheckboxCrash.setChecked(true);
-                }
-                UmaSessionStats.changeMetricsReportingConsent(
-                        true, ChangeMetricsReportingStateCalledFrom.UI_FIRST_RUN);
-                OnboardingPrefManager.getInstance().setP3aCrashReportingMessageShown(true);
-            } else {
-                boolean isCrashReporting = false;
-                try {
-                    isCrashReporting = PrivacyPreferencesManagerImpl.getInstance()
-                                               .isUsageAndCrashReportingPermittedByUser();
+            boolean isCrashReporting = false;
+            try {
+                isCrashReporting = PrivacyPreferencesManagerImpl.getInstance()
+                                            .isUsageAndCrashReportingPermittedByUser();
 
-                } catch (Exception e) {
-                    Log.e(TAG, "isCrashReportingOnboarding: " + e.getMessage());
-                }
-                if (mCheckboxCrash != null) {
-                    mCheckboxCrash.setChecked(isCrashReporting);
-                }
+            } catch (Exception e) {
+                Log.e(TAG, "isCrashReportingOnboarding: " + e.getMessage());
             }
-
             if (mCheckboxCrash != null) {
                 mCheckboxCrash.setOnCheckedChangeListener(
                         new CompoundButton.OnCheckedChangeListener() {
@@ -367,6 +353,7 @@ public class WelcomeOnboardingActivity extends FirstRunActivityBase {
                                 }
                             }
                         });
+                mCheckboxCrash.setChecked(isCrashReporting);
             }
 
             boolean isP3aEnabled = true;
