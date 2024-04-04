@@ -14,6 +14,7 @@
 class BraveMetricsServiceAccessor : public metrics::MetricsServiceAccessor {
  private:
   friend bool ShouldShowCrashReportPermissionAskDialog();
+  friend class BraveWelcomeUI;
 
   static bool IsMetricsAndCrashReportingEnabled();
 };
