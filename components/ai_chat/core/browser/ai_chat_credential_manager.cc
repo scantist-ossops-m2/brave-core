@@ -309,8 +309,9 @@ void AIChatCredentialManager::CreateOrderFromReceipt(
     const std::string& subscription_id,
     skus::mojom::SkusService::CreateOrderFromReceiptCallback callback) {
   if (!EnsureMojoConnected()) {
-    std::move(callback).Run(skus::mojom::SkusResult::New(
-        skus::mojom::SkusResultCode::InvalidCall, message));
+    std::move(callback).Run(
+        skus::mojom::SkusResult::New(skus::mojom::SkusResultCode::InvalidCall,
+                                     "EnsureMojoConnected Failed"));
     return;
   }
   const std::string leo_sku_domain = brave_domains::GetServicesDomain(
@@ -334,8 +335,9 @@ void AIChatCredentialManager::FetchOrderCredentials(
     const std::string& order_id,
     skus::mojom::SkusService::FetchOrderCredentialsCallback callback) {
   if (!EnsureMojoConnected()) {
-    std::move(callback).Run(skus::mojom::SkusResult::New(
-        skus::mojom::SkusResultCode::InvalidCall, message));
+    std::move(callback).Run(
+        skus::mojom::SkusResult::New(skus::mojom::SkusResultCode::InvalidCall,
+                                     "EnsureMojoConnected Failed"));
     return;
   }
 
@@ -350,8 +352,9 @@ void AIChatCredentialManager::RefreshOrder(
     const std::string& order_id,
     skus::mojom::SkusService::RefreshOrderCallback callback) {
   if (!EnsureMojoConnected()) {
-    std::move(callback).Run(skus::mojom::SkusResult::New(
-        skus::mojom::SkusResultCode::InvalidCall, message));
+    std::move(callback).Run(
+        skus::mojom::SkusResult::New(skus::mojom::SkusResultCode::InvalidCall,
+                                     "EnsureMojoConnected Failed"));
     return;
   }
 
