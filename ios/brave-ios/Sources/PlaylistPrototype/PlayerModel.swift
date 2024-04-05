@@ -184,6 +184,12 @@ final class PlayerModel: ObservableObject {
     }
   }
 
+  // MARK: - UI
+
+  /// Whether or not the video that is currently loaded into the `AVPlayer` is a potrait video
+  // FIXME: Have to hook this up somehow to loading video tracks to get naturalSize
+  private(set) var isPortraitVideo: Bool = false
+
   // MARK: - Picture in Picture
 
   private var pipController: AVPictureInPictureController?
@@ -219,7 +225,7 @@ final class PlayerModel: ObservableObject {
       }
     }
     cancellables.formUnion([
-      subscriber(for: \.timeControlStatus),
+      subscriber(for: \.timeControlStatus)
       // FIXME: Add the rest
     ])
   }

@@ -3,9 +3,9 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with this file,
 // You can obtain one at https://mozilla.org/MPL/2.0/.
 
+import AVKit
 import Foundation
 import SwiftUI
-import AVKit
 
 /// The view shown when the user is playing video or audio
 @available(iOS 16.0, *)
@@ -13,22 +13,36 @@ struct MediaContentView: View {
   @ObservedObject var model: PlayerModel
 
   @Environment(\.interfaceOrientation) private var interfaceOrientation
-
-  private var isFullScreen: Bool {
-    interfaceOrientation.isLandscape && UIDevice.current.userInterfaceIdiom == .phone
-  }
+  @Environment(\.isFullScreen) private var isFullScreen
+  @Environment(\.toggleFullScreen) private var toggleFullScreen
+  @Environment(\.requestGeometryUpdate) private var requestGeometryUpdate
 
   var body: some View {
     VStack {
-      PlayerView(player: model.player)
+      PlayerView(playerModel: model)
+        .zIndex(1)
       if !isFullScreen {
         PlaybackControlsView(model: model)
           .padding(24)
       }
     }
-    .frame(maxHeight: .infinity, alignment: .top)
-    .background(isFullScreen ? .black : Color(braveSystemName: .containerBackground))
+    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: isFullScreen ? .center : .top)
+    //    .background(isFullScreen ? .black : Color(braveSystemName: .containerBackground))
+    .background(Color(braveSystemName: .containerBackground))
     .environment(\.colorScheme, .dark)
+    .onChange(of: isFullScreen) { newValue in
+      // Automatically rotate the device orientation on iPhones when the video is not portrait
+      if UIDevice.current.userInterfaceIdiom == .phone, !model.isPortraitVideo {
+        //        requestGeometryUpdate(orientation: newValue ? .landscapeLeft : .portrait)
+      }
+    }
+    .onChange(of: interfaceOrientation) { newValue in
+      if UIDevice.current.userInterfaceIdiom == .phone {
+        toggleFullScreen(explicitFullScreenMode: newValue.isLandscape)
+      }
+    }
+    .persistentSystemOverlays(isFullScreen ? .hidden : .automatic)
+    .defersSystemGestures(on: isFullScreen ? .all : [])
   }
 }
 
@@ -40,6 +54,8 @@ extension MediaContentView {
     @State private var currentTime: TimeInterval = 0
     @State private var isScrubbing: Bool = false
     @State private var resumePlayingAfterScrub: Bool = false
+
+    @Environment(\.toggleFullScreen) private var toggleFullScreen
 
     var body: some View {
       VStack(spacing: 28) {
@@ -72,11 +88,53 @@ extension MediaContentView {
         .tint(Color(braveSystemName: .iconInteractive))
         VStack(spacing: 28) {
           PlaybackControls(model: model)
-          ExtraControls(
-            stopPlaybackDate: .constant(nil),
-            isPlaybackStopInfoPresented: .constant(false),
-            contentSpeed: $model.playbackSpeed
-          )
+          HStack {
+            Button {
+              model.playbackSpeed.cycle()
+            } label: {
+              Label("Playback Speed", braveSystemImage: model.playbackSpeed.braveSystemName)
+                .transition(.opacity.animation(.linear(duration: 0.1)))
+            }
+            Spacer()
+            Menu {
+              Section {
+                Button {
+                  //                  stopPlaybackDate = .now.addingTimeInterval(10 * 60)
+                } label: {
+                  Text("10 minutes")
+                }
+                Button {
+                  //                  stopPlaybackDate = .now.addingTimeInterval(20 * 60)
+                } label: {
+                  Text("20 minutes")
+                }
+                Button {
+                  //                  stopPlaybackDate = .now.addingTimeInterval(30 * 60)
+                } label: {
+                  Text("30 minutes")
+                }
+                Button {
+                  //                  stopPlaybackDate = .now.addingTimeInterval(60 * 60)
+                } label: {
+                  Text("1 hour")
+                }
+              } header: {
+                Text("Stop Playback In…")
+              }
+            } label: {
+              Label("Sleep Timer", braveSystemImage: "leo.sleep.timer")
+            }
+            Spacer()
+            Button {
+              withAnimation {
+                toggleFullScreen()
+              }
+            } label: {
+              Label("Fullscreen", braveSystemImage: "leo.fullscreen.on")
+            }
+          }
+          .buttonStyle(.playbackControl)
+          .foregroundStyle(Color(braveSystemName: .textSecondary))
         }
         .font(.title3)
       }

@@ -60,6 +60,7 @@ struct PlaybackControlButtonStyle: ButtonStyle {
       .imageScale(imageScale)
       .font(.system(fontStyle))
       .frame(width: multiplier * length, height: multiplier * length)
+      .contentShape(.rect)
       .background {
         if isPressed {
           RoundedRectangle(cornerRadius: 8, style: .continuous)

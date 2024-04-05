@@ -37,14 +37,15 @@ struct RequestGeometryUpdateAction {
   /// Do not call this method, instead use the Swift language feature to call it directly from
   /// the instance. E.g. `requestGeometryUpdate(orientation: .portrait)`
   func callAsFunction(orientation: UIInterfaceOrientation) {
-    let mask: UIInterfaceOrientationMask = switch orientation {
-    case .portrait: .portrait
-    case .portraitUpsideDown: .portraitUpsideDown
-    case .landscapeLeft: .landscapeLeft
-    case .landscapeRight: .landscapeRight
-    case .unknown: []
-    @unknown default: []
-    }
+    let mask: UIInterfaceOrientationMask =
+      switch orientation {
+      case .portrait: .portrait
+      case .portraitUpsideDown: .portraitUpsideDown
+      case .landscapeLeft: .landscapeLeft
+      case .landscapeRight: .landscapeRight
+      case .unknown: []
+      @unknown default: []
+      }
     windowScene?.requestGeometryUpdate(.iOS(interfaceOrientations: mask)) { error in
       // This method will fail with an error when you attempt to request an orientation change
       // while in split view/slide over windowing states. `UIWindowScene.isFullScreen` is
@@ -75,8 +76,6 @@ extension EnvironmentValues {
   }
 
   /// Writable reference to `requestGeometryUpdate`
-  ///
-  /// - SeeAlso: `interfaceOrientation`
   fileprivate var _requestGeometryUpdate: RequestGeometryUpdateAction {
     get { self[RequestGeometryUpdateActionKey.self] }
     set { self[RequestGeometryUpdateActionKey.self] = newValue }

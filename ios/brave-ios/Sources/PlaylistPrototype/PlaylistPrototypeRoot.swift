@@ -8,8 +8,7 @@ import SwiftUI
 
 @available(iOS 16.0, *)
 public struct PlaylistPrototypeRootView: View {
-  @Environment(\.dismiss) private var dismiss
-
+  // FIXME: Will this have to be an ObservedObject instead to handle PiP?
   @StateObject private var playerModel: PlayerModel = .init()
 
   public init() {}
@@ -20,6 +19,7 @@ public struct PlaylistPrototypeRootView: View {
         .toolbarBackground(.hidden, for: .navigationBar)
         .observingInterfaceOrientation()
         .creatingRequestGeometryUpdateAction()
+        .setUpFullScreenEnvironment()
     }
   }
 }
