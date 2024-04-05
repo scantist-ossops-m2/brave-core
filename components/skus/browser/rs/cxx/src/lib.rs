@@ -13,7 +13,7 @@ use std::fmt;
 use std::rc::Rc;
 use std::thread;
 
-use cxx::{type_id, ExternType, UniquePtr};
+use cxx::UniquePtr;
 use futures::executor::{LocalPool, LocalSpawner};
 use futures::task::LocalSpawnExt;
 use futures::lock::Mutex;
@@ -124,8 +124,6 @@ mod ffi {
         Error = 4,
     }
 
-    impl UniquePtr<SkusResult> {}
-
     #[derive(Debug)]
     pub struct SkusResult {
         code: SkusResultCode,
@@ -187,40 +185,34 @@ mod ffi {
         fn shutdown(self: &CppSDK);
         fn refresh_order(
             self: &CppSDK,
-            callback: RefreshOrderCallback,
-            callback_state: UniquePtr<RefreshOrderCallbackState>,
+            mut callback_state: UniquePtr<RustSequencedCallback>,
             order_id: String,
         );
         fn fetch_order_credentials(
             self: &CppSDK,
-            callback: FetchOrderCredentialsCallback,
-            callback_state: UniquePtr<FetchOrderCredentialsCallbackState>,
+            mut callback_state: UniquePtr<RustSequencedCallback>,
             order_id: String,
         );
         fn prepare_credentials_presentation(
             self: &CppSDK,
-            callback: PrepareCredentialsPresentationCallback,
-            callback_state: UniquePtr<PrepareCredentialsPresentationCallbackState>,
+            mut callback_state: UniquePtr<RustSequencedCallback>,
             domain: String,
             path: String,
         );
         fn credential_summary(
             self: &CppSDK,
-            callback: CredentialSummaryCallback,
-            callback_state: UniquePtr<CredentialSummaryCallbackState>,
+            mut callback_state: UniquePtr<RustSequencedCallback>,
             domain: String,
         );
         fn submit_receipt(
             self: &CppSDK,
-            callback: SubmitReceiptCallback,
-            callback_state: UniquePtr<SubmitReceiptCallbackState>,
+            mut callback_state: UniquePtr<RustSequencedCallback>,
             order_id: String,
             receipt: String,
         );
         fn create_order_from_receipt(
             self: &CppSDK,
-            callback: CreateOrderFromReceiptCallback,
-            callback_state: UniquePtr<CreateOrderFromReceiptCallbackState>,
+            mut callback_state: UniquePtr<RustSequencedCallback>,
             receipt: String,
         );
     }
@@ -267,18 +259,10 @@ mod ffi {
             st_ctx: Box<StorageGetContext>,
         );
 
-        type RefreshOrderCallbackState;
-        type RefreshOrderCallback = crate::RefreshOrderCallback;
-        type FetchOrderCredentialsCallbackState;
-        type FetchOrderCredentialsCallback = crate::FetchOrderCredentialsCallback;
-        type PrepareCredentialsPresentationCallbackState;
-        type PrepareCredentialsPresentationCallback = crate::PrepareCredentialsPresentationCallback;
-        type CredentialSummaryCallbackState;
-        type CredentialSummaryCallback = crate::CredentialSummaryCallback;
-        type SubmitReceiptCallbackState;
-        type SubmitReceiptCallback = crate::SubmitReceiptCallback;
-        type CreateOrderFromReceiptCallbackState;
-        type CreateOrderFromReceiptCallback = crate::CreateOrderFromReceiptCallback;
+        fn Run(self: Pin<&mut RustSequencedCallback>, result: SkusResult);
+        fn RunWithResponse(self: Pin<&mut RustSequencedCallback>, result: SkusResult, response: &str);
+
+        type RustSequencedCallback;
     }
 }
 
@@ -334,13 +318,12 @@ impl CppSDK {
 
     fn refresh_order(
         &self,
-        callback: RefreshOrderCallback,
-        callback_state: UniquePtr<ffi::RefreshOrderCallbackState>,
+        callback_state: UniquePtr<ffi::RustSequencedCallback>,
         order_id: String,
     ) {
         let spawner = self.sdk.client.get_spawner();
         if spawner
-            .spawn_local(refresh_order_task(self.sdk.clone(), callback, callback_state, order_id))
+            .spawn_local(refresh_order_task(self.sdk.clone(), callback_state, order_id))
             .is_err()
         {
             debug!("pool is shutdown");
@@ -351,15 +334,13 @@ impl CppSDK {
 
     fn fetch_order_credentials(
         &self,
-        callback: FetchOrderCredentialsCallback,
-        callback_state: UniquePtr<ffi::FetchOrderCredentialsCallbackState>,
+        callback_state: UniquePtr<ffi::RustSequencedCallback>,
         order_id: String,
     ) {
         let spawner = self.sdk.client.get_spawner();
         if spawner
             .spawn_local(fetch_order_credentials_task(
                 self.sdk.clone(),
-                callback,
                 callback_state,
                 order_id,
             ))
@@ -373,8 +354,7 @@ impl CppSDK {
 
     fn prepare_credentials_presentation(
         &self,
-        callback: PrepareCredentialsPresentationCallback,
-        callback_state: UniquePtr<ffi::PrepareCredentialsPresentationCallbackState>,
+        callback_state: UniquePtr<ffi::RustSequencedCallback>,
         domain: String,
         path: String,
     ) {
@@ -382,7 +362,6 @@ impl CppSDK {
         if spawner
             .spawn_local(prepare_credentials_presentation_task(
                 self.sdk.clone(),
-                callback,
                 callback_state,
                 domain,
                 path,
@@ -397,15 +376,13 @@ impl CppSDK {
 
     fn credential_summary(
         &self,
-        callback: CredentialSummaryCallback,
-        callback_state: UniquePtr<ffi::CredentialSummaryCallbackState>,
+        callback_state: UniquePtr<ffi::RustSequencedCallback>,
         domain: String,
     ) {
         let spawner = self.sdk.client.get_spawner();
         if spawner
             .spawn_local(credential_summary_task(
                 self.sdk.clone(),
-                callback,
                 callback_state,
                 domain,
             ))
@@ -419,8 +396,7 @@ impl CppSDK {
 
     fn submit_receipt(
         self: &CppSDK,
-        callback: SubmitReceiptCallback,
-        callback_state: UniquePtr<ffi::SubmitReceiptCallbackState>,
+        callback_state: UniquePtr<ffi::RustSequencedCallback>,
         order_id: String,
         receipt: String,
     ) {
@@ -428,7 +404,6 @@ impl CppSDK {
         if spawner
             .spawn_local(submit_receipt_task(
                 self.sdk.clone(),
-                callback,
                 callback_state,
                 order_id,
                 receipt,
@@ -442,15 +417,13 @@ impl CppSDK {
     }
     fn create_order_from_receipt(
         self: &CppSDK,
-        callback: CreateOrderFromReceiptCallback,
-        callback_state: UniquePtr<ffi::CreateOrderFromReceiptCallbackState>,
+        callback_state: UniquePtr<ffi::RustSequencedCallback>,
         receipt: String,
     ) {
         let spawner = self.sdk.client.get_spawner();
         if spawner
             .spawn_local(create_order_from_receipt_task(
                 self.sdk.clone(),
-                callback,
                 callback_state,
                 receipt,
             ))
@@ -463,25 +436,9 @@ impl CppSDK {
     }
 }
 
-#[allow(improper_ctypes_definitions)]
-#[repr(transparent)]
-pub struct RefreshOrderCallback(
-    pub  extern "C" fn(
-        callback_state: *mut ffi::RefreshOrderCallbackState,
-        result: UniquePtr<ffi::SkusResult>,
-        order: &str,
-    ),
-);
-
-unsafe impl ExternType for RefreshOrderCallback {
-    type Id = type_id!("skus::RefreshOrderCallback");
-    type Kind = cxx::kind::Trivial;
-}
-
 async fn refresh_order_task(
     sdk: Rc<skus::sdk::SDK<NativeClient>>,
-    callback: RefreshOrderCallback,
-    callback_state: UniquePtr<ffi::RefreshOrderCallbackState>,
+    mut callback_state: UniquePtr<ffi::RustSequencedCallback>,
     order_id: String,
 ) {
     match sdk
@@ -490,87 +447,38 @@ async fn refresh_order_task(
         .and_then(|order| serde_json::to_string(&order).map_err(|e| e.into()))
         .map_err(|e| e.into())
     {
-        Ok(order) => callback.0(callback_state.into_raw(), UniquePtr::new(ffi::SkusResult::new(ffi::SkusResultCode::Ok, "")), &order),
-        Err(e) => callback.0(callback_state.into_raw(), UniquePtr::new(e), ""),
+        Ok(order) => callback_state.pin_mut().RunWithResponse(ffi::SkusResult::new(ffi::SkusResultCode::Ok, ""), &order),
+        Err(e) => callback_state.pin_mut().RunWithResponse(e, ""),
     }
-}
-
-#[allow(improper_ctypes_definitions)]
-#[repr(transparent)]
-pub struct FetchOrderCredentialsCallback(
-    pub  extern "C" fn(
-        callback_state: *mut ffi::FetchOrderCredentialsCallbackState,
-        result: UniquePtr<ffi::SkusResult>,
-    ),
-);
-
-unsafe impl ExternType for FetchOrderCredentialsCallback {
-    type Id = type_id!("skus::FetchOrderCredentialsCallback");
-    type Kind = cxx::kind::Trivial;
 }
 
 async fn fetch_order_credentials_task(
     sdk: Rc<skus::sdk::SDK<NativeClient>>,
-    callback: FetchOrderCredentialsCallback,
-    callback_state: UniquePtr<ffi::FetchOrderCredentialsCallbackState>,
+    mut callback_state: UniquePtr<ffi::RustSequencedCallback>,
     order_id: String,
 ) {
     match sdk.fetch_order_credentials(&order_id).await.map_err(|e| e.into()) {
-        Ok(_) => callback.0(callback_state.into_raw(), UniquePtr::new(ffi::SkusResult::new(ffi::SkusResultCode::Ok, ""))),
-        Err(e) => callback.0(callback_state.into_raw(), UniquePtr::new(e)),
+        Ok(_) => callback_state.pin_mut().Run(ffi::SkusResult::new(ffi::SkusResultCode::Ok, "")),
+        Err(e) => callback_state.pin_mut().Run(e),
     }
-}
-
-#[allow(improper_ctypes_definitions)]
-#[repr(transparent)]
-pub struct PrepareCredentialsPresentationCallback(
-    pub  extern "C" fn(
-        callback_state: *mut ffi::PrepareCredentialsPresentationCallbackState,
-        result: UniquePtr<ffi::SkusResult>,
-        presentation: &str,
-    ),
-);
-
-unsafe impl ExternType for PrepareCredentialsPresentationCallback {
-    type Id = type_id!("skus::PrepareCredentialsPresentationCallback");
-    type Kind = cxx::kind::Trivial;
 }
 
 async fn prepare_credentials_presentation_task(
     sdk: Rc<skus::sdk::SDK<NativeClient>>,
-    callback: PrepareCredentialsPresentationCallback,
-    callback_state: UniquePtr<ffi::PrepareCredentialsPresentationCallbackState>,
+    mut callback_state: UniquePtr<ffi::RustSequencedCallback>,
     domain: String,
     path: String,
 ) {
     match sdk.prepare_credentials_presentation(&domain, &path).await.map_err(|e| e.into()) {
-        Ok(Some(presentation)) => {
-            callback.0(callback_state.into_raw(), UniquePtr::new(ffi::SkusResult::new(ffi::SkusResultCode::Ok, "")), &presentation)
-        }
-        Ok(None) => callback.0(callback_state.into_raw(), UniquePtr::new(ffi::SkusResult::new(ffi::SkusResultCode::Ok, "")), ""),
-        Err(e) => callback.0(callback_state.into_raw(), UniquePtr::new(e), ""),
+        Ok(Some(presentation)) => callback_state.pin_mut().RunWithResponse(ffi::SkusResult::new(ffi::SkusResultCode::Ok, ""), &presentation),
+        Ok(None) => callback_state.pin_mut().RunWithResponse(ffi::SkusResult::new(ffi::SkusResultCode::Ok, ""), ""),
+        Err(e) => callback_state.pin_mut().RunWithResponse(e, ""),
     }
-}
-
-#[allow(improper_ctypes_definitions)]
-#[repr(transparent)]
-pub struct CredentialSummaryCallback(
-    pub  extern "C" fn(
-        callback_state: *mut ffi::CredentialSummaryCallbackState,
-        result: UniquePtr<ffi::SkusResult>,
-        summary: &str,
-    ),
-);
-
-unsafe impl ExternType for CredentialSummaryCallback {
-    type Id = type_id!("skus::CredentialSummaryCallback");
-    type Kind = cxx::kind::Trivial;
 }
 
 async fn credential_summary_task(
     sdk: Rc<skus::sdk::SDK<NativeClient>>,
-    callback: CredentialSummaryCallback,
-    callback_state: UniquePtr<ffi::CredentialSummaryCallbackState>,
+    mut callback_state: UniquePtr<ffi::RustSequencedCallback>,
     domain: String,
 ) {
     match sdk
@@ -581,59 +489,31 @@ async fn credential_summary_task(
         })
         .map_err(|e| e.into())
     {
-        Ok(Some(summary)) => callback.0(callback_state.into_raw(), UniquePtr::new(ffi::SkusResult::new(ffi::SkusResultCode::Ok, "")), &summary),
-        Ok(None) => callback.0(callback_state.into_raw(), UniquePtr::new(ffi::SkusResult::new(ffi::SkusResultCode::Ok, "")), "{}"), /* none, empty */
-        Err(e) => callback.0(callback_state.into_raw(), UniquePtr::new(e), "{}"),                     // none, empty
+        Ok(Some(summary)) => callback_state.pin_mut().RunWithResponse(ffi::SkusResult::new(ffi::SkusResultCode::Ok, ""), &summary),
+        Ok(None) => callback_state.pin_mut().RunWithResponse(ffi::SkusResult::new(ffi::SkusResultCode::Ok, ""), "{}"), /* none, empty */
+        Err(e) => callback_state.pin_mut().RunWithResponse(e, "{}"),                     // none, empty
     }
-}
-
-#[allow(improper_ctypes_definitions)]
-#[repr(transparent)]
-pub struct SubmitReceiptCallback(
-    pub extern "C" fn(callback_state: *mut ffi::SubmitReceiptCallbackState, result: UniquePtr<ffi::SkusResult>),
-);
-
-unsafe impl ExternType for SubmitReceiptCallback {
-    type Id = type_id!("skus::SubmitReceiptCallback");
-    type Kind = cxx::kind::Trivial;
 }
 
 async fn submit_receipt_task(
     sdk: Rc<skus::sdk::SDK<NativeClient>>,
-    callback: SubmitReceiptCallback,
-    callback_state: UniquePtr<ffi::SubmitReceiptCallbackState>,
+    mut callback_state: UniquePtr<ffi::RustSequencedCallback>,
     order_id: String,
     receipt: String,
 ) {
     match sdk.submit_receipt(&order_id, &receipt).await.map_err(|e| e.into()) {
-        Ok(_) => callback.0(callback_state.into_raw(), UniquePtr::new(ffi::SkusResult::new(ffi::SkusResultCode::Ok, ""))),
-        Err(e) => callback.0(callback_state.into_raw(), UniquePtr::new(e)),
+        Ok(_) => callback_state.pin_mut().Run(ffi::SkusResult::new(ffi::SkusResultCode::Ok, "")),
+        Err(e) => callback_state.pin_mut().Run(e),
     }
-}
-
-#[allow(improper_ctypes_definitions)]
-#[repr(transparent)]
-pub struct CreateOrderFromReceiptCallback(
-    pub  extern "C" fn(
-        callback_state: *mut ffi::CreateOrderFromReceiptCallbackState,
-        result: UniquePtr<ffi::SkusResult>,
-        order_id: &str,
-    ),
-);
-
-unsafe impl ExternType for CreateOrderFromReceiptCallback {
-    type Id = type_id!("skus::CreateOrderFromReceiptCallback");
-    type Kind = cxx::kind::Trivial;
 }
 
 async fn create_order_from_receipt_task(
     sdk: Rc<skus::sdk::SDK<NativeClient>>,
-    callback: CreateOrderFromReceiptCallback,
-    callback_state: UniquePtr<ffi::CreateOrderFromReceiptCallbackState>,
+    mut callback_state: UniquePtr<ffi::RustSequencedCallback>,
     receipt: String,
 ) {
     match sdk.create_order_from_receipt(&receipt).await.map_err(|e| e.into()) {
-        Ok(order_id) => callback.0(callback_state.into_raw(), UniquePtr::new(ffi::SkusResult::new(ffi::SkusResultCode::Ok, "")), &order_id),
-        Err(e) => callback.0(callback_state.into_raw(), UniquePtr::new(e), ""),
+        Ok(order_id) => callback_state.pin_mut().RunWithResponse(ffi::SkusResult::new(ffi::SkusResultCode::Ok, ""), &order_id),
+        Err(e) => callback_state.pin_mut().RunWithResponse(e, ""),
     }
 }

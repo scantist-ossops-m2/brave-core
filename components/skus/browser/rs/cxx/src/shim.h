@@ -12,6 +12,7 @@
 
 #include "base/functional/bind.h"
 #include "base/functional/callback_helpers.h"
+#include "brave/components/skus/common/skus_sdk.mojom.h"
 #include "third_party/rust/chromium_crates_io/vendor/cxx-1.0.116/include/cxx.h"
 
 class PrefService;
@@ -29,58 +30,19 @@ struct StoragePurgeContext;
 struct StorageSetContext;
 struct StorageGetContext;
 
-class FetchOrderCredentialsCallbackState {
+class RustSequencedCallback {
  public:
-  FetchOrderCredentialsCallbackState();
-  ~FetchOrderCredentialsCallbackState();
-  base::OnceCallback<void(const SkusResultCode code,
-                          const std::string& message)>
-      cb;
-};
+  RustSequencedCallback(
+      base::OnceCallback<void(skus::mojom::SkusResultPtr)> callback,
+      scoped_refptr<base::SequencedTaskRunner> task_runner);
+  ~RustSequencedCallback();
 
-class PrepareCredentialsPresentationCallbackState {
- public:
-  PrepareCredentialsPresentationCallbackState();
-  ~PrepareCredentialsPresentationCallbackState();
-  base::OnceCallback<void(const SkusResultCode code,
-                          const std::string& message)>
-      cb;
-};
+  void Run(SkusResult result);
+  void RunWithResponse(SkusResult result, rust::cxxbridge1::Str response);
 
-class CredentialSummaryCallbackState {
- public:
-  CredentialSummaryCallbackState();
-  ~CredentialSummaryCallbackState();
-  base::OnceCallback<void(const SkusResultCode code,
-                          const std::string& message)>
-      cb;
-};
-
-class RefreshOrderCallbackState {
- public:
-  RefreshOrderCallbackState();
-  ~RefreshOrderCallbackState();
-  base::OnceCallback<void(const SkusResultCode code,
-                          const std::string& message)>
-      cb;
-};
-
-class SubmitReceiptCallbackState {
- public:
-  SubmitReceiptCallbackState();
-  ~SubmitReceiptCallbackState();
-  base::OnceCallback<void(const SkusResultCode code,
-                          const std::string& message)>
-      cb;
-};
-
-class CreateOrderFromReceiptCallbackState {
- public:
-  CreateOrderFromReceiptCallbackState();
-  ~CreateOrderFromReceiptCallbackState();
-  base::OnceCallback<void(const SkusResultCode code,
-                          const std::string& message)>
-      cb;
+ private:
+  base::OnceCallback<void(skus::mojom::SkusResultPtr)> callback_;
+  scoped_refptr<base::SequencedTaskRunner> task_runner_;
 };
 
 class SkusUrlLoader {
@@ -116,29 +78,6 @@ class SkusContext {
                                 bool success)> done,
       rust::cxxbridge1::Box<skus::StorageSetContext> st_ctx) const = 0;
 };
-
-using RefreshOrderCallback = void (*)(RefreshOrderCallbackState* callback_state,
-                                      std::unique_ptr<skus::SkusResult> result,
-                                      rust::cxxbridge1::Str order);
-using FetchOrderCredentialsCallback =
-    void (*)(FetchOrderCredentialsCallbackState* callback_state,
-             std::unique_ptr<skus::SkusResult> result);
-using PrepareCredentialsPresentationCallback =
-    void (*)(PrepareCredentialsPresentationCallbackState* callback_state,
-             std::unique_ptr<skus::SkusResult> result,
-             rust::cxxbridge1::Str presentation);
-using CredentialSummaryCallback =
-    void (*)(CredentialSummaryCallbackState* callback_state,
-             std::unique_ptr<skus::SkusResult> result,
-             rust::cxxbridge1::Str summary);
-using SubmitReceiptCallback =
-    void (*)(SubmitReceiptCallbackState* callback_state,
-             std::unique_ptr<skus::SkusResult> result);
-
-using CreateOrderFromReceiptCallback =
-    void (*)(CreateOrderFromReceiptCallbackState* callback_state,
-             std::unique_ptr<skus::SkusResult> result,
-             rust::cxxbridge1::Str order_id);
 
 void shim_logMessage(rust::cxxbridge1::Str file,
                      uint32_t line,

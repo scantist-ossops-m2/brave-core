@@ -45,27 +45,47 @@ logging::LogSeverity GetLogSeverity(skus::TracingLevel level) {
 
 namespace skus {
 
-FetchOrderCredentialsCallbackState::FetchOrderCredentialsCallbackState() =
-    default;
-FetchOrderCredentialsCallbackState::~FetchOrderCredentialsCallbackState() =
-    default;
+skus::mojom::SkusResultPtr to_skus_result(const skus::SkusResultCode code,
+                                          const std::string& message) {
+  return skus::mojom::SkusResult::New(
+      static_cast<skus::mojom::SkusResultCode>(code), message);
+}
 
-PrepareCredentialsPresentationCallbackState::
-    PrepareCredentialsPresentationCallbackState() = default;
-PrepareCredentialsPresentationCallbackState::
-    ~PrepareCredentialsPresentationCallbackState() = default;
+RustSequencedCallback::RustSequencedCallback(
+    base::OnceCallback<void(skus::mojom::SkusResultPtr)> callback,
+    scoped_refptr<base::SequencedTaskRunner> task_runner)
+    : callback_(std::move(callback)), task_runner_(task_runner) {}
 
-CredentialSummaryCallbackState::CredentialSummaryCallbackState() = default;
-CredentialSummaryCallbackState::~CredentialSummaryCallbackState() = default;
+RustSequencedCallback::~RustSequencedCallback() = default;
 
-RefreshOrderCallbackState::RefreshOrderCallbackState() = default;
-RefreshOrderCallbackState::~RefreshOrderCallbackState() = default;
+void RustSequencedCallback::Run(SkusResult result) {
+  if (callback_) {
+    task_runner_->PostTask(
+        FROM_HERE,
+        base::BindOnce(
+            std::move(callback_),
+            to_skus_result(result.code, static_cast<std::string>(result.msg))));
+  }
+}
 
-SubmitReceiptCallbackState::SubmitReceiptCallbackState() {}
-SubmitReceiptCallbackState::~SubmitReceiptCallbackState() {}
-
-CreateOrderFromReceiptCallbackState::CreateOrderFromReceiptCallbackState() {}
-CreateOrderFromReceiptCallbackState::~CreateOrderFromReceiptCallbackState() {}
+void RustSequencedCallback::RunWithResponse(SkusResult result,
+                                            rust::cxxbridge1::Str response) {
+  if (callback_) {
+    if (result.code == skus::SkusResultCode::Ok) {
+      task_runner_->PostTask(
+          FROM_HERE,
+          base::BindOnce(
+              std::move(callback_),
+              to_skus_result(result.code, static_cast<std::string>(response))));
+    } else {
+      task_runner_->PostTask(
+          FROM_HERE,
+          base::BindOnce(std::move(callback_),
+                         to_skus_result(result.code,
+                                        static_cast<std::string>(result.msg))));
+    }
+  }
+}
 
 void shim_logMessage(rust::cxxbridge1::Str file,
                      uint32_t line,
