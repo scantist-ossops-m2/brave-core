@@ -7,14 +7,16 @@ import DesignSystem
 import Foundation
 import SwiftUI
 
+extension AnyTransition {
+  static var playButtonTransition: AnyTransition {
+    .scale.combined(with: .opacity).animation(.spring(response: 0.3, dampingFraction: 0.7))
+  }
+}
+
 // FIXME: Delete, move into MediaContentView.PlaybackControlsView
 @available(iOS 16.0, *)
 struct PlaybackControls: View {
   @ObservedObject var model: PlayerModel
-
-  private var playButtonTransition: AnyTransition {
-    .scale.combined(with: .opacity).animation(.spring(response: 0.3, dampingFraction: 0.7))
-  }
 
   var body: some View {
     HStack {
@@ -40,15 +42,14 @@ struct PlaybackControls: View {
       Toggle(isOn: $model.isPlaying) {
         if model.isPlaying {
           Label("Pause", braveSystemImage: "leo.pause.filled")
-            .labelStyle(.iconOnly)
-            .transition(playButtonTransition)
+            .transition(.playButtonTransition)
         } else {
           Label("Play", braveSystemImage: "leo.play.filled")
-            .labelStyle(.iconOnly)
-            .transition(playButtonTransition)
+            .transition(.playButtonTransition)
         }
       }
       .toggleStyle(.button)
+      .accessibilityAddTraits(!model.isPlaying ? .startsMediaSession : [])
       .foregroundStyle(Color(braveSystemName: .textPrimary))
       .buttonStyle(.playbackControl(size: .extraLarge))
       Spacer()

@@ -32,7 +32,7 @@ struct PlayerView: View {
         anchor: .center
       )
       .frame(maxWidth: isFullScreen ? .infinity : nil, maxHeight: isFullScreen ? .infinity : nil)
-      .ignoresSafeArea(isFullScreen ? .all : [], edges: .bottom)
+      .ignoresSafeArea(isFullScreen ? .all : [], edges: .vertical)
       // FIXME: Better accessibility copy
       .accessibilityLabel(isFullScreen ? "Tap to toggle controls" : "Media player")
       .accessibilityAddTraits(isFullScreen ? .isButton : [])
@@ -45,34 +45,36 @@ struct PlayerView: View {
           )
           .opacity(isControlsVisible && isFullScreen ? 1 : 0)
           .accessibilityHidden(isControlsVisible && isFullScreen)
-          .background(
-            Color.clear
-              .contentShape(.rect)
-              .simultaneousGesture(
-                TapGesture().onEnded { _ in
-                  withAnimation(.linear(duration: 0.1)) {
-                    isControlsVisible.toggle()
+          .background {
+            if isFullScreen {
+              Color.clear
+                .contentShape(.rect)
+                .simultaneousGesture(
+                  TapGesture().onEnded { _ in
+                    withAnimation(.linear(duration: 0.1)) {
+                      isControlsVisible.toggle()
+                    }
                   }
-                }
-              )
-              .simultaneousGesture(
-                DragGesture()
-                  .onChanged { value in
-                    dragOffset = value.translation
-                  }
-                  .onEnded { value in
-                    let finalOffset = value.predictedEndTranslation
-                    if abs(finalOffset.height) > 200 {
+                )
+                .simultaneousGesture(
+                  DragGesture()
+                    .onChanged { value in
+                      dragOffset = value.translation
+                    }
+                    .onEnded { value in
+                      let finalOffset = value.predictedEndTranslation
+                      if abs(finalOffset.height) > 200 {
+                        withAnimation(.snappy) {
+                          toggleFullScreen()
+                        }
+                      }
                       withAnimation(.snappy) {
-                        toggleFullScreen()
+                        dragOffset = .zero
                       }
                     }
-                    withAnimation(.snappy) {
-                      dragOffset = .zero
-                    }
-                  }
-              )
-          )
+                )
+            }
+          }
       }
       .onChange(of: isFullScreen) { newValue in
         // Delay showing controls until the animation to present full screen is done, unfortunately
@@ -99,15 +101,18 @@ struct PlayerView: View {
 @available(iOS 16.0, *)
 extension PlayerView {
   /// Controls shown inside of the PlayerView, typically in fullscreen mode
+  // FIXME: Find a way to share the actual control buttons?
   struct InlinePlaybackControlsView: View {
     @Environment(\.toggleFullScreen) private var toggleFullScreen
+    @State private var currentTime: TimeInterval = 0
+    @State private var isScrubbing: Bool = false
+    @State private var resumePlayingAfterScrub: Bool = false
 
     @ObservedObject var model: PlayerModel
 
     var body: some View {
       VStack {
-        HStack {
-          // content speed, sleep timer, shuffle, repeat
+        HStack(spacing: 16) {
           Button {
             model.playbackSpeed.cycle()
           } label: {
@@ -115,28 +120,126 @@ extension PlayerView {
               .transition(.opacity.animation(.linear(duration: 0.1)))
           }
           Spacer()
-        }
-        Spacer()
-        HStack {
-          // Seek back, Play/Pause, Seek forwards
+          Toggle(isOn: $model.isShuffleEnabled) {
+            if model.isShuffleEnabled {
+              Image(braveSystemName: "leo.shuffle.toggle-on")
+                .transition(.opacity.animation(.linear(duration: 0.1)))
+            } else {
+              Image(braveSystemName: "leo.shuffle.off")
+                .transition(.opacity.animation(.linear(duration: 0.1)))
+            }
+          }
+          .toggleStyle(.button)
+          Button {
+            model.repeatMode.cycle()
+          } label: {
+            // FIXME: Switch to Label's for VoiceOver
+            Group {
+              switch model.repeatMode {
+              case .none:
+                Image(braveSystemName: "leo.loop.off")
+              case .one:
+                Image(braveSystemName: "leo.loop.1")
+              case .all:
+                Image(braveSystemName: "leo.loop.all")
+              }
+            }
+            .transition(.opacity.animation(.linear(duration: 0.1)))
+          }
         }
         Spacer()
         VStack {
           // scrubber
-          HStack {
-            // playback time/duration
-            Button {
-              withAnimation {
-                toggleFullScreen()
+          MediaScrubber(
+            currentTime: Binding(
+              get: { .seconds(currentTime) },
+              set: { newValue in
+                Task { await model.seek(to: TimeInterval(newValue.components.seconds)) }
               }
-            } label: {
-              Label("Exit Fullscreen", braveSystemImage: "leo.fullscreen.off")
+            ),
+            duration: .seconds(model.duration),
+            isScrubbing: $isScrubbing
+          ) {
+            HStack {
+              CompactMediaScrubberLabel(
+                currentTime: .seconds(currentTime),
+                duration: .seconds(model.duration)
+              )
+              Spacer()
+              Button {
+                withAnimation {
+                  toggleFullScreen()
+                }
+              } label: {
+                Label("Exit Fullscreen", braveSystemImage: "leo.fullscreen.off")
+              }
             }
+            .buttonStyle(.playbackControl)
           }
         }
       }
-      .buttonStyle(.playbackControl)
       .padding(12)
+      .overlay {
+        // Always center the play/pause buttons
+        HStack(spacing: 42) {
+          Button {
+            Task { await model.seekBackwards() }
+          } label: {
+            Label("Step Back", braveSystemImage: "leo.rewind.15")
+          }
+          .buttonStyle(.playbackControl(size: .large))
+          Toggle(isOn: $model.isPlaying) {
+            if model.isPlaying {
+              Label("Pause", braveSystemImage: "leo.pause.filled")
+                .transition(.playButtonTransition)
+            } else {
+              Label("Play", braveSystemImage: "leo.play.filled")
+                .transition(.playButtonTransition)
+            }
+          }
+          .toggleStyle(.button)
+          .accessibilityAddTraits(!model.isPlaying ? .startsMediaSession : [])
+          .buttonStyle(.playbackControl(size: .extraLarge))
+          Button {
+            Task { await model.seekForwards() }
+          } label: {
+            Label("Step Forward", braveSystemImage: "leo.forward.15")
+          }
+          .buttonStyle(.playbackControl(size: .large))
+        }
+        .foregroundStyle(Color(braveSystemName: .textPrimary))
+        .ignoresSafeArea(edges: .vertical)
+      }
+      .buttonStyle(.playbackControl)
+      .task {
+        for await currentTime in model.currentTimeStream {
+          self.currentTime = currentTime
+        }
+      }
     }
+  }
+}
+
+@available(iOS 16.0, *)
+struct CompactMediaScrubberLabel: View {
+  var currentTime: Duration
+  var duration: Duration
+
+  private var currentValueLabel: Text {
+    return Text(currentTime, format: .time(pattern: .minuteSecond))
+  }
+
+  private var remainingTimeLabel: Text {
+    let value = Text(duration - currentTime, format: .time(pattern: .minuteSecond))
+    return Text("-\(value)")
+  }
+
+  var body: some View {
+    HStack {
+      currentValueLabel
+      Text("/")
+      remainingTimeLabel
+    }
+    .font(.caption2)
   }
 }

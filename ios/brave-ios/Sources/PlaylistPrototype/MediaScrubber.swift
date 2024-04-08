@@ -9,12 +9,24 @@ import SwiftUI
 
 /// FIXME: Add doc
 @available(iOS 16.0, *)
-struct MediaScrubber: View {
+struct MediaScrubber<Label: View>: View {
   @Binding var currentTime: Duration
   var duration: Duration
   @Binding var isScrubbing: Bool
+  var label: Label
 
-  @State private var isShowingTotalTime: Bool = false
+  init(
+    currentTime: Binding<Duration>,
+    duration: Duration,
+    isScrubbing: Binding<Bool>,
+    @ViewBuilder label: () -> Label
+  ) {
+    self._currentTime = currentTime
+    self.duration = duration
+    self._isScrubbing = isScrubbing
+    self.label = label()
+  }
+
   @GestureState private var isScrubbingState: Bool = false
   @ScaledMetric private var barHeight = 4
   @ScaledMetric private var thumbSize = 12
@@ -99,24 +111,8 @@ struct MediaScrubber: View {
             }
           }
         }
-      HStack {
-        currentValueLabel
-        Spacer()
-        Button {
-          isShowingTotalTime.toggle()
-        } label: {
-          Group {
-            if isShowingTotalTime {
-              durationLabel
-            } else {
-              remainingTimeLabel
-            }
-          }
-          .transition(.move(edge: .trailing).combined(with: .opacity))
-        }
-      }
-      .foregroundStyle(.primary)
-      .font(.footnote)
+        .disabled(!duration.isValid)
+      label
     }
     .onChange(of: isScrubbingState) { newValue in
       isScrubbing = newValue
@@ -136,7 +132,65 @@ struct MediaScrubber: View {
         }
       }
     }
-    .disabled(!duration.isValid)
+  }
+}
+
+@available(iOS 16.0, *)
+extension MediaScrubber where Label == DefaultMediaScrubberLabel {
+  init(
+    currentTime: Binding<Duration>,
+    duration: Duration,
+    isScrubbing: Binding<Bool>
+  ) {
+    self._currentTime = currentTime
+    self.duration = duration
+    self._isScrubbing = isScrubbing
+    self.label = DefaultMediaScrubberLabel(
+      currentTime: currentTime.wrappedValue,
+      duration: duration
+    )
+  }
+}
+
+@available(iOS 16.0, *)
+struct DefaultMediaScrubberLabel: View {
+  var currentTime: Duration
+  var duration: Duration
+
+  @State private var isShowingTotalTime: Bool = false
+
+  private var currentValueLabel: Text {
+    return Text(currentTime, format: .time(pattern: .minuteSecond))
+  }
+
+  private var remainingTimeLabel: Text {
+    let value = Text(duration - currentTime, format: .time(pattern: .minuteSecond))
+    return Text("-\(value)")
+  }
+
+  private var durationLabel: Text {
+    Text(duration, format: .time(pattern: .minuteSecond))
+  }
+
+  var body: some View {
+    HStack {
+      currentValueLabel
+      Spacer()
+      Button {
+        isShowingTotalTime.toggle()
+      } label: {
+        Group {
+          if isShowingTotalTime {
+            durationLabel
+          } else {
+            remainingTimeLabel
+          }
+        }
+        .transition(.move(edge: .trailing).combined(with: .opacity))
+      }
+    }
+    .foregroundStyle(.primary)
+    .font(.footnote)
   }
 }
 

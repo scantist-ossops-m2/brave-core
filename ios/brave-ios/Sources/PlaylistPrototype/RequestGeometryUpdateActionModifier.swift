@@ -30,6 +30,7 @@ import os
 ///         blocking to only run when the interface idiom is `phone`.
 @available(iOS 16.0, *)
 struct RequestGeometryUpdateAction {
+  // FIXME: May have to be weak
   fileprivate var windowScene: UIWindowScene?
 
   /// Calls `requestGeometryUpdate` on the associated `UIWindowScene`.
@@ -94,6 +95,7 @@ extension View {
 // Could use `UIWindowScene.effectiveGeometry` to fetch the interface orientation which is KVO-compliant
 @available(iOS 16.0, *)
 private struct RequestGeometryUpdateModifier: ViewModifier {
+  // FIXME: May have to be a weak box
   @State private var windowScene: UIWindowScene?
 
   func body(content: Content) -> some View {
