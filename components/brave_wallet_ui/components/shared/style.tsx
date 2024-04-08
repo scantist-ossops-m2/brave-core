@@ -562,10 +562,11 @@ export const InputLabelText = styled.label`
   width: 100%;
 `
 
-export const VerticalDivider = styled.div`
+export const VerticalDivider = styled.div<{ margin?: string }>`
   height: 1px;
   width: 100%;
   background-color: ${leo.color.divider.subtle};
+  margin: ${(p) => p.margin ?? 'unset'};
 `
 
 export const BraveRewardsIndicator = styled.div`
