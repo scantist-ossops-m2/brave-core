@@ -21,5 +21,7 @@ public struct PlaylistPrototypeRootView: View {
         .creatingRequestGeometryUpdateAction()
         .setUpFullScreenEnvironment()
     }
+    .preferredColorScheme(.dark)
+    .environment(\.colorScheme, .dark)
   }
 }

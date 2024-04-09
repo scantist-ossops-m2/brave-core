@@ -17,6 +17,8 @@ struct PlaylistSplitView: View {
 
   @ObservedObject var playerModel: PlayerModel
 
+  @GestureState private var isDraggingDrawer: Bool = false
+
   /// Whether or not the bottom drawer is visible
   ///
   /// On iPhone:
@@ -39,26 +41,103 @@ struct PlaylistSplitView: View {
     !isFullScreen && horizontalSizeClass == .regular && interfaceOrientation.isLandscape
   }
 
+  var sidebarContents: some View {
+    ScrollView {
+      LazyVStack(alignment: .leading) {
+        ForEach(0..<10, id: \.self) { _ in
+          HStack {
+            Color.black.frame(width: 120, height: 90)
+            Text("Sidebar Content")
+          }
+          .padding(12)
+        }
+      }
+      .frame(maxWidth: .infinity, alignment: .leading)
+    }
+    .scrollDisabled(isDraggingDrawer)
+    .safeAreaInset(edge: .top, spacing: 0) {
+      VStack(spacing: 0) {
+        Capsule()
+          .fill(Color.white.opacity(0.2))
+          .frame(width: 32, height: 4)
+          .padding(.vertical, 8)
+        HStack {
+          VStack(alignment: .leading) {
+            Text("Play Later")
+              .fontWeight(.semibold)
+            HStack {
+              Text("5 items")
+              Text("1h 35m")
+              Text("245 MB")
+            }
+            .font(.caption2)
+          }
+          Spacer()
+          Text("Edit")
+            .fontWeight(.semibold)
+        }
+        .padding()
+      }
+      .frame(maxWidth: .infinity)
+      .background(Color(braveSystemName: .gray10))
+      .contentShape(.rect)
+      .gesture(isBottomDrawerVisible ? drawerDragGesture : nil)
+    }
+  }
+
+  private var drawerDragGesture: some Gesture {
+    DragGesture(coordinateSpace: .global)
+      .updating($isDraggingDrawer, body: { _, state, _ in state = true })
+      .onChanged { value in
+        drawerHeight = max(120, min(screenHeight, initialDrawerHeight - value.translation.height))
+      }
+      .onEnded { value in
+        withAnimation(.snappy) {
+          drawerHeight = max(120, min(screenHeight, initialDrawerHeight - value.predictedEndTranslation.height))
+          initialDrawerHeight = drawerHeight
+        }
+      }
+  }
+
+  @State private var drawerHeight: CGFloat = 120
+  @State private var initialDrawerHeight: CGFloat = 120
+  @State private var screenHeight: CGFloat = 0
+
   var body: some View {
     // FIXME: Empty-state instances also affect drawer visibility
     //
     // Maybe can control explicit drawer/sidebar visibility from content view instead
     HStack {
       if isSidebarVisible {
-        Text("List Content")
+        sidebarContents
           .frame(width: 320)
         Divider()
       }
+      // FIXME: Swap out for some sort of container for the selected item (shows different views if its webpage TTS for instance)
       MediaContentView(model: playerModel)
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .overlay(alignment: .bottom) {
-          if isBottomDrawerVisible {
-            VStack {
-              Divider()
-              Text("List Content")
-            }
+        .background {
+          GeometryReader { proxy in
+            Color.clear
+              .onAppear {
+                screenHeight = proxy.size.height
+              }
+              .onChange(of: proxy.size.height) { newValue in
+                screenHeight = newValue
+              }
           }
         }
+        .overlay(alignment: .bottom) {
+          if isBottomDrawerVisible {
+            VStack(spacing: 0) {
+              sidebarContents
+            }
+            .frame(height: drawerHeight)
+            .background(Color(braveSystemName: .primitiveGray90))
+            .clipShape(UnevenRoundedRectangle(cornerRadii: .init(topLeading: 10, bottomLeading: 0, bottomTrailing: 0, topTrailing: 10)))
+          }
+        }
+        .ignoresSafeArea(.container, edges: .bottom)
     }
     .toolbar(isFullScreen ? .hidden : .automatic, for: .navigationBar)
     .toolbar {

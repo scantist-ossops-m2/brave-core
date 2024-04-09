@@ -6,6 +6,7 @@
 import AVKit
 import Foundation
 import SwiftUI
+import DesignSystem
 
 // FIXME: Add doc
 @available(iOS 16.0, *)
@@ -133,15 +134,15 @@ extension PlayerView {
           Button {
             model.repeatMode.cycle()
           } label: {
-            // FIXME: Switch to Label's for VoiceOver
             Group {
+              // FIXME: Better accessibility labels
               switch model.repeatMode {
               case .none:
-                Image(braveSystemName: "leo.loop.off")
+                Label("Repeat Mode: Off", braveSystemImage: "leo.loop.off")
               case .one:
-                Image(braveSystemName: "leo.loop.1")
+                Label("Repeat Mode: One", braveSystemImage: "leo.loop.1")
               case .all:
-                Image(braveSystemName: "leo.loop.all")
+                Label("Repeat Mode: All", braveSystemImage: "leo.loop.all")
               }
             }
             .transition(.opacity.animation(.linear(duration: 0.1)))

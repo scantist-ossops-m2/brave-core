@@ -29,7 +29,6 @@ struct MediaContentView: View {
     .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: isFullScreen ? .center : .top)
     //    .background(isFullScreen ? .black : Color(braveSystemName: .containerBackground))
     .background(Color(braveSystemName: .containerBackground))
-    .environment(\.colorScheme, .dark)
     .onChange(of: isFullScreen) { newValue in
       // Automatically rotate the device orientation on iPhones when the video is not portrait
       if UIDevice.current.userInterfaceIdiom == .phone, !model.isPortraitVideo {
