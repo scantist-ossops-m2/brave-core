@@ -19,7 +19,7 @@
 namespace first_run {
 
 bool IsMetricsReportingOptIn(version_info::Channel channel) {
-  switch (chrome::GetChannel()) {
+  switch (channel) {
     case version_info::Channel::STABLE:
 #if BUILDFLAG(IS_ANDROID)
       // Change both to false when android implements ask on first crash
