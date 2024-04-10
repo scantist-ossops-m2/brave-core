@@ -15,7 +15,7 @@ public class BraveFirstRunUtils {
      * @return The default value for metrics reporting state
      */
     public static boolean isMetricsReportingOptIn() {
-        return FirstRunUtilsJni.get().isMetricsReportingOptIn();
+        return BraveFirstRunUtilsJni.get().isMetricsReportingOptIn();
     }
 
     @NativeMethods
