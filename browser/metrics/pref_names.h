@@ -7,6 +7,7 @@
 #define BRAVE_BROWSER_METRICS_PREF_NAMES_H_
 
 namespace metrics::prefs {
+
 inline constexpr char kDontAskForCrashReporting[] =
     "brave.dont_ask_for_crash_reporting";
 
