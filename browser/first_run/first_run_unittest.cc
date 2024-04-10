@@ -4,6 +4,8 @@
  * You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 #include "chrome/browser/first_run/first_run.h"
+#include "base/command_line.h"
+#include "brave/browser/metrics/switches.h"
 #include "build/build_config.h"
 #include "testing/gtest/include/gtest/gtest.h"
 
@@ -11,8 +13,34 @@
 #include "chrome/browser/ui/ui_features.h"
 #endif
 
-TEST(FirstRunTest, BasicTest) {
+TEST(FirstRunTest, OverrideIsMetricsReportingOptInToEnabled) {
+  auto* command_line = base::CommandLine::ForCurrentProcess();
+  command_line->AppendSwitch(metrics::switches::kForceMetricsOptInEnabled);
+
   EXPECT_TRUE(first_run::IsMetricsReportingOptIn());
+}
+
+TEST(FirstRunTest, OverrideIsMetricsReportingOptInToDisabled) {
+  auto* command_line = base::CommandLine::ForCurrentProcess();
+  command_line->AppendSwitch(metrics::switches::kForceMetricsOptInDisabled);
+
+  EXPECT_FALSE(first_run::IsMetricsReportingOptIn());
+}
+
+TEST(FirstRunTest, IsMetricsReportingOptInDefaultValue) {
+#if BUILDFLAG(IS_ANDROID)
+  EXPECT_FALSE(
+      first_run::IsMetricsReportingOptIn(version_info::Channel::STABLE));
+#else
+  EXPECT_TRUE(
+      first_run::IsMetricsReportingOptIn(version_info::Channel::STABLE));
+#endif
+  EXPECT_FALSE(first_run::IsMetricsReportingOptIn(version_info::Channel::BETA));
+  EXPECT_FALSE(first_run::IsMetricsReportingOptIn(version_info::Channel::DEV));
+  EXPECT_FALSE(
+      first_run::IsMetricsReportingOptIn(version_info::Channel::CANARY));
+  EXPECT_TRUE(
+      first_run::IsMetricsReportingOptIn(version_info::Channel::UNKNOWN));
 }
 
 #if BUILDFLAG(IS_MAC)

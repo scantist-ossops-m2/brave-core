@@ -128,7 +128,6 @@ source_set("ui") {
       "omnibox/brave_omnibox_client_impl.cc",
       "omnibox/brave_omnibox_client_impl.h",
       "page_action/brave_page_action_icon_type.h",
-      "session_crashed_bubble_brave.cc",
       "side_panel/ai_chat/ai_chat_side_panel_utils.cc",
       "side_panel/ai_chat/ai_chat_side_panel_utils.h",
       "toolbar/app_menu_icons.cc",

@@ -331,13 +331,16 @@ public class WelcomeOnboardingActivity extends FirstRunActivityBase {
                 mBtnNegative.setVisibility(View.VISIBLE);
             }
 
-            boolean isCrashReporting = false;
-            try {
-                isCrashReporting = PrivacyPreferencesManagerImpl.getInstance()
-                                            .isUsageAndCrashReportingPermittedByUser();
-
-            } catch (Exception e) {
-                Log.e(TAG, "isCrashReportingOnboarding: " + e.getMessage());
+            boolean isCrashReportingEnabled = false;
+            if (PackageUtils.isFirstInstall(this))
+                isCrashReportingEnabled = !BraveFirstRunUtils.isMetricsReportingOptIn();
+            else {
+              try {
+                  isCrashReportingEnabled = PrivacyPreferencesManagerImpl.getInstance()
+                                              .isUsageAndCrashReportingPermittedByUser();
+              } catch (Exception e) {
+                  Log.e(TAG, "isCrashReportingEnabledOnboarding: " + e.getMessage());
+              }
             }
             if (mCheckboxCrash != null) {
                 mCheckboxCrash.setOnCheckedChangeListener(
@@ -353,7 +356,7 @@ public class WelcomeOnboardingActivity extends FirstRunActivityBase {
                                 }
                             }
                         });
-                mCheckboxCrash.setChecked(isCrashReporting);
+                mCheckboxCrash.setChecked(isCrashReportingEnabled);
             }
 
             boolean isP3aEnabled = true;

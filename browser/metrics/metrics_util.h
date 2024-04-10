@@ -6,7 +6,8 @@
 #ifndef BRAVE_BROWSER_METRICS_METRICS_REPORTING_UTIL_H_
 #define BRAVE_BROWSER_METRICS_METRICS_REPORTING_UTIL_H_
 
-bool GetDefaultPrefValueForMetricsReporting();
+namespace metrics {
 bool ShouldShowCrashReportPermissionAskDialog();
+}  // namespace metrics
 
 #endif  // BRAVE_BROWSER_METRICS_METRICS_REPORTING_UTIL_H_

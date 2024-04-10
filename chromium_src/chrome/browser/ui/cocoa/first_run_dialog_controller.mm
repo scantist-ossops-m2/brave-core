@@ -10,9 +10,9 @@
 #include "base/i18n/rtl.h"
 #include "base/strings/sys_string_conversions.h"
 #include "brave/browser/brave_shell_integration.h"
-#include "brave/browser/metrics/metrics_reporting_util.h"
 #include "brave/components/l10n/common/localization_util.h"
 #include "brave/grit/brave_generated_resources.h"
+#include "chrome/browser/first_run/first_run.h"
 #include "chrome/grit/branded_strings.h"
 #include "chrome/grit/generated_resources.h"
 #import "third_party/google_toolbox_for_mac/src/AppKit/GTMUILocalizerAndLayoutTweaker.h"
@@ -178,7 +178,7 @@
 
 - (BOOL)isStatsReportingEnabled {
   // Give default value because we don't provide checkbox for this option.
-  return GetDefaultPrefValueForMetricsReporting();
+  return false;
 }
 
 - (BOOL)isMakeDefaultBrowserEnabled {

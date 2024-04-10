@@ -6,6 +6,7 @@
 #include "base/feature_list.h"
 #include "brave/browser/ethereum_remote_client/buildflags/buildflags.h"
 #include "brave/browser/metrics/buildflags/buildflags.h"
+#include "brave/browser/metrics/pref_names.h"
 #include "brave/components/brave_rewards/common/pref_names.h"
 #include "brave/components/brave_shields/core/common/features.h"
 #include "brave/components/brave_shields/core/common/pref_names.h"
@@ -192,8 +193,6 @@ IN_PROC_BROWSER_TEST_F(BraveProfilePrefsBrowserTest, MediaRouterPrefTest) {
 }
 
 IN_PROC_BROWSER_TEST_F(BraveLocalStatePrefsBrowserTest, DefaultLocalStateTest) {
-#if BUILDFLAG(ENABLE_CRASH_DIALOG)
-  EXPECT_FALSE(
-      g_browser_process->local_state()->GetBoolean(kDontAskForCrashReporting));
-#endif
+  EXPECT_FALSE(g_browser_process->local_state()->GetBoolean(
+      metrics::prefs::kDontAskForCrashReporting));
 }

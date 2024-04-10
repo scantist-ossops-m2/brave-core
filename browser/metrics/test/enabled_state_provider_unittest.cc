@@ -5,7 +5,6 @@
 
 #include "chrome/browser/metrics/chrome_metrics_services_manager_client.h"
 
-#include "chrome/browser/metrics/chrome_metrics_service_accessor.h"
 #include "components/metrics/enabled_state_provider.h"
 #include "components/metrics/metrics_pref_names.h"
 #include "components/metrics/metrics_reporting_default_state.h"
