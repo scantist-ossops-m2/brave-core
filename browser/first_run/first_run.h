@@ -6,7 +6,7 @@
 #ifndef BRAVE_BROWSER_FIRST_RUN_FIRST_RUN_H_
 #define BRAVE_BROWSER_FIRST_RUN_FIRST_RUN_H_
 
-#include "components/version_info/channel.h"
+#include "base/version_info/channel.h"
 
 namespace brave::first_run {
 

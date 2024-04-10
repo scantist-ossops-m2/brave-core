@@ -15,9 +15,7 @@ source_set("first_run") {
     "first_run.h",
   ]
 
-  deps = [
+  public_deps = [
     "//base",
-    "//chrome/common",
-    "//components/version_info",
   ]
 }

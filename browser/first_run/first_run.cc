@@ -9,7 +9,6 @@
 #include "base/notreached.h"
 #include "brave/browser/metrics/switches.h"
 #include "build/build_config.h"
-#include "chrome/common/channel_info.h"
 
 namespace brave::first_run {
 
