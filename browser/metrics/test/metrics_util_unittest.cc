@@ -6,6 +6,7 @@
 #include "brave/browser/metrics/metrics_util.h"
 #include "brave/browser/brave_local_state_prefs.h"
 #include "brave/browser/metrics/pref_names.h"
+#include "chrome/browser/prefs/browser_prefs.h"
 #include "chrome/browser/ui/cocoa/confirm_quit.h"
 #include "chrome/test/base/scoped_testing_local_state.h"
 #include "chrome/test/base/testing_browser_process.h"
@@ -19,8 +20,7 @@ class MetricsUtilTest : public testing::Test {
   ~MetricsUtilTest() override = default;
 
   void SetUp() override {
-    confirm_quit::RegisterLocalState(local_state_.registry());
-    brave::RegisterLocalStatePrefs(local_state_.registry());
+    RegisterLocalState(local_state_.registry());
     TestingBrowserProcess::GetGlobal()->SetLocalState(&local_state_);
   }
   void TearDown() override {
