@@ -27,6 +27,7 @@
 #include "chrome/test/base/chrome_test_utils.h"
 #include "components/embedder_support/pref_names.h"
 #include "components/gcm_driver/gcm_buildflags.h"
+#include "components/metrics/metrics_pref_names.h"
 #include "components/policy/core/common/policy_pref_names.h"
 #include "components/prefs/pref_service.h"
 #include "components/safe_browsing/core/common/safe_browsing_prefs.h"
@@ -194,4 +195,6 @@ IN_PROC_BROWSER_TEST_F(BraveProfilePrefsBrowserTest, MediaRouterPrefTest) {
 IN_PROC_BROWSER_TEST_F(BraveLocalStatePrefsBrowserTest, DefaultLocalStateTest) {
   EXPECT_FALSE(g_browser_process->local_state()->GetBoolean(
       metrics::prefs::kDontAskForCrashReporting));
+  EXPECT_FALSE(g_browser_process->local_state()->GetBoolean(
+      metrics::prefs::kMetricsReportingEnabled));
 }
