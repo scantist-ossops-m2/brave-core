@@ -8,9 +8,8 @@
 
 #include "components/version_info/channel.h"
 
-#define IsMetricsReportingOptIn                                \
-  IsMetricsReportingOptIn();                                   \
-  bool IsMetricsReportingOptIn(version_info::Channel channel); \
+#define IsMetricsReportingOptIn \
+  IsMetricsReportingOptIn();    \
   bool IsMetricsReportingOptIn_ChromiumImpl
 #include "src/chrome/browser/first_run/first_run.h"  // IWYU pragma: export
 #undef IsMetricsReportingOptIn

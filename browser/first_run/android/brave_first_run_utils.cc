@@ -5,13 +5,9 @@
 
 #include <jni.h>
 
+#include "brave/browser/first_run/first_run.h"
 #include "brave/build/android/jni_headers/BraveFirstRunUtils_jni.h"
-#include "chrome/browser/first_run/first_run.h"
-
-bool IsMetricsReportingOptInAndroid() {
-  return first_run::IsMetricsReportingOptIn();
-}
 
 static jboolean JNI_BraveFirstRunUtils_IsMetricsReportingOptIn(JNIEnv* env) {
-  return IsMetricsReportingOptInAndroid();
+  return brave::first_run::IsMetricsReportingOptIn();
 }

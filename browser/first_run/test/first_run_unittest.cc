@@ -3,10 +3,11 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
-#include "chrome/browser/first_run/first_run.h"
+#include "brave/browser/first_run/first_run.h"
 #include "base/command_line.h"
 #include "brave/browser/metrics/switches.h"
 #include "build/build_config.h"
+#include "chrome/browser/first_run/first_run.h"
 #include "testing/gtest/include/gtest/gtest.h"
 
 #if BUILDFLAG(IS_MAC)
@@ -30,17 +31,19 @@ TEST(FirstRunTest, OverrideIsMetricsReportingOptInToDisabled) {
 TEST(FirstRunTest, IsMetricsReportingOptInDefaultValue) {
 #if BUILDFLAG(IS_ANDROID)
   EXPECT_FALSE(
-      first_run::IsMetricsReportingOptIn(version_info::Channel::STABLE));
+      brave::first_run::IsMetricsReportingOptIn(version_info::Channel::STABLE));
 #else
   EXPECT_TRUE(
-      first_run::IsMetricsReportingOptIn(version_info::Channel::STABLE));
+      brave::first_run::IsMetricsReportingOptIn(version_info::Channel::STABLE));
 #endif
-  EXPECT_FALSE(first_run::IsMetricsReportingOptIn(version_info::Channel::BETA));
-  EXPECT_FALSE(first_run::IsMetricsReportingOptIn(version_info::Channel::DEV));
   EXPECT_FALSE(
-      first_run::IsMetricsReportingOptIn(version_info::Channel::CANARY));
-  EXPECT_TRUE(
-      first_run::IsMetricsReportingOptIn(version_info::Channel::UNKNOWN));
+      brave::first_run::IsMetricsReportingOptIn(version_info::Channel::BETA));
+  EXPECT_FALSE(
+      brave::first_run::IsMetricsReportingOptIn(version_info::Channel::DEV));
+  EXPECT_FALSE(
+      brave::first_run::IsMetricsReportingOptIn(version_info::Channel::CANARY));
+  EXPECT_TRUE(brave::first_run::IsMetricsReportingOptIn(
+      version_info::Channel::UNKNOWN));
 }
 
 #if BUILDFLAG(IS_MAC)

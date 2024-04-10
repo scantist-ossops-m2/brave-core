@@ -9,8 +9,8 @@ source_set("unit_tests") {
 
   deps = [
     "//base",
+    "//brave/browser/first_run",
     "//chrome/browser",
-    "//chrome/browser/ui",
     "//testing/gtest",
   ]
 }
