@@ -15,7 +15,5 @@ source_set("first_run") {
     "first_run.h",
   ]
 
-  public_deps = [
-    "//base",
-  ]
+  public_deps = [ "//base" ]
 }

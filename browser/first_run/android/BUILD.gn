@@ -6,5 +6,8 @@
 source_set("android") {
   sources = [ "brave_first_run_utils.cc" ]
 
-  deps = [ "//brave/browser/first_run" ]
+  deps = [
+    "//brave/browser/first_run",
+    "//brave/build/android:jni_headers",
+  ]
 }
