@@ -334,6 +334,7 @@ if (ethereum_remote_client_enabled) {
 if (is_android) {
   brave_chrome_browser_sources += [
     "//brave/browser/android/brave_init_android.cc",
+    "//brave/browser/first_run/android/brave_first_run_utils.cc",
     "//brave/browser/sync/brave_sync_devices_android.cc",
     "//brave/browser/sync/brave_sync_devices_android.h",
     "//chrome/browser/bookmarks/bookmark_html_writer.cc",
