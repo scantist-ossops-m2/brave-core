@@ -7,5 +7,5 @@
 
 // Consent is only for chromium metrics services which we disable
 #define IsConsentGiven() false
-
 #include "src/components/metrics/enabled_state_provider.cc"
+#undef IsConsentGiven

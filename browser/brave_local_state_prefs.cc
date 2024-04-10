@@ -102,9 +102,8 @@ void RegisterLocalStatePrefs(PrefRegistrySimple* registry) {
   tor::TorProfileService::RegisterLocalStatePrefs(registry);
 #endif
   // default values for onboarding are set by metrics::IsMetricsReportingOptIn
-  registry->SetDefaultPrefValue(
-      metrics::prefs::kMetricsReportingEnabled,
-      base::Value(false));
+  registry->SetDefaultPrefValue(metrics::prefs::kMetricsReportingEnabled,
+                                base::Value(false));
 
   p3a::P3AService::RegisterPrefs(registry,
 #if !BUILDFLAG(IS_ANDROID)

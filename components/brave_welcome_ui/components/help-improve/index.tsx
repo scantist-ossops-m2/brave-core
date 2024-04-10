@@ -34,8 +34,10 @@ function InputCheckbox (props: InputCheckboxProps) {
 }
 
 function HelpImprove () {
-  const [isMetricsReportingEnabled, setMetricsReportingEnabled] = React.useState(loadTimeData.getBoolean('metricsReportingEnabled'))
-  const [isP3AEnabled, setP3AEnabled] = React.useState(loadTimeData.getBoolean('p3aEnabled'))
+  const [isMetricsReportingEnabled, setMetricsReportingEnabled] =
+    React.useState(loadTimeData.getBoolean('metricsReportingEnabled'))
+  const [isP3AEnabled, setP3AEnabled] =
+    React.useState(loadTimeData.getBoolean('p3aEnabled'))
 
   const handleP3AChange = () => {
     setP3AEnabled(!isP3AEnabled)

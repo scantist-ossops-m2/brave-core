@@ -1008,8 +1008,6 @@ test("brave_browser_tests") {
     deps += [ "//brave/components/brave_mobile_subscription/renderer/android:browser_tests" ]
   }
 
-  sources += [  ]
-
   if (enable_greaselion) {
     sources += [ "//brave/browser/greaselion/greaselion_browsertest.cc" ]
 

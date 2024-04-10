@@ -17,7 +17,7 @@ bool IsMetricsReportingOptInAndroid();
   friend bool metrics::ShouldShowCrashReportPermissionAskDialog(); \
   friend bool IsMetricsReportingOptInAndroid();                    \
   friend class BraveWelcomeUI
-
-#include "src/chrome/browser/metrics/chrome_metrics_service_accessor.h"
+#include "src/chrome/browser/metrics/chrome_metrics_service_accessor.h"  // IWYU pragma: export
+#undef MetricsReportingStateTest
 
 #endif  // BRAVE_CHROMIUM_SRC_CHROME_BROWSER_FIRST_RUN_FIRST_RUN_H_

@@ -5,6 +5,8 @@
 
 #include "brave/browser/ui/views/crash_report_permission_ask_dialog_view.h"
 
+#include <memory>
+
 #include "base/functional/bind.h"
 #include "base/task/sequenced_task_runner.h"
 #include "brave/app/vector_icons/vector_icons.h"
