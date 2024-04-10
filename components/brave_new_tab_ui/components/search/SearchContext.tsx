@@ -72,6 +72,7 @@ class SearchPage implements PageInterface {
   updateSelection(selection: OmniboxPopupSelection) {
     for (const listener of this.selectionListeners) listener(selection)
   }
+  setInputText(inputText: string) {}
 }
 
 export const search = new SearchPage()
