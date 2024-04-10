@@ -5,15 +5,20 @@
 
 #include "brave/browser/first_run/first_run.h"
 #include "base/command_line.h"
+#include "base/feature_list.h"
 #include "brave/browser/metrics/switches.h"
 #include "build/build_config.h"
-#include "chrome/browser/first_run/first_run.h"
 #include "testing/gtest/include/gtest/gtest.h"
+
+#if !BUILDFLAG(IS_ANDROID)
+#include "chrome/browser/first_run/first_run.h"
+#endif
 
 #if BUILDFLAG(IS_MAC)
 #include "chrome/browser/ui/ui_features.h"
 #endif
 
+#if !BUILDFLAG(IS_ANDROID)
 TEST(FirstRunTest, OverrideIsMetricsReportingOptInToEnabled) {
   auto* command_line = base::CommandLine::ForCurrentProcess();
   command_line->AppendSwitch(metrics::switches::kForceMetricsOptInEnabled);
@@ -27,6 +32,7 @@ TEST(FirstRunTest, OverrideIsMetricsReportingOptInToDisabled) {
 
   EXPECT_FALSE(first_run::IsMetricsReportingOptIn());
 }
+#endif
 
 TEST(FirstRunTest, IsMetricsReportingOptInDefaultValue) {
 #if BUILDFLAG(IS_ANDROID)
