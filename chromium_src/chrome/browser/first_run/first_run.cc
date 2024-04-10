@@ -51,7 +51,11 @@ bool IsMetricsReportingOptIn() {
     return false;
   }
 
+#if defined(OFFICIAL_BUILD)
   return IsMetricsReportingOptIn(chrome::GetChannel());
+#else
+  return true;
+#endif
 }
 
 }  // namespace first_run
