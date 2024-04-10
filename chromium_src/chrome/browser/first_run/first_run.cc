@@ -1,4 +1,4 @@
-/* Copyright (c) 2024 The Brave Authors. All rights reserved.
+/* Copyright (c) 2021 The Brave Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at http://mozilla.org/MPL/2.0/. */
@@ -28,8 +28,10 @@ bool IsMetricsReportingOptIn(version_info::Channel channel) {
 #else
       return true;
 #endif
-    case version_info::Channel::BETA:  // fall through
-    case version_info::Channel::DEV:   // fall through
+    case version_info::Channel::BETA:
+      [[fallthrough]];
+    case version_info::Channel::DEV:
+      [[fallthrough]];
     case version_info::Channel::CANARY:
       return false;
     case version_info::Channel::UNKNOWN:

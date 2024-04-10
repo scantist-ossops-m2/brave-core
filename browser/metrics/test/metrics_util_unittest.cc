@@ -29,7 +29,6 @@ class MetricsUtilTest : public testing::Test {
   TestingPrefServiceSimple local_state_;
 };
 
-// move this test
 TEST_F(MetricsUtilTest, CrashReportPermissionAskDialog) {
   local_state_.SetBoolean(metrics::prefs::kMetricsReportingEnabled, false);
   EXPECT_TRUE(metrics::ShouldShowCrashReportPermissionAskDialog());
