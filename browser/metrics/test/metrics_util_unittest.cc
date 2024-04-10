@@ -5,6 +5,7 @@
 
 #include "brave/browser/metrics/metrics_util.h"
 #include "brave/browser/brave_local_state_prefs.h"
+#include "brave/browser/metrics/pref_names.h"
 #include "chrome/test/base/scoped_testing_local_state.h"
 #include "chrome/test/base/testing_browser_process.h"
 #include "components/metrics/metrics_pref_names.h"
@@ -12,7 +13,10 @@
 #include "testing/gtest/include/gtest/gtest.h"
 
 class MetricsUtilTest : public testing::Test {
- protected:
+ public:
+  MetricsUtilTest() = default;
+  ~MetricsUtilTest() override = default;
+
   void SetUp() override {
     brave::RegisterLocalStatePrefs(local_state_.registry());
     TestingBrowserProcess::GetGlobal()->SetLocalState(&local_state_);
