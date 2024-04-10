@@ -6,7 +6,7 @@
 import("//brave/build/config.gni")
 import("//testing/test.gni")
 
-source_set("unit_test") {
+source_set("unit_tests") {
   testonly = true
 
   sources = [
