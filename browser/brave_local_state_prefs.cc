@@ -9,7 +9,7 @@
 
 #include "base/values.h"
 #include "brave/browser/brave_ads/analytics/p3a/brave_stats_helper.h"
-#include "brave/browser/brave_stats/brave_stats_updater.h"f
+#include "brave/browser/brave_stats/brave_stats_updater.h"
 #include "brave/browser/metrics/pref_names.h"
 #include "brave/browser/misc_metrics/process_misc_metrics.h"
 #include "brave/browser/misc_metrics/uptime_monitor.h"
