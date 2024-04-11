@@ -11,14 +11,10 @@ source_set("unit_tests") {
 
   sources = [
     "enabled_state_provider_unittest.cc",
-    "metrics_util_unittest.cc",
   ]
   deps = [
-    "//base/test:test_support",
-    "//brave/browser",
-    "//brave/browser/metrics",
-    "//chrome/browser",
-    "//chrome/test:test_support",
-    "//content/test:test_support",
+    "//components/metrics",
+    "//components/prefs",
+    "//testing/gtest",
   ]
 }

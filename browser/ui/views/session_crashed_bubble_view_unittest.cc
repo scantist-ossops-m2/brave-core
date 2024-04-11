@@ -1,9 +1,9 @@
-/* Copyright (c) 2021 The Brave Authors. All rights reserved.
+/* Copyright (c) 2024 The Brave Authors. All rights reserved.
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at https://mozilla.org/MPL/2.0/. */
 
-#include "brave/browser/metrics/metrics_util.h"
+#include "chrome/browser/ui/views/session_crashed_bubble_view.h"
 #include "brave/browser/brave_local_state_prefs.h"
 #include "brave/browser/metrics/pref_names.h"
 #include "chrome/browser/prefs/browser_prefs.h"
@@ -14,10 +14,10 @@
 #include "components/prefs/testing_pref_service.h"
 #include "testing/gtest/include/gtest/gtest.h"
 
-class MetricsUtilTest : public testing::Test {
+class SessionCrashedBubbleViewTest : public testing::Test {
  public:
-  MetricsUtilTest() = default;
-  ~MetricsUtilTest() override = default;
+  SessionCrashedBubbleViewTest() = default;
+  ~SessionCrashedBubbleViewTest() override = default;
 
   void SetUp() override {
     RegisterLocalState(local_state_.registry());
@@ -29,22 +29,29 @@ class MetricsUtilTest : public testing::Test {
   TestingPrefServiceSimple local_state_;
 };
 
-TEST_F(MetricsUtilTest, CrashReportPermissionAskDialog) {
+TEST_F(SessionCrashedBubbleViewTest, CrashReportPermissionAskDialog) {
   local_state_.SetBoolean(metrics::prefs::kMetricsReportingEnabled, false);
-  EXPECT_TRUE(metrics::ShouldShowCrashReportPermissionAskDialog());
+  EXPECT_TRUE(
+      SessionCrashedBubbleView::ShouldShowCrashReportPermissionAskDialog());
 
   local_state_.SetBoolean(metrics::prefs::kMetricsReportingEnabled, true);
-  EXPECT_FALSE(metrics::ShouldShowCrashReportPermissionAskDialog());
+  EXPECT_FALSE(
+      SessionCrashedBubbleView::ShouldShowCrashReportPermissionAskDialog());
 }
 
-TEST_F(MetricsUtilTest, CrashReportPermissionAskDialogPolicyManaged) {
-  EXPECT_TRUE(metrics::ShouldShowCrashReportPermissionAskDialog());
+TEST_F(SessionCrashedBubbleViewTest,
+       CrashReportPermissionAskDialogPolicyManaged) {
+  EXPECT_TRUE(
+      SessionCrashedBubbleView::ShouldShowCrashReportPermissionAskDialog());
   local_state_.SetManagedPref(metrics::prefs::kDontAskForCrashReporting,
                               base::Value(true));
-  EXPECT_FALSE(metrics::ShouldShowCrashReportPermissionAskDialog());
+  EXPECT_FALSE(
+      SessionCrashedBubbleView::ShouldShowCrashReportPermissionAskDialog());
 }
 
-TEST_F(MetricsUtilTest, CrashReportPermissionAskDialogPolicyDontAskPref) {
+TEST_F(SessionCrashedBubbleViewTest,
+       CrashReportPermissionAskDialogPolicyDontAskPref) {
   local_state_.SetBoolean(metrics::prefs::kMetricsReportingEnabled, true);
-  EXPECT_FALSE(metrics::ShouldShowCrashReportPermissionAskDialog());
+  EXPECT_FALSE(
+      SessionCrashedBubbleView::ShouldShowCrashReportPermissionAskDialog());
 }

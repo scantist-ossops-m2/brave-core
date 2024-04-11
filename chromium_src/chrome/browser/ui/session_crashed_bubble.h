@@ -9,6 +9,7 @@
 #define ShowIfNotOffTheRecordProfile                                 \
   ShowIfNotOffTheRecordProfile_ChromiumImpl(Browser* browser,        \
                                             bool skip_tab_checking); \
+  static bool ShouldShowCrashReportPermissionAskDialog();            \
   static void ShowIfNotOffTheRecordProfile
 
 #include "src/chrome/browser/ui/session_crashed_bubble.h"  // IWYU pragma: export
