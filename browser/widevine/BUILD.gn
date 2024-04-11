@@ -11,38 +11,6 @@ if (is_win) {
 
 assert(enable_widevine)
 
-source_set("widevine") {
-  # Remove when https://github.com/brave/brave-browser/issues/10644 is resolved
-  check_includes = false
-  deps = [
-    "//base",
-    "//brave/app:brave_generated_resources_grit",
-    "//brave/components/constants",
-    "//brave/components/widevine:constants",
-    "//chrome/common",
-    "//components/component_updater/",
-    "//components/content_settings/core/common",
-    "//components/permissions",
-    "//components/pref_registry",
-    "//components/prefs",
-    "//components/subresource_filter/content/browser",
-    "//components/vector_icons",
-    "//content/public/browser",
-    "//content/public/common",
-    "//third_party/widevine/cdm:buildflags",
-    "//third_party/widevine/cdm:headers",
-    "//ui/base",
-    "//url",
-  ]
-
-  sources = [
-    "widevine_permission_request.cc",
-    "widevine_permission_request.h",
-    "widevine_utils.cc",
-    "widevine_utils.h",
-  ]
-}
-
 source_set("widevine_cdm_component_installer_unittest") {
   testonly = true
 
@@ -121,20 +89,5 @@ source_set("browser_tests") {
       "//ui/views",
       "//url",
     ]
-  }
-}
-
-if (is_win && !skip_signing) {
-  widevine_sign_file("brave_exe_sig") {
-    file = "$root_out_dir/presigned_binaries/brave.exe"
-    signature_file = "$root_out_dir/brave.exe.sig"
-    flags = "1"
-    deps = [ "//brave:signed_brave_exe" ]
-  }
-  widevine_sign_file("chrome_dll_sig") {
-    file = "$root_out_dir/presigned_binaries/chrome.dll"
-    signature_file = "$root_out_dir/chrome.dll.sig"
-    flags = "0"
-    deps = [ "//brave:signed_chrome_dll" ]
   }
 }

@@ -1,0 +1,58 @@
+# Copyright (c) 2024 The Brave Authors. All rights reserved.
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this file,
+# You can obtain one at https://mozilla.org/MPL/2.0/.
+
+import("//third_party/widevine/cdm/widevine.gni")
+
+if (is_win) {
+  import("//brave/build/win/sign.gni")
+}
+
+brave_browser_widevine_sources = []
+brave_browser_widevine_deps = []
+
+if (enable_widevine) {
+  brave_browser_widevine_sources += [
+    "//brave/browser/widevine/widevine_permission_request.cc",
+    "//brave/browser/widevine/widevine_permission_request.h",
+    "//brave/browser/widevine/widevine_utils.cc",
+    "//brave/browser/widevine/widevine_utils.h",
+  ]
+
+  brave_browser_widevine_deps = [
+    "//base",
+    "//brave/app:brave_generated_resources_grit",
+    "//brave/components/constants",
+    "//brave/components/widevine:constants",
+    "//chrome/common",
+    "//components/component_updater/",
+    "//components/content_settings/core/common",
+    "//components/permissions",
+    "//components/pref_registry",
+    "//components/prefs",
+    "//components/subresource_filter/content/browser",
+    "//components/vector_icons",
+    "//content/public/browser",
+    "//content/public/common",
+    "//third_party/widevine/cdm:buildflags",
+    "//third_party/widevine/cdm:headers",
+    "//ui/base",
+    "//url",
+  ]
+
+  if (is_win && !skip_signing) {
+    widevine_sign_file("brave_exe_sig") {
+      file = "$root_out_dir/presigned_binaries/brave.exe"
+      signature_file = "$root_out_dir/brave.exe.sig"
+      flags = "1"
+      brave_browser_widevine_deps = [ "//brave:signed_brave_exe" ]
+    }
+    widevine_sign_file("chrome_dll_sig") {
+      file = "$root_out_dir/presigned_binaries/chrome.dll"
+      signature_file = "$root_out_dir/chrome.dll.sig"
+      flags = "0"
+      brave_browser_widevine_deps = [ "//brave:signed_chrome_dll" ]
+    }
+  }
+}
