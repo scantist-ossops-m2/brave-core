@@ -1,8 +1,8 @@
 diff --git a/third_party/blink/renderer/bindings/generated_in_modules.gni b/third_party/blink/renderer/bindings/generated_in_modules.gni
-index 5f508324b344553b7df55d823b80ff2a91176aba..1cc05b8365944a9d6b8ccd734da8f5f0194c1861 100644
+index 35b1681484e33a9b9cba223ca36791d8ee08ead3..a21fa5fe4d26331d6bd187b63e27bab4f82deb52 100644
 --- a/third_party/blink/renderer/bindings/generated_in_modules.gni
 +++ b/third_party/blink/renderer/bindings/generated_in_modules.gni
-@@ -2965,6 +2965,7 @@ generated_interface_sources_in_modules = [
+@@ -2967,6 +2967,7 @@ generated_interface_sources_in_modules = [
    "$root_gen_dir/third_party/blink/renderer/bindings/modules/v8/v8_xr_webgl_sub_image.cc",
    "$root_gen_dir/third_party/blink/renderer/bindings/modules/v8/v8_xr_webgl_sub_image.h",
  ]

@@ -1,5 +1,5 @@
 diff --git a/components/search_engines/prepopulated_engines.json b/components/search_engines/prepopulated_engines.json
-index 8847144b2d36bce51c53d0f1f7f4573eb4c5d76f..001504159e0fec9de2e090508928788ba276389b 100644
+index 1b89297561fc42ea6cbb72ed471e78a46ad2e443..07ae30d08768a1428498a96d2e674aa03d57db66 100644
 --- a/components/search_engines/prepopulated_engines.json
 +++ b/components/search_engines/prepopulated_engines.json
 @@ -102,17 +102,6 @@
@@ -20,7 +20,7 @@ index 8847144b2d36bce51c53d0f1f7f4573eb4c5d76f..001504159e0fec9de2e090508928788b
      "ecosia": {
        "name": "Ecosia",
        "keyword": "ecosia.org",
-@@ -253,16 +242,6 @@
+@@ -254,16 +243,6 @@
        "id": 108
      },
  

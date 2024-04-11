@@ -1,8 +1,8 @@
 diff --git a/chrome/renderer/chrome_content_renderer_client.h b/chrome/renderer/chrome_content_renderer_client.h
-index 64ae05394e7c0fe8642ddadca741fd40d0147bc1..34d4306d109a80cccdb3c5b3e21523096182c5ad 100644
+index b66d6f180d2565b315ddad41ef55781d10757364..de6de493fee577a432685a2d536906c2f26dd30e 100644
 --- a/chrome/renderer/chrome_content_renderer_client.h
 +++ b/chrome/renderer/chrome_content_renderer_client.h
-@@ -241,6 +241,7 @@ class ChromeContentRendererClient
+@@ -242,6 +242,7 @@ class ChromeContentRendererClient
  #endif
  
   private:

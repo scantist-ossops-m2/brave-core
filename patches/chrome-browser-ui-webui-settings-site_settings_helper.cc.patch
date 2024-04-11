@@ -1,8 +1,8 @@
 diff --git a/chrome/browser/ui/webui/settings/site_settings_helper.cc b/chrome/browser/ui/webui/settings/site_settings_helper.cc
-index ebd655c1b61810281b6c44f4cf85c1ca40d7b9af..e53a8837afc42390b188be2b6155220ebe7473a7 100644
+index d85a8565a16ccf88568f5343e079626c9c3a9825..e4179130bf4386565e8c0db0702ddf67ecb893c3 100644
 --- a/chrome/browser/ui/webui/settings/site_settings_helper.cc
 +++ b/chrome/browser/ui/webui/settings/site_settings_helper.cc
-@@ -219,6 +219,7 @@ const ContentSettingsTypeNameEntry kContentSettingsTypeGroupNames[] = {
+@@ -221,6 +221,7 @@ const ContentSettingsTypeNameEntry kContentSettingsTypeGroupNames[] = {
      {ContentSettingsType::SUB_APP_INSTALLATION_PROMPTS, nullptr},
      {ContentSettingsType::DIRECT_SOCKETS, nullptr},
      {ContentSettingsType::REVOKED_ABUSIVE_NOTIFICATION_PERMISSIONS, nullptr},
@@ -10,7 +10,7 @@ index ebd655c1b61810281b6c44f4cf85c1ca40d7b9af..e53a8837afc42390b188be2b6155220e
  };
  
  static_assert(
-@@ -481,6 +482,7 @@ bool HasRegisteredGroupName(ContentSettingsType type) {
+@@ -483,6 +484,7 @@ bool HasRegisteredGroupName(ContentSettingsType type) {
  }
  
  ContentSettingsType ContentSettingsTypeFromGroupName(base::StringPiece name) {

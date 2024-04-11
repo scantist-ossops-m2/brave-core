@@ -1,8 +1,8 @@
 diff --git a/chrome/browser/ui/views/bubble/webui_bubble_manager.h b/chrome/browser/ui/views/bubble/webui_bubble_manager.h
-index a554528ce9c2795bd70c4d2fadf887657a3418bf..7282dc3e11c370ccdc71fddd4f4e0269a1c62a0b 100644
+index 875aecf6a900872b47ec858536b7d668a5778e2a..34c14b48fb26222f5557fd30d583b633fe065c01 100644
 --- a/chrome/browser/ui/views/bubble/webui_bubble_manager.h
 +++ b/chrome/browser/ui/views/bubble/webui_bubble_manager.h
-@@ -165,9 +165,11 @@ class WebUIBubbleManagerImpl : public WebUIBubbleManager {
+@@ -169,9 +169,11 @@ class WebUIBubbleManagerImpl : public WebUIBubbleManager {
   private:
    // WebUIBubbleManager:
    void MaybeInitPersistentRenderer() override;
@@ -14,7 +14,7 @@ index a554528ce9c2795bd70c4d2fadf887657a3418bf..7282dc3e11c370ccdc71fddd4f4e0269
    WebUIContentsWrapper* GetContentsWrapper() override;
  
    const raw_ptr<views::View> anchor_view_;
-@@ -247,6 +249,7 @@ WebUIBubbleManagerImpl<T>::CreateWebUIBubbleDialog(
+@@ -266,6 +268,7 @@ WebUIBubbleManagerImpl<T>::CreateWebUIBubbleDialog(
  
    auto bubble_view = std::make_unique<WebUIBubbleDialogView>(
        anchor_view_, contents_wrapper->GetWeakPtr(), anchor, arrow);
