@@ -219,6 +219,11 @@ CHAR_LIMIT guidelines:
         Advanced
       </message>
 
+      <!-- TODO(b/326574743): Revisit string and mark it as translateable.-->
+      <message name="IDS_PREFS_CONTROL_YOUR_DATA" desc="Title of &quot;Control your data and accounts&quot; section of preferences. [CHAR_LIMIT=32]" translateable="false">
+        Control your data &amp; accounts
+      </message>
+
       <!-- Notification channels -->
       <message name="IDS_NOTIFICATION_CATEGORY_GROUP_GENERAL" desc="Subheading for &quot;General&quot; section of a list of notification categories. [CHAR_LIMIT=32]">
         General
@@ -2137,6 +2142,10 @@ Your Brave account may have other forms of browsing history like searches and ac
       <message name="IDS_SIGNOUT_MANAGED_ACCOUNT_MESSAGE" desc="Message to display for sign out of Brave dialog when the account has enterprise management, and all user data will be erased">
         Because you're signing out of an account managed by <ph name="DOMAIN_NAME">%1$s<ex>google.com</ex></ph>, your Brave data will be deleted from this device. It will remain in your Brave sync chain.
       </message>
+      <!-- TODO(crbug.com/41493790): Add description and remove translateable once strings are finalized. -->
+      <message name="IDS_SIGN_OUT_SNACKBAR_MESSAGE" desc="to be added" translateable="false">
+          Signed out. Sign back in to use the bookmarks, passwords and more in your account.
+      </message>
       <message name="IDS_SIGN_IN_GETTING_ACCOUNT_MANAGEMENT_POLICY" desc="Title of progress bar dialog for getting management policy">
         Contacting Brave. This may take a minute…
       </message>
@@ -2377,9 +2386,6 @@ To change this setting, <ph name="BEGIN_LINK">BEGIN_LINK</ph>clear the Brave dat
       </message>
       <message name="IDS_SYNC_ERROR_SERVICE_UNAVAILABLE" desc="Sync error string for service unavailable. [CHAR_LIMIT=80]">
         The service is not available; try again later.
-      </message>
-      <message name="IDS_POLICY_DIALOG_PROCEED" desc="Label on the button to accept the policy dialog during sign-in. [CHAR_LIMIT=20]">
-        Accept and sign in
       </message>
       <message name="IDS_WIPING_PROFILE_DATA_TITLE" desc="Title for the progress dialog shown while profile data is being wiped after signing out of an enterprise account">
         Clearing account data
@@ -3347,8 +3353,14 @@ To change this setting, <ph name="BEGIN_LINK">BEGIN_LINK</ph>clear the Brave dat
       <message name="IDS_SYNC_PROMO_TITLE_RECENT_TABS" desc="This string is the headline of a card that appears when the user opens Brave's recent tabs. The user may be signed in to Brave, but isn't syncing their Brave data. The line below this string is 'Sync to get your tabs from your other devices'. [CHAR_LIMIT=70]" meaning="This headline means that the user can see some of their recent tabs from their computer on their phone, and their phone's recent tabs on their computer. We want users to read this card and tap the 'Continue' button and turn on sync. The tone should be inviting.">
         Get all your tabs
       </message>
+      <message name="IDS_SIGNIN_PROMO_TITLE_RECENT_TABS" translateable="false">
+        You’ll find tabs from other devices here
+      </message>
       <message name="IDS_SYNC_PROMO_DESCRIPTION_RECENT_TABS" desc="This string is the body of a card that appears when the user opens Brave's recent tabs. The user may be signed in to Brave, but isn't syncing their Brave data. There's no character limit but try to keep the translation under 120 characters." meaning="The headline above this string is 'Continue from another device'. This message means that the user can see some of their recent tabs from their computer on their phone, and their phone's recent tabs on their computer. We want users to read this card and tap the 'Continue' button and turn on sync. The tone should be inviting.">
         Sync to get your tabs from your other devices
+      </message>
+      <message name="IDS_SIGNIN_PROMO_DESCRIPTION_RECENT_TABS" translateable="false">
+        To see tabs from other devices, sync your tabs and history
       </message>
       <message name="IDS_SYNC_PROMO_TITLE_SETTINGS" desc="This string is the headline of a card that appears when the user opens Brave's settings; the user may be signed in to Brave, but isn't syncing their Brave data. The line below this string is 'Sync to get your passwords, bookmarks and more on all your devices'. [CHAR_LIMIT=70]" meaning="This headline means that the user can use Chrome more easily by syncing their passwords, bookmarks, settings, and more.. We want users to read this card and tap the 'Continue' button and turn on sync. The tone should be inviting.">
         Use Brave your way
@@ -3361,6 +3373,9 @@ To change this setting, <ph name="BEGIN_LINK">BEGIN_LINK</ph>clear the Brave dat
       </message>
       <message name="IDS_SYNC_PROMO_TURN_ON_SYNC" desc="Button that the user can press if they want to turn on sync with this account.">
         Turn on sync
+      </message>
+      <message name="IDS_SIGNIN_PROMO_TURN_ON" translateable="false">
+        Turn on
       </message>
 
       <message name="IDS_EXTERNAL_APP_RESTRICTED_ACCESS_ERROR" desc="A message shown to the user if Brave receives a file view request to something Brave does not have access to view.">
@@ -4305,6 +4320,12 @@ To change this setting, <ph name="BEGIN_LINK">BEGIN_LINK</ph>clear the Brave dat
       <message name="IDS_ACCESSIBILITY_TABSTRIP_BTN_INCOGNITO_TOGGLE_INCOGNITO" desc="Content description for the Private tabs toggle button when viewing Private tabs.">
         Leave Private mode
       </message>
+      <message name="IDS_ACCESSIBILITY_TABSTRIP_GROUP_IDENTIFIER_MULTIPLE_TABS" desc="Content description for group identifiers with multiple tabs.">
+        <ph name="WEBSITE_TITLE">%1$s<ex>Crater Lake National Park (U.S. National Park Service)</ex></ph> and <ph name="TAB_COUNT">%2$d<ex>12</ex></ph> other tabs
+      </message>
+      <message name="IDS_ACCESSIBILITY_TABSTRIP_GROUP_IDENTIFIER_UNNAMED" desc="Content description for group identifiers without a name.">
+        Unnamed group
+      </message>
       <message name="IDS_ACCESSIBILITY_TABSTRIP_IDENTIFIER" desc="Content description for tabs that are not selected">
         Tab
       </message>
@@ -5072,51 +5093,6 @@ To change this setting, <ph name="BEGIN_LINK">BEGIN_LINK</ph>clear the Brave dat
       </message>
       <message name="IDS_CLICK_TO_CALL_DIALER_ABSENT_NOTIFICATION_TEXT" desc="Text displayed in a click to call notification when there is no dialer on device.">
         Make sure a phone app is enabled on this device
-      </message>
-
-      <!-- Sharing content types -->
-      <message name="IDS_BROWSER_SHARING_CONTENT_TYPE_TEXT" desc="This will be used as a placeholder in the message 'Can't share [content type].' so it should be lower-case unless this is a language where nouns are upper case." meaning="text as placeholder">
-        text
-      </message>
-
-      <!-- Sharing notification error messages -->
-      <message name="IDS_BROWSER_SHARING_ERROR_DIALOG_TITLE_GENERIC_ERROR" desc="The label to be shown as the title of the dialog when we encounter an error that can be fixed by the user. Eg, device not connected to internet or sync turned off.">
-        Can't share <ph name="CONTENT_TYPE">%1$s<ex>video</ex></ph>
-      </message>
-      <message name="IDS_BROWSER_SHARING_ERROR_DIALOG_TITLE_INTERNAL_ERROR" desc="The label to be shown as the title of the dialog when an internal error occurred while sending the message.">
-        Couldn't share <ph name="CONTENT_TYPE">%1$s<ex>video</ex></ph>
-      </message>
-
-      <message name="IDS_BROWSER_SHARING_ERROR_DIALOG_TEXT_DEVICE_NOT_FOUND" desc="The text to be shown on the dialog when an error occurred because the device is not synced.">
-        Make sure <ph name="TARGET_DEVICE_NAME">%1$s<ex>Pixel XL</ex></ph> has sync turned on in Brave
-      </message>
-      <message name="IDS_BROWSER_SHARING_ERROR_DIALOG_TEXT_NETWORK_ERROR" desc="The text to be shown on the dialog when the sender device has network issues.">
-        Make sure this device is connected to the internet
-      </message>
-      <message name="IDS_BROWSER_SHARING_ERROR_DIALOG_TEXT_DEVICE_ACK_TIMEOUT" desc="The text to be shown on the dialog when the recipient device has network issues.">
-        Make sure <ph name="TARGET_DEVICE_NAME">%1$s<ex>Pixel XL</ex></ph> is connected to the internet
-      </message>
-      <message name="IDS_BROWSER_SHARING_ERROR_DIALOG_TEXT_INTERNAL_ERROR" desc="The text to be shown on the dialog when an internal error occurred while sending the message.">
-        Something went wrong. Try again later.
-      </message>
-
-      <!-- Shared clipboard error message for notification. Could potentially be made generic -->
-      <message name="IDS_BROWSER_SHARING_SHARED_CLIPBOARD_ERROR_DIALOG_TITLE_PAYLOAD_TOO_LARGE" desc="The label to be shown as the title of the dialog when the text shared is too large.">
-        Text is too large
-      </message>
-      <message name="IDS_BROWSER_SHARING_SHARED_CLIPBOARD_ERROR_DIALOG_TEXT_PAYLOAD_TOO_LARGE" desc="The text to be shown on the dialog when the text shared is too large.">
-        Try sharing the text in smaller chunks
-      </message>
-
-      <!-- Shared Clipboard -->
-      <message name="IDS_SHARED_CLIPBOARD_NOTIFICATION_TITLE_UNKNOWN_DEVICE" desc="Title text displayed in a shared clipboard notification when the source device name is unknown.">
-        Text shared from other device
-      </message>
-      <message name="IDS_SHARED_CLIPBOARD_NOTIFICATION_TITLE" desc="Title text displayed in a shared clipboard notification when the source device name is known.">
-        Text shared from <ph name="DEVICE_NAME">%1$s<ex>Pixel 3</ex></ph>
-      </message>
-      <message name="IDS_SHARED_CLIPBOARD_NOTIFICATION_TEXT" desc="Content text displayed in a shared clipboard notification.">
-        Copied to your clipboard
       </message>
 
       <!-- Sms Fetcher -->
@@ -6007,6 +5983,60 @@ To change this setting, <ph name="BEGIN_LINK">BEGIN_LINK</ph>clear the Brave dat
       </message>
       <message name="IDS_SHARE_WITH_SUMMARY_SHEET_CLOSED" desc="Accessibility string that describes closing a bottomsheet that appears when generating a summary to share along a web page." formatter_data="android_java" is_accessibility_with_no_ui="true">
         Share with summary sheet closed
+      </message>
+      <message name="IDS_SHARE_WITH_SUMMARY_POSITIVE_FEEDBACK_DESCRIPTION" desc="Accessibility string that describes a thumbs up button to provide positive feedback on a generated summary." formatter_data="android_java" is_accessibility_with_no_ui="true">
+        Thumbs up submits feedback that you like this summary
+      </message>
+      <message name="IDS_SHARE_WITH_SUMMARY_NEGATIVE_FEEDBACK_DESCRIPTION" desc="Accessibility string that describes a thumbs down button to provide negative feedback on a generated summary." formatter_data="android_java" is_accessibility_with_no_ui="true">
+        Thumbs down submits feedback that you dislike this summary
+      </message>
+      <message name="IDS_SHARE_WITH_SUMMARY_SHEET_ADD_SUMMARY" desc="Label of a button to add a generated summary to a share sheet.">
+        Add summary
+      </message>
+      <message name="IDS_SHARE_WITH_SUMMARY_SHEET_ERROR_MESSAGE" desc="Error message shown after a summary failed to generate.">
+        Something went wrong. Summary couldn\u2019t be completed
+      </message>
+      <message name="IDS_SHARE_WITH_SUMMARY_SHEET_DISCLAIMER" desc="Disclaimer at the bottom of a sheet with a generated summary. The learn more link will open a help article.">
+        This is an experimental AI feature and won\u2019t always get it right. <ph name="BEGIN_LINK">&lt;link&gt;</ph>Learn more<ph name="END_LINK">&lt;/link&gt;</ph>
+      </message>
+      <message name="IDS_SHARE_WITH_SUMMARY_FEEDBACK_SHEET_TITLE" desc="Title of a bottom sheet that appears when providing feedback for a generated web page summary.">
+        Select an issue
+      </message>
+      <message name="IDS_SHARE_WITH_SUMMARY_FEEDBACK_SHEET_SUBMIT" desc="Button label to submit feedback on a generated web page summary.">
+        Submit
+      </message>
+      <message name="IDS_SHARE_WITH_SUMMARY_FEEDBACK_SHEET_DESCRIPTION" desc="Accessibility string that describes a bottomsheet that appears when providing feedback on a generated web page summary." formatter_data="android_java" is_accessibility_with_no_ui="true">
+        Share with summary feedback sheet
+      </message>
+      <message name="IDS_SHARE_WITH_SUMMARY_FEEDBACK_SHEET_OPENED" desc="Accessibility string that describes opening a bottomsheet that appears when providing feedback on a generated web page summary." formatter_data="android_java" is_accessibility_with_no_ui="true">
+        Share with summary feedback sheet opened
+      </message>
+      <message name="IDS_SHARING_CREATE_SUMMARY" desc="Label of share sheet action to create a summary of the currently shared page.">
+        Create summary
+      </message>
+      <message name="IDS_SHARING_REMOVE_SUMMARY" desc="Label of share sheet action to remove a summary when sharing a web page.">
+        Remove summary
+      </message>
+      <message name="IDS_SHARE_WITH_SUMMARY_FEEDBACK_SHEET_CLOSED" desc="Accessibility string that describes closing a bottomsheet that appears when providing feedback on a generated web page summary." formatter_data="android_java" is_accessibility_with_no_ui="true">
+        Share with summary feedback sheet closed
+      </message>
+      <message name="IDS_SHARE_WITH_SUMMARY_FEEDBACK_DISCLAIMER" desc="Disclaimer at the bottom of a bottom sheet to provide feedback for a generated web page summary.">
+        The URL of the page you\u2019re providing feedback for will be sent to Brave, and may be reviewed by humans to improve this feature
+      </message>
+      <message name="IDS_SHARE_WITH_SUMMARY_FEEDBACK_LABEL_OFFENSIVE" desc="Label of a radio button item for providing feedback on a generated summary that's offensive or unsafe.">
+        Offensive or unsafe
+      </message>
+      <message name="IDS_SHARE_WITH_SUMMARY_FEEDBACK_LABEL_INACCURATE" desc="Label of a radio button item for providing feedback on a generated summary that's inaccurate.">
+        Inaccurate
+      </message>
+      <message name="IDS_SHARE_WITH_SUMMARY_FEEDBACK_LABEL_REPETITIVE" desc="Label of a radio button item for providing feedback on a generated summary that's repetitive.">
+        Repetitive
+      </message>
+      <message name="IDS_SHARE_WITH_SUMMARY_FEEDBACK_LABEL_MISSING_INFO" desc="Label of a radio button item for providing feedback on a generated summary that's missing information.">
+        Missing information
+      </message>
+      <message name="IDS_SHARE_WITH_SUMMARY_FEEDBACK_LABEL_OTHER" desc="Label of a radio button item for providing feedback on a generated summary that doesn't fit any other category.">
+        Other
       </message>
 
       <!-- Data Sharing -->

@@ -327,6 +327,15 @@
   <message name="IDS_SETTINGS_SYNC_SIGN_IN_PROMPT_WITH_NO_ACCOUNT" desc="The text displayed to prompt users to sign in to Brave.">
     Sign in to sync and personalize Brave across your devices
   </message>
+  <message name="IDS_SETTINGS_PERSONALIZE_GOOGLE_SERVICES_DESC" desc="This is the subtitle of a setting that directs users to other settings where they can control how Brave history can be used to personalize other Brave services. This subtitle appears in Brave's Advanced Sync settings, after the 'Control how browsing history is used with your other data across Brave services' string. The 'Web &amp; App Activity' text should match the branded term in Glossary Manager: https://localization.google.com/glossary/termset?gid=27517723&amp;tsid=77d3b75.">
+    To get personalization, include Brave in Web &amp; App Activity
+  </message>
+  <message name="IDS_SETTINGS_PERSONALIZE_GOOGLE_SERVICES_DESC_WITH_LINKED_SERVICES" desc="This is the subtitle of a setting that directs users to other settings where they can control how Brave history can be used to personalize other Brave services. This subtitle appears in Brave's Advanced Sync settings, after the 'Control how browsing history is used with your other data across Brave services' string. The 'Web &amp; App Activity' text should match the branded term in Glossary Manager: https://localization.google.com/glossary/termset?gid=27517723&amp;tsid=77d3b75. The 'linked Brave services' text should match the branded term in Glossary Manager: https://localization.google.com/glossary/termset?gid=27517723&amp;tsid=517bace2.">
+    To get personalization and other features, include Brave in Web &amp; App Activity and linked Brave services
+  </message>
+  <message name="IDS_SETTINGS_PERSONALIZE_GOOGLE_SERVICES_LINKED_SERVICES_DESC" desc="This is the subtitle of a setting that links to 'Linked Brave services' in the Brave sync chain's Data &amp; privacy settings. This subtitle appears in Brave's Advanced Sync settings and is after the 'Linked Brave services' string.">
+    Link Brave and other Brave services for personalization and other purposes
+  </message>
 
   <!-- Page content -->
   <message name="IDS_SETTINGS_PAGE_CONTENT_THINGS_TO_CONSIDER_BULLET_TWO" desc="Bullet point in the 'Things to consider' column of the description of the setting that enables features that provide contextual help for currently opened pages.">

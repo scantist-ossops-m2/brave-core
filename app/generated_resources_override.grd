@@ -644,13 +644,7 @@ are declared in tools/grit/grit_rule.gni.
       <if expr="not use_titlecase">
         </if>
       <if expr="not is_android">
-        <if expr="is_chromeos">
-          <then>
-            </then>
-          <else>
-            </else>
         </if>
-      </if>
 
       <if expr="_google_chrome">
         <if expr="not is_android">
