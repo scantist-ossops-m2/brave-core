@@ -431,7 +431,10 @@ source_set("ui") {
       "views/window_closing_confirm_dialog_view.h",
     ]
 
-    deps += [ "//components/bookmarks/browser" ]
+    deps += [
+      "//brave/browser/metrics",
+      "//components/bookmarks/browser",
+    ]
 
     if (enable_brave_vpn) {
       if (is_win) {
