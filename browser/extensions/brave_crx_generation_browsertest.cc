@@ -162,7 +162,7 @@ IN_PROC_BROWSER_TEST_F(BraveCrxGenerationTest,
   const auto public_key_hash = GetPublicKeyHash(publisher_test_key_path);
   ASSERT_GT(public_key_hash.size(), 0u);
   // Register it's hash as publisher proof key has (replacing the real one).
-  crx_file::SetBraveComponentsKeyHashForTesting(public_key_hash);
+  crx_file::SetBravePublisherKeyHashForTesting(public_key_hash);
 
   // Add the test key to the command line for using in crx generating process.
   base::CommandLine::ForCurrentProcess()->AppendSwitchPath(

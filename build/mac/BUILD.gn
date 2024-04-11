@@ -593,8 +593,8 @@ if (brave_enable_updater) {
     base_dir = get_path_info(target_dmg_path, "dir")
 
     # The private key file is not in Git for obvious reasons. It needs to be
-    # copied into the source tree manually. Changing the private key requires
-    # also changing kBraveBrowserUpdatesKeyHash in crx_verifier.cc.
+    # copied into this directory manually. Changing the private key requires
+    # also changing kBravePublisherKeyHash in crx_verifier.cc.
     key = "//brave/updater/crx-private-key.der"
     deps = [ ":copy_dmg_pkg" ]
   }
