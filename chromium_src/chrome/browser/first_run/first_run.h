@@ -6,8 +6,6 @@
 #ifndef BRAVE_CHROMIUM_SRC_CHROME_BROWSER_FIRST_RUN_FIRST_RUN_H_
 #define BRAVE_CHROMIUM_SRC_CHROME_BROWSER_FIRST_RUN_FIRST_RUN_H_
 
-#include "components/version_info/channel.h"
-
 #define IsMetricsReportingOptIn \
   IsMetricsReportingOptIn();    \
   bool IsMetricsReportingOptIn_ChromiumImpl
