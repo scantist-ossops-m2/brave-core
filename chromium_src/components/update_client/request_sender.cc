@@ -18,6 +18,8 @@
 
 namespace {
 
+// If you change the following, then you will likely also need to update
+// RequestSenderTest::UsesBraveCUPKey.
 constexpr int kBraveKeyVersion = 1;
 constexpr char kBraveKeyPubBytesBase64[] =
     "MFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAEMZENJfFz9Jph//JXTejVdn5U+ALz"
