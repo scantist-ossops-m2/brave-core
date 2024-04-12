@@ -90,16 +90,6 @@ PrepopulatedEngine ModifyEngineParams(const PrepopulatedEngine& engine,
 
 }  // namespace
 
-const PrepopulatedEngine duckduckgo = MakeBravePrepopulatedEngine(
-    u"DuckDuckGo",
-    u":d",
-    "https://duckduckgo.com/favicon.ico",
-    "https://duckduckgo.com/?q={searchTerms}&t=brave",
-    "UTF-8",
-    "https://ac.duckduckgo.com/ac/?q={searchTerms}&type=list",
-    SEARCH_ENGINE_DUCKDUCKGO,
-    PREPOPULATED_ENGINE_ID_DUCKDUCKGO);
-
 const PrepopulatedEngine duckduckgo_de =
     ModifyEngineParams(duckduckgo,
                        nullptr,
@@ -144,16 +134,6 @@ const PrepopulatedEngine brave_ecosia =
                        "https://ac.ecosia.org/?q={searchTerms}",
                        nullptr,
                        PREPOPULATED_ENGINE_ID_ECOSIA);
-
-const PrepopulatedEngine qwant = MakeBravePrepopulatedEngine(
-    u"Qwant",
-    u":q",
-    "https://www.qwant.com/favicon.ico",
-    "https://www.qwant.com/?q={searchTerms}&client=brz-brave",
-    "UTF-8",
-    "https://api.qwant.com/api/suggest/?q={searchTerms}&client=opensearch",
-    SEARCH_ENGINE_QWANT,
-    PREPOPULATED_ENGINE_ID_QWANT);
 
 const PrepopulatedEngine startpage = MakeBravePrepopulatedEngine(
     u"Startpage",
