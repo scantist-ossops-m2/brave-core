@@ -12,14 +12,14 @@
 // customize the view appropriately (e.g. by setting the border radius) prior to
 // rendering. For a class that uses this method, see `BraveWebUIBubbleManager`.
 
-#define DisableCloseBubbleHelperForTesting()    \
-  DisableCloseBubbleHelperForTesting_NotUsed(); \
-  virtual void BraveCustomizeBubbleDialogView(  \
-      WebUIBubbleDialogView& bubble_view) {}    \
+#define DisableCloseBubbleHelperForTesting()                                   \
+  DisableCloseBubbleHelperForTesting_NotUsed();                                \
+  virtual void CustomizeBubbleDialogView(WebUIBubbleDialogView& bubble_view) { \
+  }                                                                            \
   void DisableCloseBubbleHelperForTesting()
 
 #define BRAVE_WEBUI_BUBBLE_MANAGER_T_CREATE_WEB_UI_BUBBLE_DIALOG \
-  BraveCustomizeBubbleDialogView(*bubble_view);
+  this->CustomizeBubbleDialogView(*bubble_view);
 
 #include "src/chrome/browser/ui/views/bubble/webui_bubble_manager.h"  // IWYU pragma: export
 

@@ -204,8 +204,9 @@ void BraveShieldsActionView::ButtonPressed() {
   }
 
   if (!webui_bubble_manager_) {
-    webui_bubble_manager_ = WebUIBubbleManager::Create<ShieldsPanelUI>(
-        this, &*profile_, GURL(kShieldsPanelURL), IDS_BRAVE_SHIELDS);
+    webui_bubble_manager_ =
+        std::make_unique<BraveWebUIBubbleManager<ShieldsPanelUI>>(
+            this, &*profile_, GURL(kShieldsPanelURL), IDS_BRAVE_SHIELDS);
   }
 
   if (webui_bubble_manager_->GetBubbleWidget()) {

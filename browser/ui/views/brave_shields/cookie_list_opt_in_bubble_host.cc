@@ -11,6 +11,7 @@
 #include "base/feature_list.h"
 #include "base/metrics/histogram_functions.h"
 #include "brave/browser/brave_browser_process.h"
+#include "brave/browser/ui/views/bubble/brave_webui_bubble_manager.h"
 #include "brave/browser/ui/webui/brave_shields/cookie_list_opt_in_ui.h"
 #include "brave/components/brave_shields/content/browser/ad_block_service.h"
 #include "brave/components/brave_shields/core/browser/ad_block_component_service_manager.h"
@@ -23,7 +24,6 @@
 #include "chrome/browser/profiles/profile.h"
 #include "chrome/browser/sessions/session_restore.h"
 #include "chrome/browser/ui/browser.h"
-#include "chrome/browser/ui/views/bubble/webui_bubble_manager.h"
 #include "chrome/browser/ui/views/frame/browser_view.h"
 #include "chrome/browser/ui/views/location_bar/location_bar_view.h"
 #include "components/grit/brave_components_strings.h"
@@ -85,22 +85,22 @@ void ShowBubbleOnSessionRestore(base::WeakPtr<Browser> browser, Profile*, int) {
   bubble_host->ShowBubble();
 }
 
-class BubbleManager : public WebUIBubbleManagerImpl<CookieListOptInUI> {
+class BubbleManager : public BraveWebUIBubbleManager<CookieListOptInUI> {
  public:
   BubbleManager(views::View* anchor_view, Profile* profile)
-      : WebUIBubbleManagerImpl<CookieListOptInUI>(anchor_view,
-                                                  profile,
-                                                  GURL(kCookieListOptInURL),
-                                                  IDS_BRAVE_SHIELDS) {}
+      : BraveWebUIBubbleManager<CookieListOptInUI>(anchor_view,
+                                                   profile,
+                                                   GURL(kCookieListOptInURL),
+                                                   IDS_BRAVE_SHIELDS) {}
 
   ~BubbleManager() override = default;
 
-  // WebUIBubbleManagerImpl<CookieListOptInUI>:
+  // BraveWebUIBubbleManager<CookieListOptInUI>:
   base::WeakPtr<WebUIBubbleDialogView> CreateWebUIBubbleDialog(
       const std::optional<gfx::Rect>& anchor,
       views::BubbleBorder::Arrow arrow) override {
     auto dialog_view =
-        WebUIBubbleManagerImpl<CookieListOptInUI>::CreateWebUIBubbleDialog(
+        BraveWebUIBubbleManager<CookieListOptInUI>::CreateWebUIBubbleDialog(
             anchor, arrow);
     DCHECK(dialog_view);
     dialog_view->set_close_on_deactivate(false);
