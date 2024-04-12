@@ -133,15 +133,10 @@ extension MediaContentView {
             }
           }
           .buttonStyle(.playbackControl)
-          .foregroundStyle(Color(braveSystemName: .textSecondary))
+          .foregroundStyle(.secondary)
         }
         .font(.title3)
       }
-      .foregroundStyle(
-        Color(braveSystemName: .textPrimary),
-        Color(braveSystemName: .textSecondary),
-        Color(braveSystemName: .textTertiary)
-      )
       // FIXME: Figure out what to do in AX sizes, maybe second row in PlaybackControls?
       // XXXL may even have issues with DisplayZoom on
       .dynamicTypeSize(.xSmall...DynamicTypeSize.xxxLarge)
