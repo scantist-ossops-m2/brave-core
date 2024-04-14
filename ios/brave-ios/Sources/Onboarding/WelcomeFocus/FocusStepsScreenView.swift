@@ -46,66 +46,84 @@ struct FocusStepsView: View {
 
   var body: some View {
     if shouldUseExtendedDesign {
-      VStack(spacing: 40) {
-        VStack {
+      NavigationView {
+        VStack(spacing: 40) {
           stepsContentView
             .background(colorScheme == .dark ? .black : .white)
+            .clipShape(RoundedRectangle(cornerRadius: 16.0, style: .continuous))
+            .frame(maxWidth: 616, maxHeight: 895)
+            .shadow(color: .black.opacity(0.1), radius: 18, x: 0, y: 8)
+            .shadow(color: .black.opacity(0.05), radius: 0, x: 0, y: 1)
+            .overlay(alignment: .topTrailing) {
+              cancelButton
+                .frame(width: iconSize, height: iconSize)
+                .padding(24)
+            }
+
+          FocusStepsPagingIndicator(totalPages: 4, activeIndex: .constant(2))
         }
-        .clipShape(RoundedRectangle(cornerRadius: 16.0, style: .continuous))
-        .frame(maxWidth: 616, maxHeight: 895)
-        .shadow(color: .black.opacity(0.1), radius: 18, x: 0, y: 8)
-        .shadow(color: .black.opacity(0.05), radius: 0, x: 0, y: 1)
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .background {
+          Image("focus-background-large", bundle: .module)
+            .resizable()
+            .aspectRatio(contentMode: .fill)
+            .opacity(0.20)
+        }
+        .background {
+          NavigationLink("", isActive: $isP3AViewPresented) {
+            FocusP3AScreenView(
+              attributionManager: attributionManager,
+              p3aUtilities: p3aUtilities,
+              shouldDismiss: $shouldDismiss
+            )
+          }
+        }
+        .osAvailabilityModifiers { content in
+          if #available(iOS 16.0, *) {
+            content.toolbar(.hidden, for: .navigationBar)
+          } else {
+            content.navigationBarHidden(true)
+          }
+        }
+      }
+      .navigationViewStyle(StackNavigationViewStyle())
+    } else {
+      NavigationView {
+        VStack {
+          stepsContentView
+          FocusStepsPagingIndicator(totalPages: 4, activeIndex: $indicatorIndex)
+            .opacity(opacity)
+            .onAppear {
+              withAnimation(.easeInOut(duration: 1.5).delay(1.25)) {
+                opacity = 1.0
+              }
+            }
+        }
+        .padding(.bottom, 20)
+        .background(Color(braveSystemName: .pageBackground))
+        .background {
+          NavigationLink("", isActive: $isP3AViewPresented) {
+            FocusP3AScreenView(
+              attributionManager: attributionManager,
+              p3aUtilities: p3aUtilities,
+              shouldDismiss: $shouldDismiss
+            )
+          }
+        }
         .overlay(alignment: .topTrailing) {
           cancelButton
-            .frame(width: iconSize, height: iconSize)
+            .frame(width: 32, height: 32)
             .padding(24)
         }
-
-        FocusStepsPagingIndicator(totalPages: 4, activeIndex: .constant(2))
-      }
-      .frame(maxWidth: .infinity, maxHeight: .infinity)
-      .background {
-        Image("focus-background-large", bundle: .module)
-          .resizable()
-          .aspectRatio(contentMode: .fill)
-          .opacity(0.20)
-      }
-      .background {
-        NavigationLink("", isActive: $isP3AViewPresented) {
-          FocusP3AScreenView(
-            attributionManager: attributionManager,
-            p3aUtilities: p3aUtilities,
-            shouldDismiss: $shouldDismiss
-          )
-        }
-      }
-    } else {
-      VStack {
-        stepsContentView
-        FocusStepsPagingIndicator(totalPages: 4, activeIndex: $indicatorIndex)
-          .opacity(opacity)
-          .onAppear {
-            withAnimation(.easeInOut(duration: 1.5).delay(1.25)) {
-              opacity = 1.0
-            }
+        .osAvailabilityModifiers { content in
+          if #available(iOS 16.0, *) {
+            content.toolbar(.hidden, for: .navigationBar)
+          } else {
+            content.navigationBarHidden(true)
           }
-      }
-      .padding(.bottom, 20)
-      .background(Color(braveSystemName: .pageBackground))
-      .background {
-        NavigationLink("", isActive: $isP3AViewPresented) {
-          FocusP3AScreenView(
-            attributionManager: attributionManager,
-            p3aUtilities: p3aUtilities,
-            shouldDismiss: $shouldDismiss
-          )
         }
       }
-      .overlay(alignment: .topTrailing) {
-        cancelButton
-          .frame(width: 32, height: 32)
-          .padding(24)
-      }
+      .navigationViewStyle(StackNavigationViewStyle())
     }
   }
 

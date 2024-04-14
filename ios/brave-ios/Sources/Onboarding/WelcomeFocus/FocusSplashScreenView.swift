@@ -11,34 +11,46 @@ struct FocusSplashScreenView: View {
   @State private var isShimmering = false
 
   var body: some View {
-    GeometryReader { geometry in
-      ZStack {
-        braveLogo
-          .scaleEffect(isShimmering ? 1.015 : 1.0)
-          .overlay(
-            self.linearGradientView
-              .frame(width: geometry.size.width, height: 2 * geometry.size.height)
-              .position(
-                x: geometry.size.width / 2,
-                y: isShimmering ? 2 * geometry.size.height : -geometry.size.height
-              )
-              .scaleEffect(isShimmering ? 1.015 : 1.0)
-              .mask(
-                braveLogo
-              )
-          )
-        Image("focus-icon-brave", bundle: .module)
-          .resizable()
-          .matchedGeometryEffect(id: "icon", in: namespace)
-          .frame(width: 146, height: 146)
-      }
-      .background(Color(braveSystemName: .pageBackground))
-      .onAppear {
-        withAnimation(.linear(duration: 1.25)) {
-          self.isShimmering = true
+    NavigationView {
+
+      GeometryReader { geometry in
+        ZStack {
+          braveLogo
+            .scaleEffect(isShimmering ? 1.015 : 1.0)
+            .overlay(
+              self.linearGradientView
+                .frame(width: geometry.size.width, height: 2 * geometry.size.height)
+                .position(
+                  x: geometry.size.width / 2,
+                  y: isShimmering ? 2 * geometry.size.height : -geometry.size.height
+                )
+                .scaleEffect(isShimmering ? 1.015 : 1.0)
+                .mask(
+                  braveLogo
+                )
+            )
+          Image("focus-icon-brave", bundle: .module)
+            .resizable()
+            .matchedGeometryEffect(id: "icon", in: namespace)
+            .frame(width: 146, height: 146)
+        }
+        .background(Color(braveSystemName: .pageBackground))
+        .onAppear {
+          withAnimation(.linear(duration: 1.25)) {
+            self.isShimmering = true
+          }
+        }
+        .osAvailabilityModifiers { content in
+          if #available(iOS 16.0, *) {
+            content.toolbar(.hidden, for: .navigationBar)
+          } else {
+            content.navigationBarHidden(true)
+          }
         }
       }
     }
+    .navigationViewStyle(StackNavigationViewStyle())
+
   }
 
   private var braveLogo: some View {
